@@ -25,17 +25,65 @@ require 'parser/current'
 module Decode
 	module Language
 		class Ruby
-			def initialize
-			end
-			
 			# The symbol which is used to separate the specified definition from the parent scope.
 			PREFIX = {
 				class: '::',
 				module: '::',
-				def: '/',
+				def: ':',
 				constant: '::',
 				defs: '.',
-			}
+			}.freeze
+			
+			KIND =  {
+				':' => :def,
+				'.' => :defs,
+			}.freeze
+			
+			class Reference
+				def initialize(value)
+					@value = value
+					
+					@path = nil
+					@kind = nil
+				end
+				
+				def absolute?
+					@value.start_with?('::')
+				end
+				
+				METHOD = /\A(?<scope>.*?)?(?<kind>:|\.)(?<name>.+?)\z/
+				
+				def path
+					if @path.nil?
+						@path = @value.split(/::/)
+						
+						if last = @path.pop
+							if match = last.match(METHOD)
+								@kind = KIND[match[:kind]]
+								
+								if scope = match[:scope]
+									@path << scope
+								end
+								
+								@path << match[:name]
+							else
+								@path << last
+							end
+						end
+						
+						@path = @path.map(&:to_sym)
+						@path.freeze
+					end
+					
+					return @path
+				end
+				
+				def kind
+					self.path
+					
+					return @kind
+				end
+			end
 			
 			def join(symbols, absolute = true)
 				buffer = String.new

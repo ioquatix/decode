@@ -32,7 +32,7 @@ RSpec.describe Decode::Language::Ruby do
 		
 		expect(declarations[0]).to have_attributes(
 			kind: :class,
-			name: 'Super',
+			name: :Super,
 			comments: nil,
 		)
 	end

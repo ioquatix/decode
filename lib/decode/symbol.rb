@@ -19,6 +19,8 @@
 # THE SOFTWARE.
 
 module Decode
+	Key = Struct.new(:kind, :name)
+	
 	class Symbol
 		def initialize(kind, name, parent: nil, language: parent.language)
 			@kind = kind
@@ -26,11 +28,16 @@ module Decode
 			@parent = parent
 			@language = language
 			
-			@full_name = nil
+			@path = nil
+			@qualified_name = nil
+		end
+		
+		def key
+			Key.new(@kind, @name)
 		end
 		
 		def inspect
-			"\#<#{self.class} #{@kind} #{full_name}>"
+			"\#<#{self.class} #{@kind} #{qualified_name}>"
 		end
 		
 		attr :kind
@@ -38,18 +45,22 @@ module Decode
 		attr :parent
 		attr :language
 		
-		def full_name
-			@full_name ||= @language.join(self.name_parts)
+		def qualified_name
+			@qualified_name ||= @language.join(self.path).freeze
 		end
 		
-		def name_parts(parts = [])
-			if @parent
-				@parent.name_parts(parts)
+		def path
+			if @path
+				@path
+			elsif @parent
+				@path = [*@parent.path, self.key]
+			else
+				@path = [self.key]
 			end
-			
-			parts << self
-			
-			return parts
+		end
+		
+		def lexical_path
+			self.path.map(&:name)
 		end
 	end
 	

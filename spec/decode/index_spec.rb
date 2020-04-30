@@ -31,22 +31,37 @@ RSpec.describe Decode::Index do
 		
 		expect(index.symbols).to include(
 			"::Decode::Documentation",
-			"::Decode::Documentation/initialize",
-			"::Decode::Documentation/description",
-			"::Decode::Documentation/attributes",
-			"::Decode::Documentation/parameters",
+			"::Decode::Documentation:initialize",
+			"::Decode::Documentation:description",
+			"::Decode::Documentation:attributes",
+			"::Decode::Documentation:parameters",
 			"::Decode::Language",
 			"::Decode::Language.detect"
 		)
 		
-		index.symbols.each do |key, symbol|
-			puts "#{key} #{symbol.kind}"
+		# index.symbols.each do |key, symbol|
+		# 	puts "#{key} #{symbol.kind}"
+		# 
+		# 	if comments = symbol.comments
+		# 		comments.each do |line|
+		# 			puts line
+		# 		end
+		# 	end
+		# end
+	end
+	
+	describe '#lookup' do
+		it 'can lookup relative references' do
+			index.update!
 			
-			if comments = symbol.comments
-				comments.each do |line|
-					puts line
-				end
-			end
+			initialize_reference = Decode::Language::Ruby::Reference.new("Decode::Documentation:initialize")
+			initialize_symbols = index.lookup(initialize_reference)
+			expect(initialize_symbols.size).to be == 1
+			
+			source_reference = Decode::Language::Ruby::Reference.new("Source")
+			source_symbols = index.lookup(source_reference, relative_to: initialize_symbols.first)
+			expect(source_symbols.size).to be == 1
+			expect(source_symbols.first.qualified_name).to be == "::Decode::Source"
 		end
 	end
 end
