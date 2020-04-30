@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decode (0.1.0)
+    decode (0.2.0)
       build-files
       parser
 
