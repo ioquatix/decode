@@ -2,6 +2,10 @@
 
 A Ruby code analysis tool and documentation generator.
 
+## Usage
+
+Please see the documentation wiki.
+
 ## Contributing
 
 1. Fork it
