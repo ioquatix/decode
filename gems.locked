@@ -3,6 +3,7 @@ PATH
   specs:
     decode (0.1.0)
       build-files
+      parser
 
 GEM
   remote: https://rubygems.org/

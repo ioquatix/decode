@@ -18,7 +18,37 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative 'source'
+
 module Decode
 	class Index
+		def initialize(paths)
+			@paths = paths
+			@sources = {}
+			@symbols = {}
+			
+			@nested = {}
+		end
+		
+		attr :paths
+		attr :sources
+		attr :symbols
+		
+		def update!
+			@paths.each do |path|
+				source = Source.new(path)
+				@sources[path.relative_path] = Source.new(path)
+				
+				source.parse do |definition|
+					@symbols[definition.full_name] = definition
+					
+					symbols = (@nested[definition.parent] ||= [])
+					symbols << definition
+				end
+			end
+		end
+		
+		# @attr nested [Hash(Symbol, Array(Symbol))]
+		attr :nested
 	end
 end

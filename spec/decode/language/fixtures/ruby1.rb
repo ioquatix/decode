@@ -23,4 +23,8 @@ class Super
 	def awesome_things
 		puts "All the things!"
 	end
+	
+	# Am I useful?
+	def self.class_method
+	end
 end

@@ -18,59 +18,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Decode
-	class Symbol
-		def initialize(kind, name, parent: nil, language: parent.language)
-			@kind = kind
-			@name = name
-			@parent = parent
-			@language = language
-			
-			@full_name = nil
-		end
-		
-		def inspect
-			"\#<#{self.class} #{@kind} #{full_name}>"
-		end
-		
-		attr :kind
-		attr :name
-		attr :parent
-		attr :language
-		
-		def full_name
-			@full_name ||= @language.join(self.name_parts)
-		end
-		
-		def name_parts(parts = [])
-			if @parent
-				@parent.name_parts(parts)
-			end
-			
-			parts << self
-			
-			return parts
-		end
-	end
+require 'decode/index'
+require 'build/files/glob'
+
+RSpec.describe Decode::Index do
+	let(:path) {File.expand_path("../../lib", __dir__)}
+	let(:glob) {Build::Files::Glob.new(path, "**/*.rb")}
+	subject(:index) {described_class.new(glob)}
 	
-	class Definition < Symbol
-		def initialize(kind, name, node, comments, **options)
-			super(kind, name, **options)
+	it 'can extract declarations' do
+		index.update!
+		
+		expect(index.symbols).to include(
+			"::Decode::Documentation",
+			"::Decode::Documentation/initialize",
+			"::Decode::Documentation/description",
+			"::Decode::Documentation/attributes",
+			"::Decode::Documentation/parameters",
+			"::Decode::Language",
+			"::Decode::Language.detect"
+		)
+		
+		index.symbols.each do |key, symbol|
+			puts "#{key} #{symbol.kind}"
 			
-			@node = node
-			@comments = comments
-			@documentation = nil
-		end
-		
-		def text
-			@node.location.expression.source
-		end
-		
-		attr :comments
-		
-		def documentation
-			if @comments.any?
-				@documentation ||= Documentation.new(@comments)
+			if comments = symbol.comments
+				comments.each do |line|
+					puts line
+				end
 			end
 		end
 	end

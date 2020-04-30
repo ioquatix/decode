@@ -19,58 +19,58 @@
 # THE SOFTWARE.
 
 module Decode
-	class Symbol
-		def initialize(kind, name, parent: nil, language: parent.language)
-			@kind = kind
-			@name = name
-			@parent = parent
-			@language = language
-			
-			@full_name = nil
-		end
-		
-		def inspect
-			"\#<#{self.class} #{@kind} #{full_name}>"
-		end
-		
-		attr :kind
-		attr :name
-		attr :parent
-		attr :language
-		
-		def full_name
-			@full_name ||= @language.join(self.name_parts)
-		end
-		
-		def name_parts(parts = [])
-			if @parent
-				@parent.name_parts(parts)
-			end
-			
-			parts << self
-			
-			return parts
-		end
-	end
-	
-	class Definition < Symbol
-		def initialize(kind, name, node, comments, **options)
-			super(kind, name, **options)
-			
-			@node = node
+	class Documentation
+		def initialize(comments)
 			@comments = comments
-			@documentation = nil
 		end
 		
-		def text
-			@node.location.expression.source
+		DESCRIPTION = /\A\s*([^@\s].*)?\z/
+		
+		def description
+			return to_enum(:description) unless block_given?
+			
+			# We track empty lines and only yield a single empty line when there is another line of text:
+			gap = false
+			
+			@comments.each do |comment|
+				if match = comment.match(DESCRIPTION)
+					if match[1]
+						if gap
+							yield ""
+							gap = false
+						end
+						
+						yield match[1]
+					else
+						gap = true
+					end
+				else
+					break
+				end
+			end
 		end
 		
-		attr :comments
+		ATTRIBUTE = /\A\s*@(?<name>.*?)\s+(?<value>.*?)\z/
 		
-		def documentation
-			if @comments.any?
-				@documentation ||= Documentation.new(@comments)
+		def attributes
+			return to_enum(:attributes) unless block_given?
+			
+			@comments.each do |comment|
+				if match = comment.match(ATTRIBUTE)
+					yield match
+				end
+			end
+		end
+		
+		PARAMETER = /\A\s*@param\s+(?<name>.*?)\s+\[(?<type>.*?)\]\s+(?<details>.*?)\z/
+		
+		def parameters
+			return to_enum(:parameters) unless block_given?
+			
+			@comments.each do |comment|
+				if match = comment.match(PARAMETER)
+					yield match
+				end
 			end
 		end
 	end

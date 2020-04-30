@@ -20,16 +20,21 @@
 
 require_relative '../symbol'
 
+require 'parser/current'
+
 module Decode
 	module Language
 		class Ruby
 			def initialize
 			end
 			
+			# The symbol which is used to separate the specified definition from the parent scope.
 			PREFIX = {
 				class: '::',
 				module: '::',
-				def: '-',
+				def: '/',
+				constant: '::',
+				defs: '.',
 			}
 			
 			def join(symbols, absolute = true)
@@ -42,37 +47,105 @@ module Decode
 						buffer << PREFIX[symbol.kind]
 					end
 					
-					buffer << symbol.name
+					buffer << symbol.name.to_s
+				end
+				
+				return buffer
+			end
+			
+			def parse(input, &block)
+				parser = ::Parser::CurrentRuby.new
+				
+				buffer = ::Parser::Source::Buffer.new('(input)')
+				buffer.source = input.read
+				
+				top, comments = parser.parse_with_comments(buffer)
+				
+				walk(top, comments, &block)
+			end
+			
+			def extract_comments_for(node, comments)
+				prefix = []
+				
+				while comment = comments.first
+					break if comment.location.line >= node.location.line
+					
+					if last_comment = prefix.last
+						if last_comment.location.line != (comment.location.line - 1)
+							prefix.clear
+						end
+					end
+					
+					prefix << comments.shift
+				end
+				
+				# The last comment must butt up against the node:
+				if comment = prefix.last
+					if comment.location.line == (node.location.line - 1)
+						return prefix.map(&:text)
+					end
 				end
 			end
 			
-			COMMENT = /\A\s*\#\s?(.*?)\Z/
-			DECLARATION = /\A(?<indentation>\s*)(?<text>(?<kind>module|class|def|attr)\s+(?<name>[\w\.\:]+).*)\Z/
-			
-			def parse(input)
-				first = true
-				comments = []
-				nesting = []
-				
-				input.each_line do |line|
-					line.chomp!
-					
-					if match = line.match(COMMENT)
-						comments << match[1]
-					elsif match = line.match(DECLARATION)
-						level = match[:indentation].size
-						parent = nesting[level-1]
-						
-						declaration = Declaration.new(match[:kind].to_sym, match[:name], match[:text], comments, parent: parent, language: self)
-						
-						nesting[level] = declaration
-						
-						yield declaration
-						
-						comments = []
-					else
-						comments.clear
+			# Walk over the syntax tree and extract relevant definitions with their associated comments.
+			def walk(node, comments, parent = nil, &block)
+				case node.type
+				when :begin
+					node.children.each do |child|
+						walk(child, comments, parent, &block)
 					end
+				when :class
+					definition = Definition.new(
+						:class, node.children[0].children[1],
+						node, extract_comments_for(node, comments),
+						parent: parent, language: self
+					)
+					
+					yield definition
+					
+					walk(node.children[2], comments, definition, &block)
+				when :module
+					definition = Definition.new(
+						:module, node.children[0].children[1],
+						node, extract_comments_for(node, comments),
+						parent: parent, language: self
+					)
+					
+					yield definition
+					
+					walk(node.children[1], comments, definition, &block)
+				when :def
+					definition = Definition.new(
+						:def, node.children[0],
+						node, extract_comments_for(node, comments),
+						parent: parent, language: self
+					)
+					
+					yield definition
+					
+					# if body = node.children[2]
+					# 	walk(body, comments, definition, &block)
+					# end
+				when :defs
+					definition = Definition.new(
+						:defs, node.children[1],
+						node, extract_comments_for(node, comments),
+						parent: parent, language: self
+					)
+					
+					yield definition
+					
+					# if body = node.children[2]
+					# 	walk(body, comments, definition, &block)
+					# end
+				when :casgn
+					definition = Definition.new(
+						:constant, node.children[1],
+						node, extract_comments_for(node, comments),
+						parent: parent, language: self
+					)
+					
+					yield definition
 				end
 			end
 		end

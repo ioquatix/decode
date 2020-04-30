@@ -28,13 +28,12 @@ RSpec.describe Decode::Language::Ruby do
 	it 'can extract declarations' do
 		declarations = source.parse.to_a
 		
-		expect(declarations.size).to be == 2
+		expect(declarations.size).to be == 3
 		
 		expect(declarations[0]).to have_attributes(
 			kind: :class,
 			name: 'Super',
-			text: 'class Super',
-			comments: [],
+			comments: nil,
 		)
 	end
 end
