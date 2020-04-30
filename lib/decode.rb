@@ -19,3 +19,4 @@
 # THE SOFTWARE.
 
 require_relative "decode/version"
+require_relative "decode/index"
