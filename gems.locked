@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     decode (0.2.0)
-      build-files
       parser
 
 GEM
@@ -160,6 +159,7 @@ PLATFORMS
 
 DEPENDENCIES
   bake-bundler
+  build-files
   bundler
   covered
   decode!
