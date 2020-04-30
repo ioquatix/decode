@@ -82,7 +82,7 @@ module Decode
 		attr :comments
 		
 		def documentation
-			if @comments.any?
+			if @comments&.any?
 				@documentation ||= Documentation.new(@comments)
 			end
 		end
