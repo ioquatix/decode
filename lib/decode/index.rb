@@ -39,7 +39,7 @@ module Decode
 		def update(paths)
 			paths.each do |path|
 				source = Source.new(path)
-				@sources[path.relative_path] = Source.new(path)
+				@sources[path] = Source.new(path)
 				
 				source.parse do |definition|
 					@symbols[definition.qualified_name] = definition
