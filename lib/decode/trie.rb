@@ -42,10 +42,10 @@ module Decode
 			end
 			
 			def traverse(path = [], &block)
-				yield path, values if values
-				
-				@children.each do |name, node|
-					node.traverse([*path, name], &block)
+				if yield(path, self)
+					@children.each do |name, node|
+						node.traverse([*path, name], &block)
+					end
 				end
 			end
 		end
