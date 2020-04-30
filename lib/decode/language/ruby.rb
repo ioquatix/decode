@@ -130,7 +130,9 @@ module Decode
 				# The last comment must butt up against the node:
 				if comment = prefix.last
 					if comment.location.line == (node.location.line - 1)
-						return prefix.map(&:text)
+						return prefix.map do |comment|
+							comment.text.sub(/\A\#\s?/, '')
+						end
 					end
 				end
 			end
