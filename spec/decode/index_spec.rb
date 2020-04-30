@@ -23,13 +23,12 @@ require 'build/files/glob'
 
 RSpec.describe Decode::Index do
 	let(:path) {File.expand_path("../../lib", __dir__)}
-	let(:glob) {Build::Files::Glob.new(path, "**/*.rb")}
-	subject(:index) {described_class.new(glob)}
+	let(:paths) {Build::Files::Glob.new(path, "**/*.rb")}
 	
 	it 'can extract declarations' do
-		index.update!
+		subject.update(paths)
 		
-		expect(index.symbols).to include(
+		expect(subject.symbols).to include(
 			"::Decode::Documentation",
 			"::Decode::Documentation:initialize",
 			"::Decode::Documentation:description",
@@ -52,14 +51,14 @@ RSpec.describe Decode::Index do
 	
 	describe '#lookup' do
 		it 'can lookup relative references' do
-			index.update!
+			subject.update(paths)
 			
 			initialize_reference = Decode::Language::Ruby::Reference.new("Decode::Documentation:initialize")
-			initialize_symbols = index.lookup(initialize_reference)
+			initialize_symbols = subject.lookup(initialize_reference)
 			expect(initialize_symbols.size).to be == 1
 			
 			source_reference = Decode::Language::Ruby::Reference.new("Source")
-			source_symbols = index.lookup(source_reference, relative_to: initialize_symbols.first)
+			source_symbols = subject.lookup(source_reference, relative_to: initialize_symbols.first)
 			expect(source_symbols.size).to be == 1
 			expect(source_symbols.first.qualified_name).to be == "::Decode::Source"
 		end

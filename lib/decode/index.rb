@@ -23,8 +23,7 @@ require_relative 'trie'
 
 module Decode
 	class Index
-		def initialize(paths)
-			@paths = paths
+		def initialize
 			@sources = {}
 			@symbols = {}
 			
@@ -32,14 +31,13 @@ module Decode
 			@trie = Trie.new
 		end
 		
-		attr :paths
 		attr :sources
 		attr :symbols
 		
 		attr :trie
 		
-		def update!
-			@paths.each do |path|
+		def update(paths)
+			paths.each do |path|
 				source = Source.new(path)
 				@sources[path.relative_path] = Source.new(path)
 				
