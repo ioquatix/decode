@@ -74,7 +74,7 @@ module Decode
 		
 		# Given a base path, enumerate all paths under that.
 		# @yield (path, values) pairs
-		def each(path, &block)
+		def each(path = [], &block)
 			if node = @root.lookup(path)
 				node.traverse(&block)
 			end
