@@ -65,26 +65,4 @@ module Decode
 			self.path.map(&:name)
 		end
 	end
-	
-	class Definition < Symbol
-		def initialize(kind, name, node, comments, **options)
-			super(kind, name, **options)
-			
-			@node = node
-			@comments = comments
-			@documentation = nil
-		end
-		
-		def text
-			@node.location.expression.source
-		end
-		
-		attr :comments
-		
-		def documentation
-			if @comments&.any?
-				@documentation ||= Documentation.new(@comments)
-			end
-		end
-	end
 end

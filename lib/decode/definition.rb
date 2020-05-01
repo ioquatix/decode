@@ -18,25 +18,52 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative 'symbol'
 
 module Decode
-	class Source
-		def initialize(path, language = nil)
-			@path = path
-			@language = language || Language.detect(path)
-		end
-		
-		def parse(&block)
-			return to_enum(:parse) unless block_given?
+	class Definition < Symbol
+		def initialize(kind, name, comments, **options)
+			super(kind, name, **options)
 			
-			self.open do |file|
-				@language.parse(file, &block)
-			end
+			@comments = comments
+			@documentation = nil
 		end
 		
-		def open(&block)
-			File.open(@path, &block)
+		attr :comments
+		
+		# A short form of the definition, e.g. `def short_form`.
+		# @return [String | nil]
+		def short_form
+		end
+		
+		# A long form of the definition, e.g. `def initialize(kind, name, comments, **options)`.
+		# @return [String | nil]
+		def long_form
+		end
+		
+		# The full text of the definition.
+		# @return [String | nil]
+		def text
+		end
+		
+		# Whether this definition can contain nested definitions.
+		# @return [Boolean]
+		def container?
+			false
+		end
+		
+		# Whether this represents a single entity to be documented (along with it's contents).
+		# @return [Boolean]
+		def nested?
+			container?
+		end
+		
+		# An interface for accsssing the documentation of the definition.
+		# @return [Documentation | nil] A `Documentation` if this definition has comments.
+		def documentation
+			if @comments&.any?
+				@documentation ||= Documentation.new(@comments)
+			end
 		end
 	end
 end

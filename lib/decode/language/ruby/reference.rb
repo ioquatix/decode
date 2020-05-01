@@ -18,25 +18,59 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
-
 module Decode
-	class Source
-		def initialize(path, language = nil)
-			@path = path
-			@language = language || Language.detect(path)
-		end
-		
-		def parse(&block)
-			return to_enum(:parse) unless block_given?
-			
-			self.open do |file|
-				@language.parse(file, &block)
+	module Language
+		module Ruby
+			class Reference
+				KIND =  {
+					':' => :def,
+					'.' => :defs,
+				}.freeze
+				
+				def initialize(value)
+					@value = value
+					
+					@path = nil
+					@kind = nil
+				end
+				
+				def absolute?
+					@value.start_with?('::')
+				end
+				
+				METHOD = /\A(?<scope>.*?)?(?<kind>:|\.)(?<name>.+?)\z/
+				
+				def path
+					if @path.nil?
+						@path = @value.split(/::/)
+						
+						if last = @path.pop
+							if match = last.match(METHOD)
+								@kind = KIND[match[:kind]]
+								
+								if scope = match[:scope]
+									@path << scope
+								end
+								
+								@path << match[:name]
+							else
+								@path << last
+							end
+						end
+						
+						@path = @path.map(&:to_sym)
+						@path.freeze
+					end
+					
+					return @path
+				end
+				
+				def kind
+					self.path
+					
+					return @kind
+				end
 			end
-		end
-		
-		def open(&block)
-			File.open(@path, &block)
 		end
 	end
 end

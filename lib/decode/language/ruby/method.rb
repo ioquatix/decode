@@ -18,25 +18,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative 'definition'
 
 module Decode
-	class Source
-		def initialize(path, language = nil)
-			@path = path
-			@language = language || Language.detect(path)
-		end
-		
-		def parse(&block)
-			return to_enum(:parse) unless block_given?
-			
-			self.open do |file|
-				@language.parse(file, &block)
+	module Language
+		module Ruby
+			class Method < Definition
+				def short_form
+					@node.location.keyword.join(@node.location.name).source
+				end
+				
+				def arguments_node
+					if node = @node.children[1]
+						if node.location.expression
+							return node
+						end
+					end
+				end
+				
+				def long_form
+					if arguments_node = self.arguments_node
+						@node.location.keyword.join(
+							arguments_node.location.expression
+						).source
+					else
+						self.short_form
+					end
+				end
 			end
-		end
-		
-		def open(&block)
-			File.open(@path, &block)
 		end
 	end
 end

@@ -18,13 +18,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-class Super
-	# It does some awesome things.
-	def awesome_things
-		puts "All the things!"
-	end
-	
-	# Am I useful?
-	def self.class_method
+require_relative 'definition'
+
+module Decode
+	module Language
+		module Ruby
+			class Constant < Definition
+				def short_form
+					@node.location.name.source
+				end
+				
+				def long_form
+					if @node.location.line == @node.location.last_line
+						@node.location.expression.source
+					elsif @node.children[2].type == :array
+						"#{@name} = [...]"
+					elsif @node.children[2].type == :hash
+						"#{@name} = {...}"
+					else
+						self.short_form
+					end
+				end
+			end
+		end
 	end
 end

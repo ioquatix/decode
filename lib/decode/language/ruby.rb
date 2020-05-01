@@ -18,13 +18,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative '../symbol'
-
-require 'parser/current'
+require_relative 'ruby/reference'
+require_relative 'ruby/parser'
 
 module Decode
 	module Language
-		class Ruby
+		module Ruby
+			def self.parse(input, &block)
+				Parser.new.parse(input, &block)
+			end
+			
 			# The symbol which is used to separate the specified definition from the parent scope.
 			PREFIX = {
 				class: '::',
@@ -34,58 +37,7 @@ module Decode
 				defs: '.',
 			}.freeze
 			
-			KIND =  {
-				':' => :def,
-				'.' => :defs,
-			}.freeze
-			
-			class Reference
-				def initialize(value)
-					@value = value
-					
-					@path = nil
-					@kind = nil
-				end
-				
-				def absolute?
-					@value.start_with?('::')
-				end
-				
-				METHOD = /\A(?<scope>.*?)?(?<kind>:|\.)(?<name>.+?)\z/
-				
-				def path
-					if @path.nil?
-						@path = @value.split(/::/)
-						
-						if last = @path.pop
-							if match = last.match(METHOD)
-								@kind = KIND[match[:kind]]
-								
-								if scope = match[:scope]
-									@path << scope
-								end
-								
-								@path << match[:name]
-							else
-								@path << last
-							end
-						end
-						
-						@path = @path.map(&:to_sym)
-						@path.freeze
-					end
-					
-					return @path
-				end
-				
-				def kind
-					self.path
-					
-					return @kind
-				end
-			end
-			
-			def join(symbols, absolute = true)
+			def self.join(symbols, absolute = true)
 				buffer = String.new
 				
 				symbols.each do |symbol|
@@ -99,104 +51,6 @@ module Decode
 				end
 				
 				return buffer
-			end
-			
-			def parse(input, &block)
-				parser = ::Parser::CurrentRuby.new
-				
-				buffer = ::Parser::Source::Buffer.new('(input)')
-				buffer.source = input.read
-				
-				top, comments = parser.parse_with_comments(buffer)
-				
-				walk(top, comments, &block)
-			end
-			
-			def extract_comments_for(node, comments)
-				prefix = []
-				
-				while comment = comments.first
-					break if comment.location.line >= node.location.line
-					
-					if last_comment = prefix.last
-						if last_comment.location.line != (comment.location.line - 1)
-							prefix.clear
-						end
-					end
-					
-					prefix << comments.shift
-				end
-				
-				# The last comment must butt up against the node:
-				if comment = prefix.last
-					if comment.location.line == (node.location.line - 1)
-						return prefix.map do |comment|
-							comment.text.sub(/\A\#\s?/, '')
-						end
-					end
-				end
-			end
-			
-			# Walk over the syntax tree and extract relevant definitions with their associated comments.
-			def walk(node, comments, parent = nil, &block)
-				case node.type
-				when :begin
-					node.children.each do |child|
-						walk(child, comments, parent, &block)
-					end
-				when :class
-					definition = Definition.new(
-						:class, node.children[0].children[1],
-						node, extract_comments_for(node, comments),
-						parent: parent, language: self
-					)
-					
-					yield definition
-					
-					walk(node.children[2], comments, definition, &block)
-				when :module
-					definition = Definition.new(
-						:module, node.children[0].children[1],
-						node, extract_comments_for(node, comments),
-						parent: parent, language: self
-					)
-					
-					yield definition
-					
-					walk(node.children[1], comments, definition, &block)
-				when :def
-					definition = Definition.new(
-						:def, node.children[0],
-						node, extract_comments_for(node, comments),
-						parent: parent, language: self
-					)
-					
-					yield definition
-					
-					# if body = node.children[2]
-					# 	walk(body, comments, definition, &block)
-					# end
-				when :defs
-					definition = Definition.new(
-						:defs, node.children[1],
-						node, extract_comments_for(node, comments),
-						parent: parent, language: self
-					)
-					
-					yield definition
-					
-					# if body = node.children[2]
-					# 	walk(body, comments, definition, &block)
-					# end
-				when :casgn
-					definition = Definition.new(
-						:constant, node.children[1],
-						node, extract_comments_for(node, comments),
-						parent: parent, language: self
-					)
-					
-					yield definition
-				end
 			end
 		end
 	end
