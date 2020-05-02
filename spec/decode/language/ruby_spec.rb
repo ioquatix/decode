@@ -101,4 +101,26 @@ RSpec.describe Decode::Language::Ruby do
 			expect(declarations[2].long_form).to be == 'MULTI_LINE_HASH = {...}'
 		end
 	end
+	
+	context 'with attributes' do
+		let(:path) {File.expand_path("fixtures/attributes.rb", __dir__)}
+		
+		it 'can extract declarations' do
+			expect(declarations).to_not be_empty
+		end
+		
+		it 'has short form' do
+			expect(declarations[0].short_form).to be == 'attr :a'
+			expect(declarations[1].short_form).to be == 'attr_reader :b'
+			expect(declarations[2].short_form).to be == 'attr_writer :c'
+			expect(declarations[3].short_form).to be == 'attr_accessor :d'
+		end
+		
+		it 'has long form' do
+			expect(declarations[0].long_form).to be == 'attr :a'
+			expect(declarations[1].long_form).to be == 'attr_reader :b'
+			expect(declarations[2].long_form).to be == 'attr_writer :c'
+			expect(declarations[3].long_form).to be == 'attr_accessor :d'
+		end
+	end
 end

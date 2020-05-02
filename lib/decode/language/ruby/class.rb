@@ -35,11 +35,15 @@ module Decode
 				def long_form
 					if super_node = @node.children[1]
 						@node.location.keyword.join(
-							super_node.location.name
+							super_node.location.expression
 						).source
 					else
 						self.short_form
 					end
+				end
+				
+				def qualified_form
+					"class #{self.qualified_name}"
 				end
 			end
 			

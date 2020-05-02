@@ -39,6 +39,13 @@ module Decode
 		# A long form of the definition, e.g. `def initialize(kind, name, comments, **options)`.
 		# @return [String | nil]
 		def long_form
+			self.short_form
+		end
+		
+		# A long form which uses the qualified name if possible. Defaults to the {long_form}.
+		# @return  [String | nil]
+		def qualified_form
+			self.long_form
 		end
 		
 		# The full text of the definition.

@@ -20,6 +20,7 @@
 
 require 'parser/current'
 
+require_relative 'attribute'
 require_relative 'class'
 require_relative 'constant'
 require_relative 'function'
@@ -40,7 +41,9 @@ module Decode
 					
 					top, comments = @parser.parse_with_comments(buffer)
 					
-					walk(top, comments, &block)
+					if top
+						walk(top, comments, &block)
+					end
 				end
 				
 				def extract_comments_for(node, comments)
@@ -135,6 +138,25 @@ module Decode
 						)
 						
 						yield definition
+					when :send
+						name = node.children[1]
+						case name
+						when :attr, :attr_reader, :attr_writer, :attr_accessor
+							definition = Attribute.new(
+								:def, name_for(node.children[2]),
+								extract_comments_for(node, comments), node,
+								parent: parent, language: Ruby
+							)
+							
+							yield definition
+						end
+					end
+				end
+				
+				def name_for(node)
+					case node.type
+					when :sym
+						return node.children[0]
 					end
 				end
 			end

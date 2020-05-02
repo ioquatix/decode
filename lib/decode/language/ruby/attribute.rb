@@ -18,43 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'ruby/reference'
-require_relative 'ruby/parser'
+require_relative 'definition'
 
 module Decode
 	module Language
 		module Ruby
-			def self.parse(input, &block)
-				Parser.new.parse(input, &block)
-			end
-			
-			# The symbol which is used to separate the specified definition from the parent scope.
-			PREFIX = {
-				class: '::',
-				module: '::',
-				def: ':',
-				constant: '::',
-				defs: '.',
-			}.freeze
-			
-			def self.join(symbols, absolute = true)
-				buffer = String.new
-				
-				symbols.each do |symbol|
-					if absolute == false
-						absolute = true
-					else
-						buffer << PREFIX[symbol.kind]
-					end
-					
-					buffer << symbol.name.to_s
+			class Attribute < Definition
+				def keyword
+					@node.children[1]
 				end
 				
-				return buffer
-			end
-			
-			def self.reference(value)
-				Reference.new(value)
+				def short_form
+					"#{self.keyword} #{@name.inspect}"
+				end
 			end
 		end
 	end
