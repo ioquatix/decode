@@ -41,10 +41,10 @@ module Decode
 				source = Source.new(path)
 				@sources[path] = Source.new(path)
 				
-				source.parse do |definition|
-					@symbols[definition.qualified_name] = definition
+				source.symbols do |symbol|
+					@symbols[symbol.qualified_name] = symbol
 					
-					@trie.insert(definition.lexical_path, definition)
+					@trie.insert(symbol.lexical_path, symbol)
 				end
 			end
 		end

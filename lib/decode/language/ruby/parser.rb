@@ -27,6 +27,8 @@ require_relative 'function'
 require_relative 'method'
 require_relative 'module'
 
+require_relative 'segment'
+
 module Decode
 	module Language
 		module Ruby
@@ -35,14 +37,14 @@ module Decode
 					@parser = parser
 				end
 				
-				def parse(input, &block)
+				def symbols_for(input, &block)
 					buffer = ::Parser::Source::Buffer.new('(input)')
 					buffer.source = input.read
 					
 					top, comments = @parser.parse_with_comments(buffer)
 					
 					if top
-						walk(top, comments, &block)
+						walk_symbols(top, comments, &block)
 					end
 				end
 				
@@ -72,11 +74,11 @@ module Decode
 				end
 				
 				# Walk over the syntax tree and extract relevant definitions with their associated comments.
-				def walk(node, comments, parent = nil, &block)
+				def walk_symbols(node, comments, parent = nil, &block)
 					case node.type
 					when :begin
 						node.children.each do |child|
-							walk(child, comments, parent, &block)
+							walk_symbols(child, comments, parent, &block)
 						end
 					when :module
 						definition = Module.new(
@@ -88,7 +90,7 @@ module Decode
 						yield definition
 						
 						if children = node.children[1]
-							walk(children, comments, definition, &block)
+							walk_symbols(children, comments, definition, &block)
 						end
 					when :class
 						definition = Class.new(
@@ -100,7 +102,7 @@ module Decode
 						yield definition
 						
 						if children = node.children[2]
-							walk(children, comments, definition, &block)
+							walk_symbols(children, comments, definition, &block)
 						end
 					when :sclass
 						definition = Singleton.new(
@@ -112,7 +114,7 @@ module Decode
 						yield definition
 						
 						if children = node.children[1]
-							walk(children, comments, definition, &block)
+							walk_symbols(children, comments, definition, &block)
 						end
 					when :def
 						definition = Method.new(
@@ -157,6 +159,51 @@ module Decode
 					case node.type
 					when :sym
 						return node.children[0]
+					end
+				end
+				
+				def segments_for(input, &block)
+					buffer = ::Parser::Source::Buffer.new('(input)')
+					buffer.source = input.read
+					
+					top, comments = @parser.parse_with_comments(buffer)
+					
+					# We delete any leading comments:
+					line = 0
+					
+					while comment = comments.first
+						if comment.location.line == line
+							comments.pop
+							line += 1
+						else
+							break
+						end
+					end
+					
+					# Now we iterate over the syntax tree and generate segments:
+					walk_segments(top, comments, &block)
+				end
+				
+				def walk_segments(node, comments, &block)
+					case node.type
+					when :begin
+						segment = nil
+						
+						node.children.each do |child|
+							if segment.nil?
+								segment = Segment.new(
+									extract_comments_for(child, comments),
+									child
+								)
+							elsif next_comments = extract_comments_for(child, comments)
+								yield segment if segment
+								segment = Segment.new(next_comments, child)
+							else
+								segment.expand(child)
+							end
+						end
+						
+						yield segment if segment
 					end
 				end
 			end

@@ -24,8 +24,8 @@ require_relative 'ruby/parser'
 module Decode
 	module Language
 		module Ruby
-			def self.parse(input, &block)
-				Parser.new.parse(input, &block)
+			def self.name
+				"ruby"
 			end
 			
 			# The symbol which is used to separate the specified definition from the parent scope.
@@ -55,6 +55,18 @@ module Decode
 			
 			def self.reference(value)
 				Reference.new(value)
+			end
+			
+			# Parse the input yielding symbols.
+			# @yield [Definition]
+			def self.symbols_for(input, &block)
+				Parser.new.symbols_for(input, &block)
+			end
+			
+			# Parse the input yielding interleaved comments and code segments.
+			# @yield [Segment]
+			def self.segments_for(input, &block)
+				Parser.new.segments_for(input, &block)
 			end
 		end
 	end

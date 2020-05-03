@@ -18,33 +18,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative 'documentation'
 
 module Decode
-	class Source
-		def initialize(path, language = nil)
-			@path = path
-			@language = language || Language.detect(path)
+	class Segment
+		def initialize(comments)
+			@comments = comments
 		end
 		
-		def open(&block)
-			File.open(@path, &block)
-		end
+		attr :comments
 		
-		def symbols(&block)
-			return to_enum(:symbols) unless block_given?
-			
-			self.open do |file|
-				@language.symbols_for(file, &block)
+		# An interface for accsssing the documentation of the definition.
+		# @return [Documentation | nil] A `Documentation` if this definition has comments.
+		def documentation
+			if @comments&.any?
+				@documentation ||= Documentation.new(@comments)
 			end
 		end
 		
-		def segments(&block)
-			return to_enum(:segments) unless block_given?
-			
-			self.open do |file|
-				@language.segments_for(file, &block)
-			end
+		# The source code trailing the comments.
+		# @return [String | nil]
+		def code
 		end
 	end
 end

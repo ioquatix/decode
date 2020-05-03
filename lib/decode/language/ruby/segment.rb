@@ -18,32 +18,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative '../../segment'
 
 module Decode
-	class Source
-		def initialize(path, language = nil)
-			@path = path
-			@language = language || Language.detect(path)
-		end
-		
-		def open(&block)
-			File.open(@path, &block)
-		end
-		
-		def symbols(&block)
-			return to_enum(:symbols) unless block_given?
-			
-			self.open do |file|
-				@language.symbols_for(file, &block)
-			end
-		end
-		
-		def segments(&block)
-			return to_enum(:segments) unless block_given?
-			
-			self.open do |file|
-				@language.segments_for(file, &block)
+	module Language
+		module Ruby
+			class Segment < Decode::Segment
+				def initialize(comments, node, **options)
+					super(comments, **options)
+					
+					@node = node
+					@expression = node.location.expression
+				end
+				
+				attr :node
+				
+				def expand(node)
+					@expression = @expression.join(node.location.expression)
+				end
+				
+				def code
+					@expression.source
+				end
 			end
 		end
 	end

@@ -24,103 +24,127 @@ require 'decode/language/ruby'
 RSpec.describe Decode::Language::Ruby do
 	let(:path) {File.expand_path("fixtures/ruby.rb", __dir__)}
 	let(:source) {Decode::Source.new(path)}
-	let(:declarations) {source.parse.to_a}
+	let(:symbols) {source.symbols.to_a}
+	let(:segments) {source.segments.to_a}
 	
 	context 'with classes' do
 		let(:path) {File.expand_path("fixtures/classes.rb", __dir__)}
 		
-		it 'can extract declarations' do
-			expect(declarations).to_not be_empty
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(declarations[0].short_form).to be == 'class Parent'
-			expect(declarations[1].short_form).to be == 'class Child'
-			expect(declarations[2].short_form).to be == 'class << (self)'
+			expect(symbols[0].short_form).to be == 'class Parent'
+			expect(symbols[1].short_form).to be == 'class Child'
+			expect(symbols[2].short_form).to be == 'class << (self)'
 		end
 		
 		it 'has long form' do
-			expect(declarations[0].long_form).to be == 'class Parent'
-			expect(declarations[1].long_form).to be == 'class Child < Parent'
-			expect(declarations[2].long_form).to be == 'class << (self)'
+			expect(symbols[0].long_form).to be == 'class Parent'
+			expect(symbols[1].long_form).to be == 'class Child < Parent'
+			expect(symbols[2].long_form).to be == 'class << (self)'
 		end
 	end
 	
 	context 'with instance methods' do
 		let(:path) {File.expand_path("fixtures/instance_methods.rb", __dir__)}
 		
-		it 'can extract declarations' do
-			expect(declarations).to_not be_empty
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(declarations[0].short_form).to be == 'def without_arguments'
-			expect(declarations[1].short_form).to be == 'def with_arguments'
+			expect(symbols[0].short_form).to be == 'def without_arguments'
+			expect(symbols[1].short_form).to be == 'def with_arguments'
 		end
 		
 		it 'has long form' do
-			expect(declarations[0].long_form).to be == 'def without_arguments'
-			expect(declarations[1].long_form).to be == 'def with_arguments(x = 10)'
+			expect(symbols[0].long_form).to be == 'def without_arguments'
+			expect(symbols[1].long_form).to be == 'def with_arguments(x = 10)'
 		end
 	end
 	
 	context 'with class methods' do
 		let(:path) {File.expand_path("fixtures/class_methods.rb", __dir__)}
 		
-		it 'can extract declarations' do
-			expect(declarations).to_not be_empty
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(declarations[0].short_form).to be == 'def self.without_arguments'
-			expect(declarations[1].short_form).to be == 'def self.with_arguments'
+			expect(symbols[0].short_form).to be == 'def self.without_arguments'
+			expect(symbols[1].short_form).to be == 'def self.with_arguments'
 		end
 		
 		it 'has long form' do
-			expect(declarations[0].long_form).to be == 'def self.without_arguments'
-			expect(declarations[1].long_form).to be == 'def self.with_arguments(x = 10)'
+			expect(symbols[0].long_form).to be == 'def self.without_arguments'
+			expect(symbols[1].long_form).to be == 'def self.with_arguments(x = 10)'
 		end
 	end
 	
 	context 'with constants' do
 		let(:path) {File.expand_path("fixtures/constants.rb", __dir__)}
 		
-		it 'can extract declarations' do
-			expect(declarations).to_not be_empty
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(declarations[0].short_form).to be == 'SINGLE_LINE_STRING'
-			expect(declarations[1].short_form).to be == 'MULTI_LINE_ARRAY'
-			expect(declarations[2].short_form).to be == 'MULTI_LINE_HASH'
+			expect(symbols[0].short_form).to be == 'SINGLE_LINE_STRING'
+			expect(symbols[1].short_form).to be == 'MULTI_LINE_ARRAY'
+			expect(symbols[2].short_form).to be == 'MULTI_LINE_HASH'
 		end
 		
 		it 'has long form' do
-			expect(declarations[0].long_form).to be == 'SINGLE_LINE_STRING = "Hello World"'
-			expect(declarations[1].long_form).to be == 'MULTI_LINE_ARRAY = [...]'
-			expect(declarations[2].long_form).to be == 'MULTI_LINE_HASH = {...}'
+			expect(symbols[0].long_form).to be == 'SINGLE_LINE_STRING = "Hello World"'
+			expect(symbols[1].long_form).to be == 'MULTI_LINE_ARRAY = [...]'
+			expect(symbols[2].long_form).to be == 'MULTI_LINE_HASH = {...}'
 		end
 	end
 	
 	context 'with attributes' do
 		let(:path) {File.expand_path("fixtures/attributes.rb", __dir__)}
 		
-		it 'can extract declarations' do
-			expect(declarations).to_not be_empty
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(declarations[0].short_form).to be == 'attr :a'
-			expect(declarations[1].short_form).to be == 'attr_reader :b'
-			expect(declarations[2].short_form).to be == 'attr_writer :c'
-			expect(declarations[3].short_form).to be == 'attr_accessor :d'
+			expect(symbols[0].short_form).to be == 'attr :a'
+			expect(symbols[1].short_form).to be == 'attr_reader :b'
+			expect(symbols[2].short_form).to be == 'attr_writer :c'
+			expect(symbols[3].short_form).to be == 'attr_accessor :d'
 		end
 		
 		it 'has long form' do
-			expect(declarations[0].long_form).to be == 'attr :a'
-			expect(declarations[1].long_form).to be == 'attr_reader :b'
-			expect(declarations[2].long_form).to be == 'attr_writer :c'
-			expect(declarations[3].long_form).to be == 'attr_accessor :d'
+			expect(symbols[0].long_form).to be == 'attr :a'
+			expect(symbols[1].long_form).to be == 'attr_reader :b'
+			expect(symbols[2].long_form).to be == 'attr_writer :c'
+			expect(symbols[3].long_form).to be == 'attr_accessor :d'
+		end
+	end
+	
+	context 'with comments' do
+		let(:path) {File.expand_path("fixtures/comments.rb", __dir__)}
+		
+		it 'can extract symbols' do
+			expect(symbols).to_not be_empty
+		end
+		
+		it 'can extract segments' do
+			expect(segments).to_not be_empty
+			expect(segments.size).to be == 2
+		end
+		
+		it 'can extract comments' do
+			expect(segments[0].comments).to be == ["Firstly, we define a method:"]
+			expect(segments[1].comments).to be == ["Then we invoke it:"]
+		end
+		
+		it 'can extract code' do
+			expect(segments[0].code).to be == "def method\n\t# Frobulate the combobulator:\n\t$combobulator.frobulate\nend"
+			expect(segments[1].code).to be == "result = self.method\nputs result"
 		end
 	end
 end
