@@ -42,13 +42,11 @@ module Decode
 			end
 			
 			def traverse(path = [], &block)
-				catch(:skip) do
-					yield(path, self)
-					
+				yield(path, self, ->{
 					@children.each do |name, node|
 						node.traverse([*path, name], &block)
 					end
-				end
+				})
 			end
 		end
 		
@@ -71,12 +69,18 @@ module Decode
 		end
 		
 		def lookup(path)
-			@root.lookup(path).values
+			@root.lookup(path)
 		end
 		
 		# Given a base path, enumerate all paths under that.
 		# @yield (path, values) pairs
 		def each(path = [], &block)
+			if node = @root.lookup(path)
+				node.traverse(&block)
+			end
+		end
+		
+		def traverse(path = [], &block)
 			if node = @root.lookup(path)
 				node.traverse(&block)
 			end
