@@ -23,6 +23,7 @@ require_relative 'documentation'
 module Decode
 	Key = Struct.new(:kind, :name)
 	
+	# A named element which represents some significant element of some kind in a computer program.
 	class Symbol
 		def initialize(kind, name, parent: nil, language: parent.language)
 			@kind = kind
@@ -34,6 +35,8 @@ module Decode
 			@qualified_name = nil
 		end
 		
+		# A symbol-specific key which represents the lexical scope.
+		# @return [Key]
 		def key
 			Key.new(@kind, @name)
 		end
@@ -42,15 +45,25 @@ module Decode
 			"\#<#{self.class} #{@kind} #{qualified_name}>"
 		end
 		
+		# The kind of symbol, e.g. `:module`.
 		attr :kind
+		
+		# The symbol name, e.g. `:Decode`.
 		attr :name
+		
+		# The parent symbol, defining lexical scope.
 		attr :parent
+		
+		# The language the symbol is defined within.
 		attr :language
 		
+		# The qualified name is an absolute name which includes any and all namespacing.
 		def qualified_name
 			@qualified_name ||= @language.join(self.path).freeze
 		end
 		
+		# The lexical scope as defined by the {key}.
+		# @return [Array]
 		def path
 			if @path
 				@path
@@ -61,6 +74,7 @@ module Decode
 			end
 		end
 		
+		# The lexical path, only taking into account the symbol names.
 		def lexical_path
 			self.path.map(&:name)
 		end
