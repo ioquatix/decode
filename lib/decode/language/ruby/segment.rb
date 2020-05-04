@@ -23,20 +23,24 @@ require_relative '../../segment'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby specific code segment.
 			class Segment < Decode::Segment
-				def initialize(comments, node, **options)
-					super(comments, **options)
+				def initialize(comments, language, node, **options)
+					super(comments, language, **options)
 					
 					@node = node
 					@expression = node.location.expression
 				end
 				
+				# The parser syntax tree node.
 				attr :node
 				
 				def expand(node)
 					@expression = @expression.join(node.location.expression)
 				end
 				
+				# The source code trailing the comments.
+				# @return [String | nil]
 				def code
 					@expression.source
 				end

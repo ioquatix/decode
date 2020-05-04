@@ -23,7 +23,9 @@ require_relative 'method'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific function.
 			class Function < Method
+				# The node which contains the function arguments.
 				def arguments_node
 					if node = @node.children[2]
 						if node.location.expression

@@ -32,16 +32,11 @@ require_relative 'segment'
 module Decode
 	module Language
 		module Ruby
+			# The Ruby source code parser.
 			class Parser
-				def initialize(parser = ::Parser::CurrentRuby.new)
-					@parser = parser
-				end
-				
+				# Extract symbols from the given input file.
 				def symbols_for(input, &block)
-					buffer = ::Parser::Source::Buffer.new('(input)')
-					buffer.source = input.read
-					
-					top, comments = @parser.parse_with_comments(buffer)
+					top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
 					
 					if top
 						walk_symbols(top, comments, &block)
@@ -162,11 +157,9 @@ module Decode
 					end
 				end
 				
+				# Extract segments from the given input file.
 				def segments_for(input, &block)
-					buffer = ::Parser::Source::Buffer.new('(input)')
-					buffer.source = input.read
-					
-					top, comments = @parser.parse_with_comments(buffer)
+					top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
 					
 					# We delete any leading comments:
 					line = 0
@@ -193,11 +186,11 @@ module Decode
 							if segment.nil?
 								segment = Segment.new(
 									extract_comments_for(child, comments),
-									child
+									Ruby,	child
 								)
 							elsif next_comments = extract_comments_for(child, comments)
 								yield segment if segment
-								segment = Segment.new(next_comments, child)
+								segment = Segment.new(next_comments, Ruby, child)
 							else
 								segment.expand(child)
 							end

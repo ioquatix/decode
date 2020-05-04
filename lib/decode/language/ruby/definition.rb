@@ -23,15 +23,20 @@ require_relative '../../definition'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific definition.
 			class Definition < Decode::Definition
+				# Initialize the definition from the syntax tree node.
 				def initialize(kind, name, comments, node, **options)
 					super(kind, name, comments, **options)
 					
 					@node = node
 				end
 				
+				# The parser syntax tree node.
 				attr :node
 				
+				# The source code associated with the definition.
+				# @return [String]
 				def text
 					@node.location.expression.source
 				end

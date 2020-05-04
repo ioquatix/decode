@@ -23,11 +23,15 @@ require_relative 'definition'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific method.
 			class Method < Definition
+				# The short form of the method.
+				# e.g. `def puts`.
 				def short_form
 					@node.location.keyword.join(@node.location.name).source
 				end
 				
+				# The node which contains the function arguments.
 				def arguments_node
 					if node = @node.children[1]
 						if node.location.expression
@@ -36,6 +40,8 @@ module Decode
 					end
 				end
 				
+				# The long form of the method.
+				# e.g. `def puts(*lines, separator: "\n")`.
 				def long_form
 					if arguments_node = self.arguments_node
 						@node.location.keyword.join(

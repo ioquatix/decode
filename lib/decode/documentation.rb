@@ -19,13 +19,26 @@
 # THE SOFTWARE.
 
 module Decode
+	# Structured access to a set of comment lines.
 	class Documentation
-		def initialize(comments)
+		# Initialize the documenation with an array of comments, within a specific language.
+		#
+		# @param comments [Array(String)] An array of comment lines.
+		# @param language [Language] The language in which the comments were extracted.
+		def initialize(comments, language = nil)
 			@comments = comments
+			@language = language
 		end
+		
+		# The language in which the documentation was extracted from.
+		attr :language
 		
 		DESCRIPTION = /\A\s*([^@\s].*)?\z/
 		
+		# The text-only lines of the comment block.
+		#
+		# @yield [String]
+		# @return [Enumerable]
 		def description
 			return to_enum(:description) unless block_given?
 			
@@ -52,6 +65,11 @@ module Decode
 		
 		ATTRIBUTE = /\A\s*@(?<name>.*?)\s+(?<value>.*?)\z/
 		
+		# The attribute lines of the comment block.
+		# e.g. `@return [String]`.
+		#
+		# @yield [String]
+		# @return [Enumerable]
 		def attributes
 			return to_enum(:attributes) unless block_given?
 			
@@ -64,6 +82,11 @@ module Decode
 		
 		PARAMETER = /\A\s*@param\s+(?<name>.*?)\s+\[(?<type>.*?)\]\s+(?<details>.*?)\z/
 		
+		# The parameter lines of the comment block.
+		# e.g. `@param value [String] The value.`
+		#
+		# @yield [String]
+		# @return [Enumerable]
 		def parameters
 			return to_enum(:parameters) unless block_given?
 			

@@ -23,15 +23,21 @@ require_relative 'definition'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific class.
 			class Class < Definition
+				# A class is a container for other definitions.
 				def container?
 					true
 				end
 				
+				# The short form of the class.
+				# e.g. `class Animal`.
 				def short_form
 					"class #{@name}"
 				end
 				
+				# The long form of the class.
+				# e.g. `class Dog < Animal`.
 				def long_form
 					if super_node = @node.children[1]
 						@node.location.keyword.join(
@@ -42,24 +48,34 @@ module Decode
 					end
 				end
 				
+				# The fully qualified name of the class.
+				# e.g. `class ::Barnyard::Dog`.
 				def qualified_form
 					"class #{self.qualified_name}"
 				end
 			end
 			
+			# A Ruby-specific singleton class.
 			class Singleton < Definition
+				# A singleton class is a container for other definitions.
+				# @return [Boolean]
 				def container?
 					true
 				end
 				
+				# Typically, a singleton class does not contain other definitions.
+				# @return [Boolean]
 				def nested?
 					false
 				end
 				
+				# The short form of the class.
+				# e.g. `class << (self)`.
 				def short_form
 					"class << #{@name}"
 				end
 				
+				# The long form is the same as the short form.
 				alias long_form short_form
 			end
 		end

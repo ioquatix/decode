@@ -21,12 +21,15 @@
 module Decode
 	module Language
 		module Ruby
+			# An Ruby-specific reference which can be resolved to zero or more symbols.
 			class Reference
 				KIND =  {
 					':' => :def,
 					'.' => :defs,
 				}.freeze
 				
+				# Initialize the reference.
+				# @param value [String] The string value of the reference.
 				def initialize(value)
 					@value = value
 					
@@ -34,12 +37,15 @@ module Decode
 					@kind = nil
 				end
 				
+				# Whether the reference starts at the base of the lexical tree.
 				def absolute?
 					@value.start_with?('::')
 				end
 				
 				METHOD = /\A(?<scope>.*?)?(?<kind>:|\.)(?<name>.+?)\z/
 				
+				# The lexical path of the reference.
+				# @return [Array(String)]
 				def path
 					if @path.nil?
 						@path = @value.split(/::/)
@@ -65,6 +71,7 @@ module Decode
 					return @path
 				end
 				
+				# The kind of symbol to match.
 				def kind
 					self.path
 					

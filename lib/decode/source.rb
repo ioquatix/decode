@@ -22,10 +22,20 @@ require_relative 'language'
 
 module Decode
 	class Source
+		def self.for?(path)
+			if language = Language.detect(path)
+				self.new(path, language)
+			end
+		end
+		
 		def initialize(path, language = nil)
 			@path = path
 			@language = language || Language.detect(path)
 		end
+		
+		attr :path
+		
+		attr :language
 		
 		def open(&block)
 			File.open(@path, &block)

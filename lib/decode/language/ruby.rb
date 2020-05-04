@@ -23,7 +23,10 @@ require_relative 'ruby/parser'
 
 module Decode
 	module Language
+		# The Ruby language.
 		module Ruby
+			# The canoical name of the language for use in output formatting.
+			# e.g. source code highlighting.
 			def self.name
 				"ruby"
 			end
@@ -37,6 +40,7 @@ module Decode
 				defs: '.',
 			}.freeze
 			
+			# Generate a language-specific fully qualified name.
 			def self.join(symbols, absolute = true)
 				buffer = String.new
 				
@@ -53,18 +57,21 @@ module Decode
 				return buffer
 			end
 			
+			# Generate a language-specific reference.
 			def self.reference(value)
 				Reference.new(value)
 			end
 			
 			# Parse the input yielding symbols.
-			# @yield [Definition]
+			# @block `{|definition| ...}`
+			# @yield definition [Definition]
 			def self.symbols_for(input, &block)
 				Parser.new.symbols_for(input, &block)
 			end
 			
 			# Parse the input yielding interleaved comments and code segments.
-			# @yield [Segment]
+			# @block `{|segment| ...}`
+			# @yield segment [Segment]
 			def self.segments_for(input, &block)
 				Parser.new.segments_for(input, &block)
 			end

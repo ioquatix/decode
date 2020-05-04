@@ -21,13 +21,12 @@
 require_relative 'language/ruby'
 
 module Decode
+	# Language specific parsers and symbols.
 	module Language
 		def self.detect(path)
 			case File.extname(path)
-			when '.rb'
+			when '.rb', '.ru'
 				return Language::Ruby
-			else
-				raise ArgumentError, "Could not determine language for #{path}!"
 			end
 		end
 	end

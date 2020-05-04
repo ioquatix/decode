@@ -23,11 +23,16 @@ require_relative 'definition'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific attribute.
 			class Attribute < Definition
+				# The keyword that defined the attribute.
+				# @return [String]
 				def keyword
 					@node.children[1]
 				end
 				
+				# The short form of the attribute.
+				# e.g. `attr :value`.
 				def short_form
 					"#{self.keyword} #{@name.inspect}"
 				end

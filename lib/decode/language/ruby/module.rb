@@ -23,15 +23,20 @@ require_relative 'definition'
 module Decode
 	module Language
 		module Ruby
+			# A Ruby-specific module.
 			class Module < Definition
+				# A module is a container for other definitions.
 				def container?
 					true
 				end
 				
+				# The short form of the module.
+				# e.g. `module Barnyard`.
 				def short_form
 					"module #{@name}"
 				end
 				
+				# The long form is the same as the short form.
 				alias long_form short_form
 			end
 		end

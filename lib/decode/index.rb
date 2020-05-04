@@ -22,7 +22,9 @@ require_relative 'source'
 require_relative 'trie'
 
 module Decode
+	# A list of symbols organised for quick lookup and lexical enumeration.
 	class Index
+		# Initialize an empty index.
 		def initialize
 			@sources = {}
 			@symbols = {}
@@ -31,11 +33,23 @@ module Decode
 			@trie = Trie.new
 		end
 		
+		# All source files that have been parsed.
+		# @attr [Array(Source)]
 		attr :sources
+		
+		# All symbols which have been parsed.
+		# @attr [Array(Symbol)]
 		attr :symbols
+		
+		# A (prefix) trie of lexically scoped symbols.
+		# @attr [Trie]
 		
 		attr :trie
 		
+		# Updates the index by parsing the specified files.
+		# All extracted symbols are merged into the existing index.
+		#
+		# @param paths [Array(String)] The source file paths.
 		def update(paths)
 			paths.each do |path|
 				source = Source.new(path)
@@ -49,6 +63,10 @@ module Decode
 			end
 		end
 		
+		# Lookup the specified reference and return matching symbols.
+		#
+		# @param reference [Reference] The reference to match.
+		# @param relative_to [Symbol] Lookup the reference relative to the scope of this symbol.
 		def lookup(reference, relative_to: nil)
 			if reference.absolute? || relative_to.nil?
 				lexical_path = []
@@ -59,7 +77,7 @@ module Decode
 			path = reference.path
 			
 			while true
-				node = @trie.match(lexical_path)
+				node = @trie.lookup(lexical_path)
 				
 				if node.children[path.first]
 					if target = node.lookup(path)

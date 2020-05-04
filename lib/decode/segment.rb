@@ -21,18 +21,32 @@
 require_relative 'documentation'
 
 module Decode
+	# A chunk of code with an optional preceeding comment block.
+	#
+	#	~~~ ruby
+	#	# Get the first segment from a source file:
+	#	segment = source.segments.first
+	#	~~~
+	#
 	class Segment
-		def initialize(comments)
+		def initialize(comments, language)
 			@comments = comments
+			@language = language
 		end
 		
+		# The preceeding comments.
+		# @attr [Array(String)]
 		attr :comments
+		
+		# The language of the code attached to this segment.
+		# @attr [Language]
+		attr :language
 		
 		# An interface for accsssing the documentation of the definition.
 		# @return [Documentation | nil] A `Documentation` if this definition has comments.
 		def documentation
 			if @comments&.any?
-				@documentation ||= Documentation.new(@comments)
+				@documentation ||= Documentation.new(@comments, @language)
 			end
 		end
 		

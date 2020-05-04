@@ -21,6 +21,7 @@
 require_relative 'symbol'
 
 module Decode
+	# A symbol with attached documentation.
 	class Definition < Symbol
 		def initialize(kind, name, comments, **options)
 			super(kind, name, **options)
@@ -29,44 +30,56 @@ module Decode
 			@documentation = nil
 		end
 		
+		# The comment lines which directly preceeded the definition.
+		# @attr [Array(String)]
 		attr :comments
 		
-		# A short form of the definition, e.g. `def short_form`.
+		# A short form of the definition.
+		# e.g. `def short_form`.
+		#
 		# @return [String | nil]
 		def short_form
 		end
 		
-		# A long form of the definition, e.g. `def initialize(kind, name, comments, **options)`.
+		# A long form of the definition.
+		# e.g. `def initialize(kind, name, comments, **options)`.
+		#
 		# @return [String | nil]
 		def long_form
 			self.short_form
 		end
 		
-		# A long form which uses the qualified name if possible. Defaults to the {long_form}.
+		# A long form which uses the qualified name if possible.
+		# Defaults to {long_form}.
+		#
 		# @return  [String | nil]
 		def qualified_form
 			self.long_form
 		end
 		
 		# The full text of the definition.
+		#
 		# @return [String | nil]
 		def text
 		end
 		
 		# Whether this definition can contain nested definitions.
+		#
 		# @return [Boolean]
 		def container?
 			false
 		end
 		
 		# Whether this represents a single entity to be documented (along with it's contents).
+		#
 		# @return [Boolean]
 		def nested?
 			container?
 		end
 		
-		# An interface for accsssing the documentation of the definition.
-		# @return [Documentation | nil] A `Documentation` if this definition has comments.
+		# Structured access to the definitions comments.
+		#
+		# @return [Documentation | Nil] A `Documentation` if this definition has comments.
 		def documentation
 			if @comments&.any?
 				@documentation ||= Documentation.new(@comments)
