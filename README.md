@@ -4,7 +4,7 @@ A Ruby code analysis tool and documentation generator.
 
 ## Usage
 
-Please see the <a href="https://ioquatix.github.io/decode">project documentation</a> or run it locally using `bake utopia:project:serve`.
+Please see the <a href="https://ioquatix.github.io/decode/">project documentation</a> or run it locally using `bake utopia:project:serve`.
 
 ## Contributing
 
