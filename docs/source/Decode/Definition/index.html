@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>::Decode::Definition</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+
+<h1><code class="language-ruby">::Decode::Definition</code></h1>
+	
+	<main>
+		<p>A symbol with attached documentation.</p>
+		
+		
+		<h2>Definitions</h2>
+		
+		<h3 id="::Decode::Definition:comments"><code class="language-ruby">attr :comments</code></h3><p>The comment lines which directly preceeded the definition.</p>
+<h3 id="::Decode::Definition:short_form"><code class="language-ruby">def short_form</code></h3><p>A short form of the definition.
+e.g. <code>def short_form</code>.</p>
+<h3 id="::Decode::Definition:long_form"><code class="language-ruby">def long_form</code></h3><p>A long form of the definition.
+e.g. <code>def initialize(kind, name, comments, **options)</code>.</p>
+<h3 id="::Decode::Definition:qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>A long form which uses the qualified name if possible.
+Defaults to <a href="index.html#%3A%3ADecode%3A%3ADefinition%3Along_form"><code class="language-ruby">def long_form</code></a>.</p>
+<h3 id="::Decode::Definition:text"><code class="language-ruby">def text</code></h3><p>The full text of the definition.</p>
+<h3 id="::Decode::Definition:container?"><code class="language-ruby">def container?</code></h3><p>Whether this definition can contain nested definitions.</p>
+<h3 id="::Decode::Definition:nested?"><code class="language-ruby">def nested?</code></h3><p>Whether this represents a single entity to be documented (along with it’s contents).</p>
+<h3 id="::Decode::Definition:documentation"><code class="language-ruby">def documentation</code></h3><p>Structured access to the definitions comments.</p>
+	</main>
+
+	</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>::Decode::Trie::Node</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../../../index.html">Project</a> › <a class="link" href="../../../index.html">Source</a></nav>
+
+<h1><code class="language-ruby">::Decode::Trie::Node</code></h1>
+	
+	<main>
+		<p>A single node in the trie.</p>
+		
+		
+		<h2>Definitions</h2>
+		
+		<h3 id="::Decode::Trie::Node:values"><code class="language-ruby">attr_accessor :values</code></h3><p>A mutable array of all values that terminate at this node.</p>
+<h3 id="::Decode::Trie::Node:children"><code class="language-ruby">attr :children</code></h3><p>A hash table of all children nodes, indexed by name.</p>
+<h3 id="::Decode::Trie::Node:lookup"><code class="language-ruby">def lookup(path, index = 0)</code></h3><p>Look up a lexical path starting at this node.</p>
+<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>The path to resolve.</p>
+</dd>
+						</dl><h3 id="::Decode::Trie::Node:traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></h3><p>Traverse the trie from this node.
+Invoke <code>descend.call</code> to traverse the children of the current node.</p>
+<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>The current lexical path.</p>
+</dd>
+						</dl>	</main>
+
+	</body>
+</html>

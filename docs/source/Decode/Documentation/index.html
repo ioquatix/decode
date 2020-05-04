@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>::Decode::Documentation</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+
+<h1><code class="language-ruby">::Decode::Documentation</code></h1>
+	
+	<main>
+		<p>Structured access to a set of comment lines.</p>
+		
+		
+		<h2>Definitions</h2>
+		
+		<h3 id="::Decode::Documentation:initialize"><code class="language-ruby">def initialize(comments, language = nil)</code></h3><p>Initialize the documenation with an array of comments, within a specific language.</p>
+<dl>							<dt><code class="syntax">comments</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>An array of comment lines.</p>
+</dd>
+													<dt><code class="syntax">language</code> — <a href="../Language/index.html"><code class="language-ruby">module Language</code></a></dt>
+								<dd><p>The language in which the comments were extracted.</p>
+</dd>
+						</dl><h3 id="::Decode::Documentation:language"><code class="language-ruby">attr :language</code></h3><p>The language in which the documentation was extracted from.</p>
+<h3 id="::Decode::Documentation:description"><code class="language-ruby">def description</code></h3><p>The text-only lines of the comment block.</p>
+<h3 id="::Decode::Documentation:attributes"><code class="language-ruby">def attributes</code></h3><p>The attribute lines of the comment block.
+e.g. <code>@return [String]</code>.</p>
+<h3 id="::Decode::Documentation:parameters"><code class="language-ruby">def parameters</code></h3><p>The parameter lines of the comment block.
+e.g. <code>@param value [String] The value.</code></p>
+	</main>
+
+	</body>
+</html>

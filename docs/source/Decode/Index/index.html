@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>::Decode::Index</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+
+<h1><code class="language-ruby">::Decode::Index</code></h1>
+	
+	<main>
+		<p>A list of symbols organised for quick lookup and lexical enumeration.</p>
+		
+		
+		<h2>Definitions</h2>
+		
+		<h3 id="::Decode::Index:initialize"><code class="language-ruby">def initialize</code></h3><p>Initialize an empty index.</p>
+<h3 id="::Decode::Index:sources"><code class="language-ruby">attr :sources</code></h3><p>All source files that have been parsed.</p>
+<h3 id="::Decode::Index:symbols"><code class="language-ruby">attr :symbols</code></h3><p>All symbols which have been parsed.</p>
+<h3 id="::Decode::Index:update"><code class="language-ruby">def update(paths)</code></h3><p>Updates the index by parsing the specified files.
+All extracted symbols are merged into the existing index.</p>
+<dl>							<dt><code class="syntax">paths</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>The source file paths.</p>
+</dd>
+						</dl><h3 id="::Decode::Index:lookup"><code class="language-ruby">def lookup(reference, relative_to: nil)</code></h3><p>Lookup the specified reference and return matching symbols.</p>
+<dl>							<dt><code class="syntax">reference</code> — <code class="language-ruby">Reference</code></dt>
+								<dd><p>The reference to match.</p>
+</dd>
+													<dt><code class="syntax">relative_to</code> — <a href="../Symbol/index.html"><code class="language-ruby">class Symbol</code></a></dt>
+								<dd><p>Lookup the reference relative to the scope of this symbol.</p>
+</dd>
+						</dl>	</main>
+
+	</body>
+</html>

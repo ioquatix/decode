@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>::Decode::Trie</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+
+<h1><code class="language-ruby">::Decode::Trie</code></h1>
+	
+	<main>
+		<p>A prefix-trie data structure for fast lexical lookups.</p>
+		
+		<h2>Nested</h2>
+		
+		<ul>
+			<li><a href="Node/index.html"><code class="language-ruby">::Decode::Trie::Node</code></a></li>
+		</ul>
+		
+		<h2>Definitions</h2>
+		
+		<h3 id="::Decode::Trie:initialize"><code class="language-ruby">def initialize</code></h3><p>Initialize an empty trie.</p>
+<h3 id="::Decode::Trie:root"><code class="language-ruby">attr :root</code></h3><p>The root of the trie.</p>
+<h3 id="::Decode::Trie:insert"><code class="language-ruby">def insert(path, value)</code></h3><p>Insert the specified value at the given path into the trie.</p>
+<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>The lexical path where the value will be inserted.</p>
+</dd>
+													<dt><code class="syntax">value</code> — <code class="language-ruby">Object</code></dt>
+								<dd><p>The value to insert.</p>
+</dd>
+						</dl><h3 id="::Decode::Trie:lookup"><code class="language-ruby">def lookup(path)</code></h3><p>Lookup the values at the specified path.</p>
+<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
+								<dd><p>The lexical path which contains the values.</p>
+</dd>
+						</dl><h3 id="::Decode::Trie:each"><code class="language-ruby">def each(path = [], &amp;block)</code></h3><p>Enumerate all lexical scopes under the specified path.</p>
+<h3 id="::Decode::Trie:traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></h3><p>Traverse the trie.
+See <a href="Node/index.html#%3A%3ADecode%3A%3ATrie%3A%3ANode%3Atraverse"><code class="language-ruby">def traverse</code></a> for details.</p>
+	</main>
+
+	</body>
+</html>

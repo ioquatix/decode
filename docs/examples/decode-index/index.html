@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Decode Index</title>
+		
+		<meta charset="UTF-8"/>
+		
+		<link rel="icon" type="image/png" href="../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../_components/jquery/jquery.min.js"></script>
+		<script src="../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body class="">
+		
+	<nav> › <a class="link" href="../../index.html">Project</a> › <a class="link" href="../index.html">Examples</a></nav>
+
+<h1>Decode Index</h1>
+	
+	<main><h2><code>extract.rb</code></h2><p>This example demonstrates how to extract symbols using the index. An instance of <a href="../../source/Decode/Index/index.html"><code class="language-ruby">class Index</code></a> is used for loading symbols from source code files. These symbols are available as a flat list and as a trie structure. You can look up specific symbols using a reference using <a href="../../source/Decode/Index/index.html#%3A%3ADecode%3A%3AIndex%3Alookup"><code class="language-ruby">def lookup</code></a>.</p>
+<pre><code class="language-ruby">require_relative '../../lib/decode/index'</code></pre><p>Firstly, construct the index:</p>
+<pre><code class="language-ruby">index = Decode::Index.new</code></pre><p>Then, update the index by loading paths from the file system:</p>
+<pre><code class="language-ruby">paths = Dir.glob(File.expand_path(&quot;../../lib/**/*.rb&quot;, __dir__))
+index.update(paths)</code></pre><p>Finally, you can print out the loaded symbols:</p>
+<pre><code class="language-ruby">index.symbols.each do |name, symbol|
+	puts symbol.long_form
+end</code></pre><p>Lookup a specific symbol:</p>
+<pre><code class="language-ruby">absolute_reference = Decode::Language::Ruby.reference(&quot;Decode::Index:lookup&quot;)
+lookup_symbol = index.lookup(absolute_reference).first
+puts lookup_symbol.long_form</code></pre><p>Lookup a method relative to that symbol:</p>
+<pre><code class="language-ruby">relative_reference = Decode::Language::Ruby.reference(&quot;trie&quot;)
+trie_attribute = index.lookup(relative_reference, relative_to: lookup_symbol).first
+puts trie_attribute.long_form</code></pre></main>
+
+	</body>
+</html>
