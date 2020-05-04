@@ -2,6 +2,12 @@
 
 A Ruby code analysis tool and documentation generator.
 
+[![Development](https://github.com/ioquatix/decode/workflows/Development/badge.svg)](https://github.com/ioquatix/decode/actions?workflow=Development)
+
+## Motivation
+
+As part of my effort to build [better project documentation](https://github.com/socketry/utopia-project), I needed a better code analysis tool. While less featured than some of the more mature alternatives, this library focuses on the needs of documentation generation, including speed, cross-referencing and (eventually) multi-language support.
+
 ## Usage
 
 Please see the <a href="https://ioquatix.github.io/decode/">project documentation</a> or run it locally using `bake utopia:project:serve`.
