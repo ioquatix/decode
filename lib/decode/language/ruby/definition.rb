@@ -35,10 +35,25 @@ module Decode
 				# The parser syntax tree node.
 				attr :node
 				
+				def multiline?
+					@node.location.line != @node.location.last_line
+				end
+				
 				# The source code associated with the definition.
 				# @return [String]
 				def text
-					@node.location.expression.source
+					expression = @node.location.expression
+					lines = expression.source.lines
+					if lines.count == 1
+						return lines.first
+					else
+						indentation = expression.source_line[/\A\s+/]
+						
+						# Remove all the indentation:
+						lines.each{|line| line.sub!(indentation, '')}
+						
+						return lines.join
+					end
 				end
 			end
 		end

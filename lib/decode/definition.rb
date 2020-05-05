@@ -57,6 +57,13 @@ module Decode
 			self.long_form
 		end
 		
+		# Whether the definition spans multiple lines.
+		#
+		# @return [Boolean]
+		def multiline?
+			false
+		end
+		
 		# The full text of the definition.
 		#
 		# @return [String | nil]
