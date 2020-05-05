@@ -21,7 +21,7 @@
 module Decode
 	# Structured access to a set of comment lines.
 	class Documentation
-		# Initialize the documenation with an array of comments, within a specific language.
+		# Initialize the documentation with an array of comments, within a specific language.
 		#
 		# @param comments [Array(String)] An array of comment lines.
 		# @param language [Language] The language in which the comments were extracted.
