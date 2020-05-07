@@ -21,20 +21,15 @@
 module Decode
 	module Language
 		module Ruby
-			# An Ruby-specific reference which can be resolved to zero or more symbols.
+			# An Ruby-specific reference which can be resolved to zero or more definitions.
 			class Reference
-				KIND =  {
-					':' => :def,
-					'.' => :defs,
-				}.freeze
-				
 				# Initialize the reference.
 				# @param value [String] The string value of the reference.
 				def initialize(value)
 					@value = value
 					
+					@lexical_path = nil
 					@path = nil
-					@kind = nil
 				end
 				
 				# Whether the reference starts at the base of the lexical tree.
@@ -42,40 +37,22 @@ module Decode
 					@value.start_with?('::')
 				end
 				
-				METHOD = /\A(?<scope>.*?)?(?<kind>:|\.)(?<name>.+?)\z/
+				def lexical_path
+					@lexical_path ||= @value.scan(/(::|\.|#|:)?([^:.#]+)/)
+				end
+				
+				def best(definitions)
+					prefix, name = lexical_path.last
+					
+					definitions.select do |definition|
+						prefix.nil? || definition.start_with?(prefix)
+					end
+				end
 				
 				# The lexical path of the reference.
 				# @return [Array(String)]
 				def path
-					if @path.nil?
-						@path = @value.split(/::/)
-						
-						if last = @path.pop
-							if match = last.match(METHOD)
-								@kind = KIND[match[:kind]]
-								
-								if scope = match[:scope]
-									@path << scope
-								end
-								
-								@path << match[:name]
-							else
-								@path << last
-							end
-						end
-						
-						@path = @path.map(&:to_sym)
-						@path.freeze
-					end
-					
-					return @path
-				end
-				
-				# The kind of symbol to match.
-				def kind
-					self.path
-					
-					return @kind
+					@path ||= self.lexical_path.map{|_, name| name.to_sym}
 				end
 			end
 		end

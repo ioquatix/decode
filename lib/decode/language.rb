@@ -21,7 +21,7 @@
 require_relative 'language/ruby'
 
 module Decode
-	# Language specific parsers and symbols.
+	# Language specific parsers and definitions.
 	module Language
 		def self.detect(path)
 			case File.extname(path)

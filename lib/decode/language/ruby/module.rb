@@ -30,6 +30,10 @@ module Decode
 					true
 				end
 				
+				def nested_name
+					"::#{name}"
+				end
+				
 				# The short form of the module.
 				# e.g. `module Barnyard`.
 				def short_form

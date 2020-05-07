@@ -41,11 +41,11 @@ module Decode
 			File.open(@path, &block)
 		end
 		
-		def symbols(&block)
-			return to_enum(:symbols) unless block_given?
+		def definitions(&block)
+			return to_enum(:definitions) unless block_given?
 			
 			self.open do |file|
-				@language.symbols_for(file, &block)
+				@language.definitions_for(file, &block)
 			end
 		end
 		

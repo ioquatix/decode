@@ -20,7 +20,11 @@
 
 require 'parser/current'
 
+require_relative '../../scope'
+
 require_relative 'attribute'
+require_relative 'block'
+require_relative 'call'
 require_relative 'class'
 require_relative 'constant'
 require_relative 'function'
@@ -34,12 +38,12 @@ module Decode
 		module Ruby
 			# The Ruby source code parser.
 			class Parser
-				# Extract symbols from the given input file.
-				def symbols_for(input, &block)
+				# Extract definitions from the given input file.
+				def definitions_for(input, &block)
 					top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
 					
 					if top
-						walk_symbols(top, comments, &block)
+						walk_definitions(top, comments, &block)
 					end
 				end
 				
@@ -69,68 +73,69 @@ module Decode
 				end
 				
 				# Walk over the syntax tree and extract relevant definitions with their associated comments.
-				def walk_symbols(node, comments, parent = nil, &block)
+				def walk_definitions(node, comments, parent = nil, &block)
 					case node.type
 					when :begin
 						node.children.each do |child|
-							walk_symbols(child, comments, parent, &block)
+							walk_definitions(child, comments, parent, &block)
 						end
 					when :module
 						definition = Module.new(
-							:module, node.children[0].children[1],
-							extract_comments_for(node, comments), node,
-							parent: parent, language: Ruby
+							node, node.children[0].children[1],
+							comments: extract_comments_for(node, comments),
+							parent: parent,
+							language: Ruby
 						)
 						
 						yield definition
 						
 						if children = node.children[1]
-							walk_symbols(children, comments, definition, &block)
+							walk_definitions(children, comments, definition, &block)
 						end
 					when :class
 						definition = Class.new(
-							:class, node.children[0].children[1],
-							extract_comments_for(node, comments), node,
+							node, node.children[0].children[1],
+							comments: extract_comments_for(node, comments),
 							parent: parent, language: Ruby
 						)
 						
 						yield definition
 						
 						if children = node.children[2]
-							walk_symbols(children, comments, definition, &block)
+							walk_definitions(children, comments, definition, &block)
 						end
 					when :sclass
 						definition = Singleton.new(
-							:class, node.children[0],
-							extract_comments_for(node, comments), node,
+							node, node.children[0],
+							comments: extract_comments_for(node, comments),
 							parent: parent, language: Ruby
 						)
 						
 						yield definition
 						
 						if children = node.children[1]
-							walk_symbols(children, comments, definition, &block)
+							walk_definitions(children, comments, definition, &block)
 						end
 					when :def
 						definition = Method.new(
-							:def, node.children[0],
-							extract_comments_for(node, comments), node,
+							node, node.children[0],
+							comments: extract_comments_for(node, comments),
 							parent: parent, language: Ruby
 						)
 						
 						yield definition
 					when :defs
 						definition = Function.new(
-							:defs, node.children[1],
-							extract_comments_for(node, comments), node,
+							node, node.children[1],
+							comments: extract_comments_for(node, comments),
 							parent: parent, language: Ruby
 						)
 						
 						yield definition
 					when :casgn
 						definition = Constant.new(
-							:constant, node.children[1],
-							extract_comments_for(node, comments), node,
+							node, node.children[1],
+							comments: extract_comments_for(node, comments),
 							parent: parent, language: Ruby
 						)
 						
@@ -140,21 +145,98 @@ module Decode
 						case name
 						when :attr, :attr_reader, :attr_writer, :attr_accessor
 							definition = Attribute.new(
-								:def, name_for(node.children[2]),
-								extract_comments_for(node, comments), node,
+								node, name_for(node.children[2]),
+								comments: extract_comments_for(node, comments),
 								parent: parent, language: Ruby
 							)
 							
 							yield definition
+						else
+							extracted_comments = extract_comments_for(node, comments)
+							if kind = kind_for(node, extracted_comments)
+								definition = Call.new(
+									node, name_for(node, extracted_comments),
+									comments: extracted_comments,
+									parent: parent, language: Ruby
+								)
+								
+								yield definition
+							end
+						end
+					when :block
+						extracted_comments = extract_comments_for(node, comments)
+						
+						if name = name_for(node, extracted_comments)
+							definition = Block.new(
+								node, name,
+								comments: extracted_comments,
+								parent: scope_for(extracted_comments, parent, &block),
+								language: Ruby
+							)
+							
+							if kind = kind_for(node, extracted_comments)
+								definition = definition.convert(kind)
+							end
+							
+							yield definition
+							
+							if children = node.children[2]
+								walk_definitions(children, comments, definition, &block)
+							end
 						end
 					end
 				end
 				
-				def name_for(node)
+				NAME_ATTRIBUTE = /\A@name\s+(?<value>.*?)\Z/
+				
+				def name_for(node, comments = nil)
+					comments&.each do |comment|
+						if match = comment.match(NAME_ATTRIBUTE)
+							return match[:value].to_sym
+						end
+					end
+					
 					case node.type
 					when :sym
 						return node.children[0]
+					when :send
+						return node.children[1]
+					when :block
+						return node.children[0].children[1]
 					end
+				end
+				
+				KIND_ATTRIBUTE = /\A
+					(@(?<kind>attr)\s+(?<value>.*?))|
+					(@define\s+(?<kind>)\s+(?<value>.*?))
+				\Z/x
+				
+				def kind_for(node, comments = nil)
+					comments&.each do |comment|
+						if match = comment.match(KIND_ATTRIBUTE)
+							return match[:kind].to_sym
+						end
+					end
+					
+					return nil
+				end
+				
+				SCOPE_ATTRIBUTE = /\A
+					(@scope\s+(?<names>.*?))
+				\Z/x
+				
+				def scope_for(comments, parent = nil, &block)
+					comments&.each do |comment|
+						if match = comment.match(SCOPE_ATTRIBUTE)
+							return match[:names].split(/\s+/).map(&:to_sym).inject(nil) do |memo, name|
+								scope = Scope.new(name, parent: memo, language: Ruby)
+								yield scope
+								scope
+							end
+						end
+					end
+					
+					return parent
 				end
 				
 				# Extract segments from the given input file.

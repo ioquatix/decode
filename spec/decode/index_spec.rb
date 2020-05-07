@@ -28,17 +28,17 @@ RSpec.describe Decode::Index do
 	it 'can extract declarations' do
 		subject.update(paths)
 		
-		expect(subject.symbols).to include(
-			"::Decode::Documentation",
-			"::Decode::Documentation:initialize",
-			"::Decode::Documentation:description",
-			"::Decode::Documentation:attributes",
-			"::Decode::Documentation:parameters",
-			"::Decode::Language",
-			"::Decode::Language.detect"
+		expect(subject.definitions).to include(
+			"Decode::Documentation",
+			"Decode::Documentation#initialize",
+			"Decode::Documentation#description",
+			"Decode::Documentation#attributes",
+			"Decode::Documentation#parameters",
+			"Decode::Language",
+			"Decode::Language.detect"
 		)
 		
-		# index.symbols.each do |key, symbol|
+		# index.definitions.each do |key, symbol|
 		# 	puts "#{key} #{symbol.kind}"
 		# 
 		# 	if comments = symbol.comments
@@ -53,14 +53,14 @@ RSpec.describe Decode::Index do
 		it 'can lookup relative references' do
 			subject.update(paths)
 			
-			initialize_reference = Decode::Language::Ruby::Reference.new("Decode::Documentation:initialize")
-			initialize_symbols = subject.lookup(initialize_reference)
-			expect(initialize_symbols.size).to be == 1
+			initialize_reference = Decode::Language::Ruby::Reference.new("Decode::Documentation#initialize")
+			initialize_definitions = subject.lookup(initialize_reference)
+			expect(initialize_definitions.size).to be == 1
 			
 			source_reference = Decode::Language::Ruby::Reference.new("Source")
-			source_symbols = subject.lookup(source_reference, relative_to: initialize_symbols.first)
-			expect(source_symbols.size).to be == 1
-			expect(source_symbols.first.qualified_name).to be == "::Decode::Source"
+			source_definitions = subject.lookup(source_reference, relative_to: initialize_definitions.first)
+			expect(source_definitions.size).to be == 1
+			expect(source_definitions.first.qualified_name).to be == "Decode::Source"
 		end
 	end
 end

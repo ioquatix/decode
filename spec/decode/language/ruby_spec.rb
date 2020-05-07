@@ -24,112 +24,112 @@ require 'decode/language/ruby'
 RSpec.describe Decode::Language::Ruby do
 	let(:path) {File.expand_path("fixtures/ruby.rb", __dir__)}
 	let(:source) {Decode::Source.new(path)}
-	let(:symbols) {source.symbols.to_a}
+	let(:definitions) {source.definitions.to_a}
 	let(:segments) {source.segments.to_a}
 	
 	context 'with classes' do
 		let(:path) {File.expand_path("fixtures/classes.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(symbols[0].short_form).to be == 'class Parent'
-			expect(symbols[1].short_form).to be == 'class Child'
-			expect(symbols[2].short_form).to be == 'class << (self)'
+			expect(definitions[0].short_form).to be == 'class Parent'
+			expect(definitions[1].short_form).to be == 'class Child'
+			expect(definitions[2].short_form).to be == 'class << (self)'
 		end
 		
 		it 'has long form' do
-			expect(symbols[0].long_form).to be == 'class Parent'
-			expect(symbols[1].long_form).to be == 'class Child < Parent'
-			expect(symbols[2].long_form).to be == 'class << (self)'
+			expect(definitions[0].long_form).to be == 'class Parent'
+			expect(definitions[1].long_form).to be == 'class Child < Parent'
+			expect(definitions[2].long_form).to be == 'class << (self)'
 		end
 	end
 	
 	context 'with instance methods' do
 		let(:path) {File.expand_path("fixtures/instance_methods.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(symbols[0].short_form).to be == 'def without_arguments'
-			expect(symbols[1].short_form).to be == 'def with_arguments'
+			expect(definitions[0].short_form).to be == 'def without_arguments'
+			expect(definitions[1].short_form).to be == 'def with_arguments'
 		end
 		
 		it 'has long form' do
-			expect(symbols[0].long_form).to be == 'def without_arguments'
-			expect(symbols[1].long_form).to be == 'def with_arguments(x = 10)'
+			expect(definitions[0].long_form).to be == 'def without_arguments'
+			expect(definitions[1].long_form).to be == 'def with_arguments(x = 10)'
 		end
 	end
 	
 	context 'with class methods' do
 		let(:path) {File.expand_path("fixtures/class_methods.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(symbols[0].short_form).to be == 'def self.without_arguments'
-			expect(symbols[1].short_form).to be == 'def self.with_arguments'
+			expect(definitions[0].short_form).to be == 'def self.without_arguments'
+			expect(definitions[1].short_form).to be == 'def self.with_arguments'
 		end
 		
 		it 'has long form' do
-			expect(symbols[0].long_form).to be == 'def self.without_arguments'
-			expect(symbols[1].long_form).to be == 'def self.with_arguments(x = 10)'
+			expect(definitions[0].long_form).to be == 'def self.without_arguments'
+			expect(definitions[1].long_form).to be == 'def self.with_arguments(x = 10)'
 		end
 	end
 	
 	context 'with constants' do
 		let(:path) {File.expand_path("fixtures/constants.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(symbols[0].short_form).to be == 'SINGLE_LINE_STRING'
-			expect(symbols[1].short_form).to be == 'MULTI_LINE_ARRAY'
-			expect(symbols[2].short_form).to be == 'MULTI_LINE_HASH'
+			expect(definitions[0].short_form).to be == 'SINGLE_LINE_STRING'
+			expect(definitions[1].short_form).to be == 'MULTI_LINE_ARRAY'
+			expect(definitions[2].short_form).to be == 'MULTI_LINE_HASH'
 		end
 		
 		it 'has long form' do
-			expect(symbols[0].long_form).to be == 'SINGLE_LINE_STRING = "Hello World"'
-			expect(symbols[1].long_form).to be == 'MULTI_LINE_ARRAY = [...]'
-			expect(symbols[2].long_form).to be == 'MULTI_LINE_HASH = {...}'
+			expect(definitions[0].long_form).to be == 'SINGLE_LINE_STRING = "Hello World"'
+			expect(definitions[1].long_form).to be == 'MULTI_LINE_ARRAY = [...]'
+			expect(definitions[2].long_form).to be == 'MULTI_LINE_HASH = {...}'
 		end
 	end
 	
 	context 'with attributes' do
 		let(:path) {File.expand_path("fixtures/attributes.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'has short form' do
-			expect(symbols[0].short_form).to be == 'attr :a'
-			expect(symbols[1].short_form).to be == 'attr_reader :b'
-			expect(symbols[2].short_form).to be == 'attr_writer :c'
-			expect(symbols[3].short_form).to be == 'attr_accessor :d'
+			expect(definitions[0].short_form).to be == 'attr :a'
+			expect(definitions[1].short_form).to be == 'attr_reader :b'
+			expect(definitions[2].short_form).to be == 'attr_writer :c'
+			expect(definitions[3].short_form).to be == 'attr_accessor :d'
 		end
 		
 		it 'has long form' do
-			expect(symbols[0].long_form).to be == 'attr :a'
-			expect(symbols[1].long_form).to be == 'attr_reader :b'
-			expect(symbols[2].long_form).to be == 'attr_writer :c'
-			expect(symbols[3].long_form).to be == 'attr_accessor :d'
+			expect(definitions[0].long_form).to be == 'attr :a'
+			expect(definitions[1].long_form).to be == 'attr_reader :b'
+			expect(definitions[2].long_form).to be == 'attr_writer :c'
+			expect(definitions[3].long_form).to be == 'attr_accessor :d'
 		end
 	end
 	
 	context 'with comments' do
 		let(:path) {File.expand_path("fixtures/comments.rb", __dir__)}
 		
-		it 'can extract symbols' do
-			expect(symbols).to_not be_empty
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
 		end
 		
 		it 'can extract segments' do
@@ -145,6 +145,36 @@ RSpec.describe Decode::Language::Ruby do
 		it 'can extract code' do
 			expect(segments[0].code).to be == "def method\n\t# Frobulate the combobulator:\n\t$combobulator.frobulate\nend"
 			expect(segments[1].code).to be == "result = self.method\nputs result"
+		end
+	end
+	
+	context 'with block' do
+		let(:path) {File.expand_path("fixtures/block.rb", __dir__)}
+		
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
+		end
+		
+		it 'defines scope' do
+			expect(definitions[0].name).to be == :Foo
+			expect(definitions[1].name).to be == :Bar
+		end
+		
+		it 'has short form' do
+			expect(definitions[2].short_form).to be == "local"
+			expect(definitions[3].short_form).to be == "hostname"
+			expect(definitions[4].short_form).to be == "context { ... }"
+		end
+		
+		it 'has long form' do
+			expect(definitions[2].long_form).to be == "add(:local)"
+			expect(definitions[3].long_form).to be == "hostname \"localhost\""
+			expect(definitions[4].long_form).to be == "context {Context.new(hostname)}"
+		end
+		
+		it 'has correct nesting' do
+			expect(definitions[2]).to be_container
+			expect(definitions[4]).to_not be_container
 		end
 	end
 end

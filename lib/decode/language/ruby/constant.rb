@@ -31,6 +31,10 @@ module Decode
 					@node.location.name.source
 				end
 				
+				def nested_name
+					"::#{@name}"
+				end
+				
 				# The long form of the constant.
 				# e.g. `NAME = "Alice"`.
 				def long_form

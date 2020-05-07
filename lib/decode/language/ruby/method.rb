@@ -51,6 +51,17 @@ module Decode
 						self.short_form
 					end
 				end
+				
+				def convert(kind)
+					case kind
+					when :attr
+						Attribute.new(@node, @name,
+							comments: @comments, parent: @parent, language: @language
+						)
+					else
+						super
+					end
+				end
 			end
 		end
 	end

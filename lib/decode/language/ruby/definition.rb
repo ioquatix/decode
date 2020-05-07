@@ -26,10 +26,14 @@ module Decode
 			# A Ruby-specific definition.
 			class Definition < Decode::Definition
 				# Initialize the definition from the syntax tree node.
-				def initialize(kind, name, comments, node, **options)
-					super(kind, name, comments, **options)
+				def initialize(node, *arguments, **options)
+					super(*arguments, **options)
 					
 					@node = node
+				end
+				
+				def nested_name
+					"\##{@name}"
 				end
 				
 				# The parser syntax tree node.

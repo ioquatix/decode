@@ -21,29 +21,14 @@
 require_relative 'definition'
 
 module Decode
-	module Language
-		module Ruby
-			# A Ruby-specific attribute.
-			class Attribute < Definition
-				# The short form of the attribute.
-				# e.g. `attr :value`.
-				def short_form
-					case @node.type
-					when :block
-						"#{@name} { ... }"
-					else
-						@node.location.expression.source
-					end
-				end
-				
-				def long_form
-					if @node.location.line == @node.location.last_line
-						@node.location.expression.source
-					else
-						short_form
-					end
-				end
-			end
+	# An abstract namespace for nesting definitions.
+	class Scope < Definition
+		def short_form
+			@name
+		end
+		
+		def container?
+			true
 		end
 	end
 end

@@ -31,42 +31,16 @@ module Decode
 				"ruby"
 			end
 			
-			# The symbol which is used to separate the specified definition from the parent scope.
-			PREFIX = {
-				class: '::',
-				module: '::',
-				def: ':',
-				constant: '::',
-				defs: '.',
-			}.freeze
-			
-			# Generate a language-specific fully qualified name.
-			def self.join(symbols, absolute = true)
-				buffer = String.new
-				
-				symbols.each do |symbol|
-					if absolute == false
-						absolute = true
-					else
-						buffer << PREFIX[symbol.kind]
-					end
-					
-					buffer << symbol.name.to_s
-				end
-				
-				return buffer
-			end
-			
 			# Generate a language-specific reference.
 			def self.reference(value)
 				Reference.new(value)
 			end
 			
-			# Parse the input yielding symbols.
+			# Parse the input yielding definitions.
 			# @block `{|definition| ...}`
 			# @yield definition [Definition]
-			def self.symbols_for(input, &block)
-				Parser.new.symbols_for(input, &block)
+			def self.definitions_for(input, &block)
+				Parser.new.definitions_for(input, &block)
 			end
 			
 			# Parse the input yielding interleaved comments and code segments.

@@ -25,6 +25,10 @@ module Decode
 		module Ruby
 			# A Ruby-specific function.
 			class Function < Method
+				def nested_name
+					".#{@name}"
+				end
+				
 				# The node which contains the function arguments.
 				def arguments_node
 					if node = @node.children[2]

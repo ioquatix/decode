@@ -30,6 +30,10 @@ module Decode
 					true
 				end
 				
+				def nested_name
+					"::#{name}"
+				end
+				
 				# The short form of the class.
 				# e.g. `class Animal`.
 				def short_form

@@ -22,12 +22,12 @@ require_relative 'source'
 require_relative 'trie'
 
 module Decode
-	# A list of symbols organised for quick lookup and lexical enumeration.
+	# A list of definitions organised for quick lookup and lexical enumeration.
 	class Index
 		# Initialize an empty index.
 		def initialize
 			@sources = {}
-			@symbols = {}
+			@definitions = {}
 			
 			# This is essentially a prefix tree:
 			@trie = Trie.new
@@ -37,17 +37,17 @@ module Decode
 		# @attr [Array(Source)]
 		attr :sources
 		
-		# All symbols which have been parsed.
+		# All definitions which have been parsed.
 		# @attr [Array(Symbol)]
-		attr :symbols
+		attr :definitions
 		
-		# A (prefix) trie of lexically scoped symbols.
+		# A (prefix) trie of lexically scoped definitions.
 		# @attr [Trie]
 		
 		attr :trie
 		
 		# Updates the index by parsing the specified files.
-		# All extracted symbols are merged into the existing index.
+		# All extracted definitions are merged into the existing index.
 		#
 		# @param paths [Array(String)] The source file paths.
 		def update(paths)
@@ -55,23 +55,24 @@ module Decode
 				source = Source.new(path)
 				@sources[path] = Source.new(path)
 				
-				source.symbols do |symbol|
-					@symbols[symbol.qualified_name] = symbol
+				source.definitions do |symbol|
+					# $stderr.puts "Adding #{symbol.qualified_name} to #{symbol.lexical_path.join(' -> ')}"
 					
-					@trie.insert(symbol.lexical_path, symbol)
+					@definitions[symbol.qualified_name] = symbol
+					@trie.insert(symbol.path, symbol)
 				end
 			end
 		end
 		
-		# Lookup the specified reference and return matching symbols.
+		# Lookup the specified reference and return matching definitions.
 		#
 		# @param reference [Reference] The reference to match.
-		# @param relative_to [Symbol] Lookup the reference relative to the scope of this symbol.
+		# @param relative_to [Definition] Lookup the reference relative to the scope of this definition.
 		def lookup(reference, relative_to: nil)
 			if reference.absolute? || relative_to.nil?
 				lexical_path = []
 			else
-				lexical_path = relative_to.lexical_path
+				lexical_path = relative_to.path
 			end
 			
 			path = reference.path
@@ -81,11 +82,7 @@ module Decode
 				
 				if node.children[path.first]
 					if target = node.lookup(path)
-						if reference.kind
-							return target.values.select{|symbol| symbol.kind == reference.kind}
-						else
-							return target.values
-						end
+						return reference.best(target.values)
 					else
 						return nil
 					end
