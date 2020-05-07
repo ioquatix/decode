@@ -72,7 +72,7 @@ module Decode
 			if reference.absolute? || relative_to.nil?
 				lexical_path = []
 			else
-				lexical_path = relative_to.path
+				lexical_path = relative_to.path.dup
 			end
 			
 			path = reference.path

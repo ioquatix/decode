@@ -90,10 +90,10 @@ module Decode
 				@path
 			elsif @parent
 				# Merge with parent:
-				@path = [*@parent.path, @name]
+				@path = [*@parent.path, @name].freeze
 			else
 				# At top:
-				@path = [@name]
+				@path = [@name].freeze
 			end
 		end
 		
