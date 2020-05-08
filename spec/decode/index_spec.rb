@@ -20,19 +20,16 @@
 
 require 'decode/index'
 require 'build/files/glob'
-require_relative 'languages_context'
 
 RSpec.describe Decode::Index do
-	include_context Decode::Languages
-	subject{index}
-	
+	let(:languages) {subject.languages}
 	let(:path) {File.expand_path("../../lib", __dir__)}
 	let(:paths) {Build::Files::Glob.new(path, "**/*.rb")}
 	
 	it 'can extract declarations' do
-		index.update(paths)
+		subject.update(paths)
 		
-		expect(index.definitions).to include(
+		expect(subject.definitions).to include(
 			"Decode::Documentation",
 			"Decode::Documentation#initialize",
 			"Decode::Documentation#description",
@@ -43,10 +40,10 @@ RSpec.describe Decode::Index do
 	
 	describe '#lookup' do
 		it 'can lookup relative references' do
-			index.update(paths)
+			subject.update(paths)
 			
 			initialize_reference = languages.reference_for('ruby', 'Decode::Documentation#initialize')
-			initialize_definitions = index.lookup(initialize_reference)
+			initialize_definitions = subject.lookup(initialize_reference)
 			expect(initialize_definitions.size).to be == 1
 			
 			source_reference = languages.reference_for('ruby', "Source")

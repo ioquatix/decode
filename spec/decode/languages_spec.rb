@@ -20,14 +20,30 @@
 
 require 'decode/languages'
 
-require 'decode/language/ruby'
-
-RSpec.shared_context Decode::Languages do
-	let(:languages) do
-		Decode::Languages.new.tap do |languages|
-			languages.add(Decode::Language::Ruby)
+RSpec.describe Decode::Languages do
+	subject(:languages) {described_class.all}
+	
+	describe '.reference' do
+		context 'language specific reference' do
+			subject(:reference) {languages.parse_reference("ruby Foo::Bar")}
+			
+			it 'can generate language specific references' do
+				expect(reference).to be_kind_of Decode::Language::Ruby::Reference
+				
+				expect(reference.identifier).to be == "Foo::Bar"
+				expect(reference.language).to be == Decode::Language::Ruby
+			end
+		end
+		
+		context 'generic reference' do
+			subject(:reference) {languages.parse_reference('generic Foo::Bar')}
+			
+			it 'can generate language specific references' do
+				expect(reference).to be_kind_of Decode::Language::Reference
+				
+				expect(reference.identifier).to be == "Foo::Bar"
+				expect(reference.language.name).to be == "generic"
+			end
 		end
 	end
-	
-	let(:index) {Decode::Index.new(languages)}
 end

@@ -19,10 +19,17 @@
 # THE SOFTWARE.
 
 require_relative 'language/generic'
+require_relative 'language/ruby'
 
 module Decode
 	# A context for looking up languages based on file extension or name.
 	class Languages
+		def self.all
+			self.new.tap do |languages|
+				languages.add(Language::Ruby)
+			end
+		end
+		
 		def initialize
 			@named = {}
 			@extensions = {}

@@ -21,11 +21,13 @@
 require_relative 'source'
 require_relative 'trie'
 
+require_relative 'languages'
+
 module Decode
 	# A list of definitions organised for quick lookup and lexical enumeration.
 	class Index
 		# Initialize an empty index.
-		def initialize(languages)
+		def initialize(languages = Languages.all)
 			@languages = languages
 			
 			@sources = {}
@@ -34,6 +36,10 @@ module Decode
 			# This is essentially a prefix tree:
 			@trie = Trie.new
 		end
+		
+		# All supported languages for this index.
+		# @attr [Languages]
+		attr :languages
 		
 		# All source files that have been parsed.
 		# @attr [Array(Source)]
