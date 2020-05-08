@@ -37,16 +37,6 @@ RSpec.describe Decode::Index do
 			"Decode::Language",
 			"Decode::Language.detect"
 		)
-		
-		# index.definitions.each do |key, symbol|
-		# 	puts "#{key} #{symbol.kind}"
-		# 
-		# 	if comments = symbol.comments
-		# 		comments.each do |line|
-		# 			puts line
-		# 		end
-		# 	end
-		# end
 	end
 	
 	describe '#lookup' do

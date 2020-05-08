@@ -52,14 +52,15 @@ module Decode
 		# @param paths [Array(String)] The source file paths.
 		def update(paths)
 			paths.each do |path|
-				source = Source.new(path)
-				@sources[path] = Source.new(path)
-				
-				source.definitions do |symbol|
-					# $stderr.puts "Adding #{symbol.qualified_name} to #{symbol.lexical_path.join(' -> ')}"
+				if source = Source.for?(path)
+					@sources[path] = source
 					
-					@definitions[symbol.qualified_name] = symbol
-					@trie.insert(symbol.path, symbol)
+					source.definitions do |symbol|
+						# $stderr.puts "Adding #{symbol.qualified_name} to #{symbol.lexical_path.join(' -> ')}"
+						
+						@definitions[symbol.qualified_name] = symbol
+						@trie.insert(symbol.path, symbol)
+					end
 				end
 			end
 		end
