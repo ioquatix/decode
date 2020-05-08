@@ -32,6 +32,10 @@ module Decode
 					@path = nil
 				end
 				
+				def language
+					Ruby
+				end
+				
 				attr :text
 				
 				# Whether the reference starts at the base of the lexical tree.

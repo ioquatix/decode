@@ -27,6 +27,7 @@ RSpec.describe Decode::Language do
 		it 'can generate language specific references' do
 			expect(reference).to be_kind_of Decode::Language::Ruby::Reference
 			expect(reference.text).to be == "Foo::Bar"
+			expect(reference.language).to be == Decode::Language::Ruby
 		end
 	end
 end
