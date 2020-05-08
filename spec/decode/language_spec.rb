@@ -18,29 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language/ruby'
+require 'decode/language'
 
-module Decode
-	# Language specific parsers and definitions.
-	module Language
-		def self.detect(path)
-			case path
-			when /\.(rb|ru)\z/
-				return Language::Ruby
-			end
-		end
+RSpec.describe Decode::Language do
+	describe '.reference' do
+		subject(:reference) {described_class.reference(".rb Foo::Bar")}
 		
-		REFERENCE = /\A(?<language>\.[a-z]+)?\s+(?<text>.*?)\z/
-		
-		# A language agnostic reference:
-		# e.g. `.rb MyModule::MyClass`
-		#
-		def self.reference(string, language = nil)
-			if match = REFERENCE.match(string)
-				language = self.detect(match[:language]) || language
-				
-				return language.reference(match[:text])
-			end
+		it 'can generate language specific references' do
+			expect(reference).to be_kind_of Decode::Language::Ruby::Reference
+			expect(reference.text).to be == "Foo::Bar"
 		end
 	end
 end
