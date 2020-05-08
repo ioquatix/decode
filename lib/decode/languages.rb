@@ -18,37 +18,66 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative 'language/generic'
 
 module Decode
-	class Source
-		def initialize(path, language)
-			@path = path
-			@language = language
+	# A context for looking up languages based on file extension or name.
+	class Languages
+		def initialize
+			@named = {}
+			@extensions = {}
 		end
 		
-		attr :path
-		
-		attr :language
-		
-		def open(&block)
-			File.open(@path, &block)
-		end
-		
-		def definitions(&block)
-			return to_enum(:definitions) unless block_given?
+		def freeze
+			return unless frozen?
 			
-			self.open do |file|
-				@language.definitions_for(file, &block)
+			@named.freeze
+			@extensions.freeze
+			
+			super
+		end
+		
+		def add(language)
+			language.names.each do |name|
+				@named[name] = language
+			end
+			
+			language.extensions.each do |extension|
+				@extensions[extension] = language
 			end
 		end
 		
-		def segments(&block)
-			return to_enum(:segments) unless block_given?
-			
-			self.open do |file|
-				@language.segments_for(file, &block)
+		def fetch(name)
+			@named.fetch(name) do
+				unless @named.frozen?
+					@named[name] = Language::Generic.new(name)
+				end
 			end
+		end
+		
+		def source_for(path)
+			extension = File.extname(path)
+			
+			if language = @extensions[extension]
+				Source.new(path, language)
+			end
+		end
+		
+		REFERENCE = /\A(?<name>[a-z]+)?\s+(?<identifier>.*?)\z/
+		
+		# Parse a language agnostic reference:
+		# e.g. `ruby MyModule::MyClass`
+		#
+		def parse_reference(text, default_language: nil)
+			if match = REFERENCE.match(text)
+				language = self.fetch(match[:name]) || default_language
+				
+				return language.reference_for(match[:identifier])
+			end
+		end
+		
+		def reference_for(name, identifier)
+			self.fetch(name).reference_for(identifier)
 		end
 	end
 end

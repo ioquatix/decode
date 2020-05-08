@@ -25,7 +25,9 @@ module Decode
 	# A list of definitions organised for quick lookup and lexical enumeration.
 	class Index
 		# Initialize an empty index.
-		def initialize
+		def initialize(languages)
+			@languages = languages
+			
 			@sources = {}
 			@definitions = {}
 			
@@ -52,7 +54,7 @@ module Decode
 		# @param paths [Array(String)] The source file paths.
 		def update(paths)
 			paths.each do |path|
-				if source = Source.for?(path)
+				if source = @languages.source_for(path)
 					@sources[path] = source
 					
 					source.definitions do |symbol|

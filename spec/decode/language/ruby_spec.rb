@@ -23,7 +23,7 @@ require 'decode/language/ruby'
 
 RSpec.describe Decode::Language::Ruby do
 	let(:path) {File.expand_path("fixtures/ruby.rb", __dir__)}
-	let(:source) {Decode::Source.new(path)}
+	let(:source) {Decode::Source.new(path, described_class)}
 	let(:definitions) {source.definitions.to_a}
 	let(:segments) {source.segments.to_a}
 	

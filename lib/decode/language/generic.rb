@@ -18,36 +18,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require_relative 'reference'
 
 module Decode
-	class Source
-		def initialize(path, language)
-			@path = path
-			@language = language
-		end
-		
-		attr :path
-		
-		attr :language
-		
-		def open(&block)
-			File.open(@path, &block)
-		end
-		
-		def definitions(&block)
-			return to_enum(:definitions) unless block_given?
-			
-			self.open do |file|
-				@language.definitions_for(file, &block)
+	module Language
+		# The Ruby language.
+		class Generic
+			def initialize(name)
+				@name = name
 			end
-		end
-		
-		def segments(&block)
-			return to_enum(:segments) unless block_given?
 			
-			self.open do |file|
-				@language.segments_for(file, &block)
+			attr :name
+			
+			# Generate a generic reference.
+			def reference_for(identifier)
+				Reference.new(identifier, self)
+			end
+			
+			# Parse the input yielding definitions.
+			# @block `{|definition| ...}`
+			# @yield definition [Definition]
+			def definitions_for(input, &block)
+			end
+			
+			# Parse the input yielding interleaved comments and code segments.
+			# @block `{|segment| ...}`
+			# @yield segment [Segment]
+			def segments_for(input, &block)
 			end
 		end
 	end

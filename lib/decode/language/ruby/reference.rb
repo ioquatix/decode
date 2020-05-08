@@ -18,47 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative '../reference'
+
 module Decode
 	module Language
 		module Ruby
 			# An Ruby-specific reference which can be resolved to zero or more definitions.
-			class Reference
-				# Initialize the reference.
-				# @param text [String] The text text of the reference.
-				def initialize(text)
-					@text = text
-					
-					@lexical_path = nil
-					@path = nil
-				end
-				
-				def language
-					Ruby
-				end
-				
-				attr :text
-				
-				# Whether the reference starts at the base of the lexical tree.
-				def absolute?
-					@text.start_with?('::')
-				end
-				
-				def lexical_path
-					@lexical_path ||= @text.scan(/(::|\.|#|:)?([^:.#]+)/)
-				end
-				
-				def best(definitions)
-					prefix, name = lexical_path.last
-					
-					definitions.select do |definition|
-						prefix.nil? || definition.start_with?(prefix)
-					end
-				end
-				
-				# The lexical path of the reference.
-				# @return [Array(String)]
-				def path
-					@path ||= self.lexical_path.map{|_, name| name.to_sym}
+			class Reference < Language::Reference
+				def split(text)
+					text.scan(/(::|\.|#|:)?([^:.#]+)/)
 				end
 			end
 		end

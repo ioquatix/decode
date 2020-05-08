@@ -20,34 +20,36 @@
 
 require 'decode/index'
 require 'build/files/glob'
+require_relative 'languages_context'
 
 RSpec.describe Decode::Index do
+	include_context Decode::Languages
+	subject{index}
+	
 	let(:path) {File.expand_path("../../lib", __dir__)}
 	let(:paths) {Build::Files::Glob.new(path, "**/*.rb")}
 	
 	it 'can extract declarations' do
-		subject.update(paths)
+		index.update(paths)
 		
-		expect(subject.definitions).to include(
+		expect(index.definitions).to include(
 			"Decode::Documentation",
 			"Decode::Documentation#initialize",
 			"Decode::Documentation#description",
 			"Decode::Documentation#attributes",
 			"Decode::Documentation#parameters",
-			"Decode::Language",
-			"Decode::Language.detect"
 		)
 	end
 	
 	describe '#lookup' do
 		it 'can lookup relative references' do
-			subject.update(paths)
+			index.update(paths)
 			
-			initialize_reference = Decode::Language::Ruby::Reference.new("Decode::Documentation#initialize")
-			initialize_definitions = subject.lookup(initialize_reference)
+			initialize_reference = languages.reference_for('ruby', 'Decode::Documentation#initialize')
+			initialize_definitions = index.lookup(initialize_reference)
 			expect(initialize_definitions.size).to be == 1
 			
-			source_reference = Decode::Language::Ruby::Reference.new("Source")
+			source_reference = languages.reference_for('ruby', "Source")
 			source_definitions = subject.lookup(source_reference, relative_to: initialize_definitions.first)
 			expect(source_definitions.size).to be == 1
 			expect(source_definitions.first.qualified_name).to be == "Decode::Source"

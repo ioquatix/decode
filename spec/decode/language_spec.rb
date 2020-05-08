@@ -19,15 +19,32 @@
 # THE SOFTWARE.
 
 require 'decode/language'
+require_relative 'languages_context'
 
 RSpec.describe Decode::Language do
+	include_context Decode::Languages
+	
 	describe '.reference' do
-		subject(:reference) {described_class.reference(".rb Foo::Bar")}
+		context 'language specific reference' do
+			subject(:reference) {languages.parse_reference("ruby Foo::Bar")}
+			
+			it 'can generate language specific references' do
+				expect(reference).to be_kind_of Decode::Language::Ruby::Reference
+				
+				expect(reference.identifier).to be == "Foo::Bar"
+				expect(reference.language).to be == Decode::Language::Ruby
+			end
+		end
 		
-		it 'can generate language specific references' do
-			expect(reference).to be_kind_of Decode::Language::Ruby::Reference
-			expect(reference.text).to be == "Foo::Bar"
-			expect(reference.language).to be == Decode::Language::Ruby
+		context 'generic reference' do
+			subject(:reference) {languages.parse_reference('generic Foo::Bar')}
+			
+			it 'can generate language specific references' do
+				expect(reference).to be_kind_of Decode::Language::Reference
+				
+				expect(reference.identifier).to be == "Foo::Bar"
+				expect(reference.language.name).to be == "generic"
+			end
 		end
 	end
 end

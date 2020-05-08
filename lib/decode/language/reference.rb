@@ -18,44 +18,60 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'ruby/reference'
-require_relative 'ruby/parser'
-
 module Decode
 	module Language
-		# The Ruby language.
-		module Ruby
-			# The canoical name of the language for use in output formatting.
-			# e.g. source code highlighting.
-			def self.name
-				"ruby"
+		# An reference which can be resolved to zero or more definitions.
+		class Reference
+			# Initialize the reference.
+			# @param identifier [String] The identifier part of the reference.
+			def initialize(identifier, language)
+				@identifier = identifier
+				@language = language
+				
+				@lexical_path = nil
+				@path = nil
 			end
 			
-			def self.names
-				[self.name]
+			# The identifier part of the reference.
+			# @attr [String]
+			attr :identifier
+			
+			# The language associated with this reference.
+			attr :language
+			
+			# Whether the reference starts at the base of the lexical tree.
+			def absolute?
+				!self.relative?
 			end
 			
-			def self.extensions
-				['.rb', '.ru']
+			def relative?
+				prefix, name = self.lexical_path.first
+				
+				return prefix.nil?
 			end
 			
-			# Generate a language-specific reference.
-			def self.reference_for(identifier)
-				Reference.new(identifier, self)
+			def split(identifier)
+				identifier.scan(/(\W+)?(\w+)/)
 			end
 			
-			# Parse the input yielding definitions.
-			# @block `{|definition| ...}`
-			# @yield definition [Definition]
-			def self.definitions_for(input, &block)
-				Parser.new.definitions_for(input, &block)
+			def lexical_path
+				@lexical_path ||= self.split(@identifier)
 			end
 			
-			# Parse the input yielding interleaved comments and code segments.
-			# @block `{|segment| ...}`
-			# @yield segment [Segment]
-			def self.segments_for(input, &block)
-				Parser.new.segments_for(input, &block)
+			def best(definitions)
+				prefix, name = lexical_path.last
+				
+				definitions.select do |definition|
+					definition.language == @language && (
+						prefix.nil? || definition.start_with?(prefix)
+					)
+				end
+			end
+			
+			# The lexical path of the reference.
+			# @return [Array(String)]
+			def path
+				@path ||= self.lexical_path.map{|_, name| name.to_sym}
 			end
 		end
 	end

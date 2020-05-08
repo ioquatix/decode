@@ -18,29 +18,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative 'language/generic'
 require_relative 'language/ruby'
 
 module Decode
 	# Language specific parsers and definitions.
 	module Language
-		def self.detect(path)
-			case path
-			when /\.(rb|ru)\z/
-				return Language::Ruby
-			end
-		end
-		
-		REFERENCE = /\A(?<language>\.[a-z]+)?\s+(?<text>.*?)\z/
-		
-		# A language agnostic reference:
-		# e.g. `.rb MyModule::MyClass`
-		#
-		def self.reference(string, language = nil)
-			if match = REFERENCE.match(string)
-				language = self.detect(match[:language]) || language
-				
-				return language.reference(match[:text])
-			end
-		end
 	end
 end

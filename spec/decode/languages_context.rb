@@ -18,37 +18,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'language'
+require 'decode/languages'
 
-module Decode
-	class Source
-		def initialize(path, language)
-			@path = path
-			@language = language
-		end
-		
-		attr :path
-		
-		attr :language
-		
-		def open(&block)
-			File.open(@path, &block)
-		end
-		
-		def definitions(&block)
-			return to_enum(:definitions) unless block_given?
-			
-			self.open do |file|
-				@language.definitions_for(file, &block)
-			end
-		end
-		
-		def segments(&block)
-			return to_enum(:segments) unless block_given?
-			
-			self.open do |file|
-				@language.segments_for(file, &block)
-			end
+require 'decode/language/ruby'
+
+RSpec.shared_context Decode::Languages do
+	let(:languages) do
+		Decode::Languages.new.tap do |languages|
+			languages.add(Decode::Language::Ruby)
 		end
 	end
+	
+	let(:index) {Decode::Index.new(languages)}
 end
