@@ -24,7 +24,7 @@ RSpec.describe Decode::Languages do
 	subject(:languages) {described_class.all}
 	
 	describe '.reference' do
-		context 'language specific reference' do
+		context 'with language specific reference' do
 			subject(:reference) {languages.parse_reference("ruby Foo::Bar")}
 			
 			it 'can generate language specific references' do
@@ -35,7 +35,7 @@ RSpec.describe Decode::Languages do
 			end
 		end
 		
-		context 'generic reference' do
+		context 'with generic reference' do
 			subject(:reference) {languages.parse_reference('generic Foo::Bar')}
 			
 			it 'can generate language specific references' do
@@ -43,6 +43,18 @@ RSpec.describe Decode::Languages do
 				
 				expect(reference.identifier).to be == "Foo::Bar"
 				expect(reference.language.name).to be == "generic"
+			end
+		end
+		
+		context 'with default language' do
+			subject(:reference) {languages.parse_reference('Foo::Bar', default_language: Decode::Language::Ruby)}
+			
+			it 'can generate language specific references' do
+				expect(reference).to be_kind_of Decode::Language::Ruby::Reference
+				
+				expect(reference.identifier).to be == "Foo::Bar"
+				expect(reference.language).to be == Decode::Language::Ruby
+
 			end
 		end
 	end

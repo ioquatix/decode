@@ -80,6 +80,8 @@ module Decode
 				language = self.fetch(match[:name]) || default_language
 				
 				return language.reference_for(match[:identifier])
+			elsif default_language
+				return default_language.reference_for(text)
 			end
 		end
 		
