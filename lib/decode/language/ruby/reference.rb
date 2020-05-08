@@ -24,21 +24,23 @@ module Decode
 			# An Ruby-specific reference which can be resolved to zero or more definitions.
 			class Reference
 				# Initialize the reference.
-				# @param value [String] The string value of the reference.
-				def initialize(value)
-					@value = value
+				# @param text [String] The text text of the reference.
+				def initialize(text)
+					@text = text
 					
 					@lexical_path = nil
 					@path = nil
 				end
 				
+				attr :text
+				
 				# Whether the reference starts at the base of the lexical tree.
 				def absolute?
-					@value.start_with?('::')
+					@text.start_with?('::')
 				end
 				
 				def lexical_path
-					@lexical_path ||= @value.scan(/(::|\.|#|:)?([^:.#]+)/)
+					@lexical_path ||= @text.scan(/(::|\.|#|:)?([^:.#]+)/)
 				end
 				
 				def best(definitions)

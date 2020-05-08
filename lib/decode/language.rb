@@ -29,5 +29,18 @@ module Decode
 				return Language::Ruby
 			end
 		end
+		
+		REFERENCE = /\A(?<language>\.[a-z]+)?\s+(?<text>.*?)\z/
+		
+		# A language agnostic reference:
+		# e.g. `.rb MyModule::MyClass`
+		#
+		def self.reference(string, language = nil)
+			if match = REFERENCE.match(string)
+				language = self.detect(match[:language]) || language
+				
+				return language.reference(match[:text])
+			end
+		end
 	end
 end
