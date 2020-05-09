@@ -78,6 +78,7 @@ module Decode
 			self.nested_name.start_with?(prefix)
 		end
 		
+		# Convert this definition into another kind of definition.
 		def convert(kind)
 			raise ArgumentError, "Unable to convert #{self} into #{kind}!"
 		end

@@ -30,7 +30,12 @@ module Decode
 			@language = language
 		end
 		
+		# The underlying comments from which the documentation is extracted.
+		# @attr [Array(String)]
+		attr :comments
+		
 		# The language in which the documentation was extracted from.
+		# @attr [Language]
 		attr :language
 		
 		DESCRIPTION = /\A\s*([^@\s].*)?\z/
@@ -63,36 +68,82 @@ module Decode
 			end
 		end
 		
-		ATTRIBUTE = /\A\s*@(?<name>.*?)\s+(?<value>.*?)\z/
-		
-		# The attribute lines of the comment block.
-		# e.g. `@return [String]`.
+		# Describes a named method parameter.
 		#
-		# @yield [String]
-		# @return [Enumerable]
-		def attributes
-			return to_enum(:attributes) unless block_given?
-			
-			@comments.each do |comment|
-				if match = comment.match(ATTRIBUTE)
-					yield match
-				end
-			end
-		end
-		
-		PARAMETER = /\A\s*@param\s+(?<name>.*?)\s+\[(?<type>.*?)\]\s+(?<details>.*?)\z/
-		
-		# The parameter lines of the comment block.
-		# e.g. `@param value [String] The value.`
+		# - `@param age [Float] The users age.`
 		#
-		# @yield [String]
-		# @return [Enumerable]
-		def parameters
-			return to_enum(:parameters) unless block_given?
+		PARAMETER = /\A\s*@(?<directive>param(eter)?)\s+(?<name>.*?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Describes a block parameter.
+		#
+		# - `@block {|person| ... } If a block is given.`
+		#
+		BLOCK = /\A\s*@(?<directive>block)\s+(?<type>{.*?})(\s+(?<details>.*?))?\Z/
+		
+		# Describes a named yield parameter.
+		#
+		# - `@yields person [Person] A person instance.`
+		#
+		YIELDS = /\A\s*@(?<directive>yields?)\s+(?<name>.*?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Describes an attribute type.
+		#
+		# - `@attribute [Integer] The person's age.`
+		#
+		ATTRIBUTE = /\A\s*@(?<directive>attr(ibute)?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Describes a return value.
+		#
+		# - `@returns [Integer] The person's age.`
+		#
+		RETURNS = /\A\s*@(?<directive>returns?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Identifies that a method might throw.
+		#
+		# - `@throws [:skip] If the `
+		#
+		THROWS = /\A\s*@(?<directive>throws?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Identifies that a mathod might raise an exception.
+		#
+		# - `@raises [exception] details`
+		#
+		RAISES = /\A\s*@(?<directive>raises?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+		
+		# Asserts a specific property about the method signature.
+		#
+		# - `@reentrant This method is thread-safe.`
+		# - `@deprecated Please use {other_method} instead.`
+		# - `@blocking This method may block.`
+		# - `@asynchronous This method may yield.`
+		#
+		PRAGMA = /\A\s*@(?<directive>reentrant|deprecated|blocking|asynchronous)(\s+(?<details>.*?))?\Z/
+		
+		# Scans the comments for matching signature patterns.
+		# @block {|kind, match| ... } If a block is given.
+		# @yield kind [Symbol] The kind of directive that was parsed.
+		# @yield match [MatchData] The extracted parts of the directive.
+		# @returns [Enumerator] If no block was given.
+		def signature
+			return to_enum(:signature) unless block_given?
 			
 			@comments.each do |comment|
 				if match = comment.match(PARAMETER)
-					yield match
+					yield :parameter, match
+				elsif match = comment.match(BLOCK)
+					yield :block, match
+				elsif match = comment.match(YIELDS)
+					yield :yields, match
+				elsif match = comment.match(ATTRIBUTE)
+					yield :attribute, match
+				elsif match = comment.match(RETURNS)
+					yield :returns, match
+				elsif match = comment.match(THROWS)
+					yield :returns, match
+				elsif match = comment.match(RAISES)
+					yield :returns, match
+				elsif match = comment.match(PRAGMA)
+					yield :pragma, match
 				end
 			end
 		end
