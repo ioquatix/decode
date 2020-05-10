@@ -39,10 +39,10 @@ RSpec.describe Decode::Comment::Text do
 			expect(yields).to be_kind_of(Decode::Comment::Yields)
 			expect(yields.children[0]).to be_kind_of(Decode::Comment::Text)
 			expect(yields.children[0]).to have_attributes(
-				line: "The items are yielded in reverse order."
+				line: "The items if a block is given."
 			)
 			
-			parameter = yields.children[1]
+			parameter = yields.children[2]
 			expect(parameter).to be_kind_of(Decode::Comment::Parameter)
 			
 			expect(parameter.children[0]).to be_kind_of(Decode::Comment::Text)

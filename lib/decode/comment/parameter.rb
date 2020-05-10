@@ -53,10 +53,6 @@ module Decode
 			# The type of the attribute.
 			# @attribute [String]
 			attr :type
-			
-			# The details associated with the tag.
-			# @attribute [String | Nil]
-			attr :details
 		end
 	end
 end

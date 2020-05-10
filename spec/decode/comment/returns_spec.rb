@@ -33,7 +33,7 @@ RSpec.describe Decode::Comment::Returns do
 			expect(documentation.children[0]).to be_kind_of(Decode::Comment::Returns)
 			expect(documentation.children[0]).to have_attributes(
 				type: "Integer",
-				details: "The number of items.",
+				text: ["The number of items."],
 			)
 		end
 	end

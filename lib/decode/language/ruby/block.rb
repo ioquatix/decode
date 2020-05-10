@@ -58,7 +58,7 @@ module Decode
 				
 				def convert(kind)
 					case kind
-					when :attr
+					when :attribute
 						Attribute.new(@node, @name,
 							comments: @comments, parent: @parent, language: @language
 						)

@@ -33,10 +33,10 @@ RSpec.describe Decode::Comment::Yields do
 			expect(documentation.children[0]).to be_kind_of(Decode::Comment::Yields)
 			expect(documentation.children[0]).to have_attributes(
 				block: "{|item| ...}",
-				details: "The items if a block is given.",
+				text: ["The items if a block is given."],
 			)
 			
-			parameter = documentation.children[0].children[0]
+			parameter = documentation.children[0].children[1]
 			expect(parameter).to be_kind_of(Decode::Comment::Parameter)
 			expect(parameter).to have_attributes(
 				type: "Integer",

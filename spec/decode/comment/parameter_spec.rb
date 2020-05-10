@@ -33,18 +33,14 @@ RSpec.describe Decode::Comment::Parameter do
 			expect(documentation.children[0]).to be_kind_of(Decode::Comment::Parameter)
 			expect(documentation.children[0]).to have_attributes(
 				type: "Integer",
-				details: "The x co-ordinate.",
+				text: ["The x co-ordinate."],
 			)
-			
-			expect(documentation.children[0].text).to be == []
 			
 			expect(documentation.children[1]).to be_kind_of(Decode::Comment::Parameter)
 			expect(documentation.children[1]).to have_attributes(
 				type: "Integer",
-				details: "The y co-ordinate.",
+				text: ["The y co-ordinate."],
 			)
-			
-			expect(documentation.children[1].text).to be == []
 		end
 	end
 end
