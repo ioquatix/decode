@@ -21,20 +21,32 @@
 require_relative 'language'
 
 module Decode
+	# Represents a source file in a specific language.
 	class Source
 		def initialize(path, language)
 			@path = path
 			@language = language
 		end
 		
+		# The path of the source file.
+		# @attribute [String] A file-system path.
 		attr :path
 		
+		# The language of the source file.
+		# @attribute [Language::Generic]
 		attr :language
 		
+		# Open the source file for reading.
+		# @yields {|file| ...} The opened {File} instance.
+		# 	@parameter file [File]
 		def open(&block)
 			File.open(@path, &block)
 		end
 		
+		# Open the source file and read all definitions.
+		# @yields {|definition| ...} All definitions from the source file.
+		# 	@parameter definition [Definition]
+		# @returns [Enumerator(Definition)] If no block given.
 		def definitions(&block)
 			return to_enum(:definitions) unless block_given?
 			
@@ -43,6 +55,10 @@ module Decode
 			end
 		end
 		
+		# Open the source file and read all segments.
+		# @yields {|segment| ...} All segments from the source file.
+		# 	@parameter segment [Segment]
+		# @returns [Enumerator(Segment)] If no block given.
 		def segments(&block)
 			return to_enum(:segments) unless block_given?
 			

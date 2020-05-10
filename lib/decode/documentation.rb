@@ -49,7 +49,7 @@ module Decode
 		attr :comments
 		
 		# The language in which the documentation was extracted from.
-		# @attribute [Language]
+		# @attribute [Language::Generic]
 		attr :language
 	end
 end

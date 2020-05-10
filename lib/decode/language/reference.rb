@@ -45,6 +45,7 @@ module Decode
 			attr :identifier
 			
 			# The language associated with this reference.
+			# @attribute [Language::Generic]
 			attr :language
 			
 			# Whether the reference starts at the base of the lexical tree.

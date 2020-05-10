@@ -116,7 +116,7 @@ module Decode
 		end
 		
 		# Traverse the trie.
-		# See {Node:traverse} for details.
+		# See {Node#traverse} for details.
 		def traverse(path = [], &block)
 			if node = @root.lookup(path)
 				node.traverse(&block)

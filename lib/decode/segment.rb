@@ -39,7 +39,7 @@ module Decode
 		attr :comments
 		
 		# The language of the code attached to this segment.
-		# @attribute [Language]
+		# @attribute [Language::Generic]
 		attr :language
 		
 		# An interface for accsssing the documentation of the definition.
