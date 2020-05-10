@@ -11,16 +11,16 @@ paths = Dir.glob(File.expand_path("../../lib/**/*.rb", __dir__))
 index.update(paths)
 
 # Finally, you can print out the loaded symbols:
-index.symbols.each do |name, symbol|
+index.definitions.each do |name, symbol|
 	puts symbol.long_form
 end
 
 # Lookup a specific symbol:
-absolute_reference = Decode::Language::Ruby.reference("Decode::Index:lookup")
+absolute_reference = Decode::Language::Ruby.reference_for("Decode::Index#lookup")
 lookup_symbol = index.lookup(absolute_reference).first
 puts lookup_symbol.long_form
 
 # Lookup a method relative to that symbol:
-relative_reference = Decode::Language::Ruby.reference("trie")
+relative_reference = Decode::Language::Ruby.reference_for("trie")
 trie_attribute = index.lookup(relative_reference, relative_to: lookup_symbol).first
 puts trie_attribute.long_form

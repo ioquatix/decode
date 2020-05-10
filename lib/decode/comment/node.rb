@@ -63,11 +63,11 @@ module Decode
 			end
 			
 			# Traverse the tags from this node using {each}.
-			# Invoke `descend.call` to traverse the children of the current node.
+			# Invoke `descend.call(child)` to recursively traverse the specified child.
 			#
-			# @block {|node, descend| descend.call}
-			# @yield node [Node] The current node which is being traversed.
-			# @yield descend [Proc | Nil] The recursive method for traversing children.
+			# @yields {|node, descend| descend.call}
+			# 	@parameter node [Node] The current node which is being traversed.
+			# 	@parameter descend [Proc | Nil] The recursive method for traversing children.
 			def traverse(&block)
 				descend = ->(node){
 					node.traverse(&block)
