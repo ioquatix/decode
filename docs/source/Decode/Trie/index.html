@@ -2,9 +2,10 @@
 <html>
 	<head>
 		
-			<title>::Decode::Trie</title>
+			<title>Decode::Trie</title>
 		
 		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
 		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
 		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
@@ -22,10 +23,11 @@
 	</head>
 
 	<body class="">
-		
-	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+		<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
 
-<h1><code class="language-ruby">::Decode::Trie</code></h1>
+		
+		
+	<h1><code class="language-ruby">Decode::Trie</code></h1>
 	
 	<main>
 		<p>A prefix-trie data structure for fast lexical lookups.</p>
@@ -33,28 +35,79 @@
 		<h2>Nested</h2>
 		
 		<ul>
-			<li><a href="Node/index.html"><code class="language-ruby">::Decode::Trie::Node</code></a></li>
+			<li><a href="Node/index.html"><code class="language-ruby">Decode::Trie::Node</code></a></li>
 		</ul>
 		
 		<h2>Definitions</h2>
 		
-		<h3 id="::Decode::Trie:initialize"><code class="language-ruby">def initialize</code></h3><p>Initialize an empty trie.</p>
-<h3 id="::Decode::Trie:root"><code class="language-ruby">attr :root</code></h3><p>The root of the trie.</p>
-<h3 id="::Decode::Trie:insert"><code class="language-ruby">def insert(path, value)</code></h3><p>Insert the specified value at the given path into the trie.</p>
-<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
-								<dd><p>The lexical path where the value will be inserted.</p>
-</dd>
-													<dt><code class="syntax">value</code> — <code class="language-ruby">Object</code></dt>
-								<dd><p>The value to insert.</p>
-</dd>
-						</dl><h3 id="::Decode::Trie:lookup"><code class="language-ruby">def lookup(path)</code></h3><p>Lookup the values at the specified path.</p>
-<dl>							<dt><code class="syntax">path</code> — <code class="language-ruby">Array(String)</code></dt>
-								<dd><p>The lexical path which contains the values.</p>
-</dd>
-						</dl><h3 id="::Decode::Trie:each"><code class="language-ruby">def each(path = [], &amp;block)</code></h3><p>Enumerate all lexical scopes under the specified path.</p>
-<h3 id="::Decode::Trie:traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></h3><p>Traverse the trie.
-See <a href="Node/index.html#%3A%3ADecode%3A%3ATrie%3A%3ANode%3Atraverse"><code class="language-ruby">def traverse</code></a> for details.</p>
-	</main>
+		<h3 id="Decode::Trie#initialize"><code class="language-ruby">def initialize</code></h3><p>Initialize an empty trie.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def initialize
+	@root = Node.new
+end</code></pre>
+						</details><h3 id="Decode::Trie#root"><code class="language-ruby">attr :root</code></h3><p>The root of the trie.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<a href="Node/index.html"><code class="language-ruby">class Decode::Trie::Node</code></a></dt></dl>
+</details>
+<h3 id="Decode::Trie#insert"><code class="language-ruby">def insert(path, value)</code></h3><p>Insert the specified value at the given path into the trie.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">path</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>The lexical path where the value will be inserted.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">value</code>　<code class="language-ruby">Object</code></dt><dd><p>The value to insert.</p>
+</dd></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def insert(path, value)
+	node = @root
+	
+	path.each do |key|
+		node = (node.children[key] ||= Node.new)
+	end
+	
+	(node.values ||= []) &lt;&lt; value
+end</code></pre>
+						</details><h3 id="Decode::Trie#lookup"><code class="language-ruby">def lookup(path)</code></h3><p>Lookup the values at the specified path.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">path</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>The lexical path which contains the values.</p>
+</dd><dt>
+					<strong>returns</strong>　<code class="language-ruby">Array(Object) | Nil</code></dt><dd><p>The values that existed (or not) at the specified path.</p>
+</dd></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def lookup(path)
+	@root.lookup(path)
+end</code></pre>
+						</details><h3 id="Decode::Trie#each"><code class="language-ruby">def each(path = [], &amp;block)</code></h3><p>Enumerate all lexical scopes under the specified path.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def each(path = [], &amp;block)
+	if node = @root.lookup(path)
+		node.traverse do |path, node, descend|
+			yield path, node.values
+			
+			descend.call
+		end
+	end
+end</code></pre>
+						</details><h3 id="Decode::Trie#traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></h3><p>Traverse the trie.
+See <a href="Node/index.html#Decode%3A%3ATrie%3A%3ANode%23traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></a> for details.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def traverse(path = [], &amp;block)
+	if node = @root.lookup(path)
+		node.traverse(&amp;block)
+	end
+end</code></pre>
+						</details>	</main>
 
 		
 		<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>

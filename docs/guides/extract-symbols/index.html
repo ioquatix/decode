@@ -5,6 +5,7 @@
 			<title>Extract Symbols</title>
 		
 		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
 		<link rel="icon" type="image/png" href="../../_static/icon.png"/>
 		<link rel="stylesheet" href="../../_static/site.css" type="text/css" media="screen"/>
@@ -22,12 +23,13 @@
 	</head>
 
 	<body class="">
-		
-	<nav> › <a class="link" href="../../index.html">Project</a> › <a class="link" href="http://localhost:41265/guides/index">Guides</a></nav>
+		<nav> › <a class="link" href="../../index.html">Project</a> › <a class="link" href="../index.html">Guides</a></nav>
 
-<h1>Extract Symbols</h1>
+		
+		
+	<h1>Extract Symbols</h1>
 	
-	<main><h2><code>extract.rb</code></h2><p>This example demonstrates how to extract symbols using the index. An instance of <a href="../../source/Decode/Index/index.html"><code class="language-ruby">class Index</code></a> is used for loading symbols from source code files. These symbols are available as a flat list and as a trie structure. You can look up specific symbols using a reference using <a href="../../source/Decode/Index/index.html#%3A%3ADecode%3A%3AIndex%3Alookup"><code class="language-ruby">def lookup</code></a>.</p>
+	<main><h2><code>extract.rb</code></h2><p>This example demonstrates how to extract symbols using the index. An instance of <a href="../../source/Decode/Index/index.html"><code class="language-ruby">class Decode::Index</code></a> is used for loading symbols from source code files. These symbols are available as a flat list and as a trie structure. You can look up specific symbols using a reference using <a href="../../source/Decode/Index/index.html#Decode%3A%3AIndex%23lookup"><code class="language-ruby">def lookup(reference, relative_to: nil)</code></a>.</p>
 <pre><code class="language-ruby">require_relative '../../lib/decode/index'</code></pre><p>Firstly, construct the index:</p>
 <pre><code class="language-ruby">index = Decode::Index.new</code></pre><p>Then, update the index by loading paths from the file system:</p>
 <pre><code class="language-ruby">paths = Dir.glob(File.expand_path(&quot;../../lib/**/*.rb&quot;, __dir__))

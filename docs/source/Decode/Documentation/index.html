@@ -2,9 +2,10 @@
 <html>
 	<head>
 		
-			<title>::Decode::Documentation</title>
+			<title>Decode::Documentation</title>
 		
 		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
 		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
 		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
@@ -22,10 +23,11 @@
 	</head>
 
 	<body class="">
-		
-	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+		<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
 
-<h1><code class="language-ruby">::Decode::Documentation</code></h1>
+		
+		
+	<h1><code class="language-ruby">Decode::Documentation</code></h1>
 	
 	<main>
 		<p>Structured access to a set of comment lines.</p>
@@ -33,19 +35,37 @@
 		
 		<h2>Definitions</h2>
 		
-		<h3 id="::Decode::Documentation:initialize"><code class="language-ruby">def initialize(comments, language = nil)</code></h3><p>Initialize the documenation with an array of comments, within a specific language.</p>
-<dl>							<dt><code class="syntax">comments</code> — <code class="language-ruby">Array(String)</code></dt>
-								<dd><p>An array of comment lines.</p>
-</dd>
-													<dt><code class="syntax">language</code> — <a href="../Language/index.html"><code class="language-ruby">module Language</code></a></dt>
-								<dd><p>The language in which the comments were extracted.</p>
-</dd>
-						</dl><h3 id="::Decode::Documentation:language"><code class="language-ruby">attr :language</code></h3><p>The language in which the documentation was extracted from.</p>
-<h3 id="::Decode::Documentation:description"><code class="language-ruby">def description</code></h3><p>The text-only lines of the comment block.</p>
-<h3 id="::Decode::Documentation:attributes"><code class="language-ruby">def attributes</code></h3><p>The attribute lines of the comment block.
-e.g. <code>@returns [String]</code>.</p>
-<h3 id="::Decode::Documentation:parameters"><code class="language-ruby">def parameters</code></h3><p>The parameter lines of the comment block.
-e.g. <code>@parameter value [String] The value.</code></p>
+		<h3 id="Decode::Documentation#initialize"><code class="language-ruby">def initialize(comments, language = nil)</code></h3><p>Initialize the documentation with an array of comments, within a specific language.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">comments</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>An array of comment lines.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">language</code>　<a href="../Language/index.html"><code class="language-ruby">module Language</code></a></dt><dd><p>The language in which the comments were extracted.</p>
+</dd></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def initialize(comments, language = nil)
+	@comments = comments
+	@language = language
+	
+	language.tags.parse(@comments.dup) do |node|
+		self.add(node)
+	end
+end</code></pre>
+						</details><h3 id="Decode::Documentation#comments"><code class="language-ruby">attr :comments</code></h3><p>The underlying comments from which the documentation is extracted.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Array(String)</code></dt></dl>
+</details>
+<h3 id="Decode::Documentation#language"><code class="language-ruby">attr :language</code></h3><p>The language in which the documentation was extracted from.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<a href="../Language/Generic/index.html"><code class="language-ruby">class Decode::Language::Generic</code></a></dt></dl>
+</details>
 	</main>
 
 		

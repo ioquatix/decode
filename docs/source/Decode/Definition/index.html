@@ -2,9 +2,10 @@
 <html>
 	<head>
 		
-			<title>::Decode::Definition</title>
+			<title>Decode::Definition</title>
 		
 		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		
 		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
 		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
@@ -22,10 +23,11 @@
 	</head>
 
 	<body class="">
-		
-	<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
+		<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
 
-<h1><code class="language-ruby">::Decode::Definition</code></h1>
+		
+		
+	<h1><code class="language-ruby">Decode::Definition</code></h1>
 	
 	<main>
 		<p>A symbol with attached documentation.</p>
@@ -33,18 +35,205 @@
 		
 		<h2>Definitions</h2>
 		
-		<h3 id="::Decode::Definition:comments"><code class="language-ruby">attr :comments</code></h3><p>The comment lines which directly preceeded the definition.</p>
-<h3 id="::Decode::Definition:short_form"><code class="language-ruby">def short_form</code></h3><p>A short form of the definition.
+		<h3 id="Decode::Definition#initialize"><code class="language-ruby">def initialize(name, parent: nil, language: parent.language, comments: nil)</code></h3><p>Initialize the symbol.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">name</code>　<code class="language-ruby">Symbol</code></dt><dd><p>The name of the definition.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">parent</code>　<code class="language-ruby">Symbol</code></dt><dd><p>The parent lexical scope.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">language</code>　<a href="../Language/index.html"><code class="language-ruby">module Language</code></a></dt><dd><p>The language in which the symbol is defined in.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">comments</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>The comments associated with the definition.</p>
+</dd></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def initialize(name, parent: nil, language: parent.language, comments: nil)
+	@name = name
+	
+	@comments = comments
+	@language = language
+	@parent = parent
+	
+	@path = nil
+	@qualified_name = nil
+	@documentation = nil
+end</code></pre>
+						</details><h3 id="Decode::Definition#name"><code class="language-ruby">attr :name</code></h3><p>The symbol name.
+e.g. <code>:Decode</code>.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Symbol</code></dt></dl>
+</details>
+<h3 id="Decode::Definition#parent"><code class="language-ruby">attr :parent</code></h3><p>The parent definition, defining lexical scope.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Definition | Nil</code></dt></dl>
+</details>
+<h3 id="Decode::Definition#language"><code class="language-ruby">attr :language</code></h3><p>The language the symbol is defined within.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<a href="../Language/Generic/index.html"><code class="language-ruby">class Decode::Language::Generic</code></a></dt></dl>
+</details>
+<h3 id="Decode::Definition#comments"><code class="language-ruby">attr :comments</code></h3><p>The comment lines which directly preceeded the definition.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Array(String)</code></dt></dl>
+</details>
+<h3 id="Decode::Definition#qualified_name"><code class="language-ruby">def qualified_name</code></h3><p>The qualified name is an absolute name which includes any and all namespacing.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def qualified_name
+	@qualified_name ||= begin
+		if @parent
+			@parent.qualified_name + self.nested_name
+		else
+			@name.to_s
+		end
+	end
+end</code></pre>
+						</details><h3 id="Decode::Definition#nested_name"><code class="language-ruby">def nested_name</code></h3><p>The name of this definition plus the nesting prefix.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def nested_name
+	&quot;::#{@name}&quot;
+end</code></pre>
+						</details><h3 id="Decode::Definition#convert"><code class="language-ruby">def convert(kind)</code></h3><p>Convert this definition into another kind of definition.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def convert(kind)
+	raise ArgumentError, &quot;Unable to convert #{self} into #{kind}!&quot;
+end</code></pre>
+						</details><h3 id="Decode::Definition#path"><code class="language-ruby">def path</code></h3><p>The lexical scope as an array of names.
+e.g. <code>[:Decode, :Definition]</code></p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Array</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def path
+	if @path
+		# Cached version:
+		@path
+	elsif @parent
+		# Merge with parent:
+		@path = [*@parent.path, @name].freeze
+	else
+		# At top:
+		@path = [@name].freeze
+	end
+end</code></pre>
+						</details><h3 id="Decode::Definition#short_form"><code class="language-ruby">def short_form</code></h3><p>A short form of the definition.
 e.g. <code>def short_form</code>.</p>
-<h3 id="::Decode::Definition:long_form"><code class="language-ruby">def long_form</code></h3><p>A long form of the definition.
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String | nil</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def short_form
+end</code></pre>
+						</details><h3 id="Decode::Definition#long_form"><code class="language-ruby">def long_form</code></h3><p>A long form of the definition.
 e.g. <code>def initialize(kind, name, comments, **options)</code>.</p>
-<h3 id="::Decode::Definition:qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>A long form which uses the qualified name if possible.
-Defaults to <a href="index.html#%3A%3ADecode%3A%3ADefinition%3Along_form"><code class="language-ruby">def long_form</code></a>.</p>
-<h3 id="::Decode::Definition:text"><code class="language-ruby">def text</code></h3><p>The full text of the definition.</p>
-<h3 id="::Decode::Definition:container?"><code class="language-ruby">def container?</code></h3><p>Whether this definition can contain nested definitions.</p>
-<h3 id="::Decode::Definition:nested?"><code class="language-ruby">def nested?</code></h3><p>Whether this represents a single entity to be documented (along with it’s contents).</p>
-<h3 id="::Decode::Definition:documentation"><code class="language-ruby">def documentation</code></h3><p>Structured access to the definitions comments.</p>
-	</main>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String | nil</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def long_form
+	self.short_form
+end</code></pre>
+						</details><h3 id="Decode::Definition#qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>A long form which uses the qualified name if possible.
+Defaults to <a href="index.html#Decode%3A%3ADefinition%23long_form"><code class="language-ruby">def long_form</code></a>.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String | nil</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def qualified_form
+	self.long_form
+end</code></pre>
+						</details><h3 id="Decode::Definition#multiline?"><code class="language-ruby">def multiline?</code></h3><p>Whether the definition spans multiple lines.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Boolean</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def multiline?
+	false
+end</code></pre>
+						</details><h3 id="Decode::Definition#text"><code class="language-ruby">def text</code></h3><p>The full text of the definition.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">String | nil</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def text
+end</code></pre>
+						</details><h3 id="Decode::Definition#container?"><code class="language-ruby">def container?</code></h3><p>Whether this definition can contain nested definitions.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Boolean</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def container?
+	false
+end</code></pre>
+						</details><h3 id="Decode::Definition#nested?"><code class="language-ruby">def nested?</code></h3><p>Whether this represents a single entity to be documented (along with it’s contents).</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Boolean</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def nested?
+	container?
+end</code></pre>
+						</details><h3 id="Decode::Definition#documentation"><code class="language-ruby">def documentation</code></h3><p>Structured access to the definitions comments.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Documentation | Nil</code></dt><dd><p>A <a href="../Documentation/index.html"><code class="language-ruby">class Decode::Documentation</code></a> instance if this definition has comments.</p>
+</dd></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def documentation
+	if @comments&amp;.any?
+		@documentation ||= Documentation.new(@comments, @language)
+	end
+end</code></pre>
+						</details>	</main>
 
 		
 		<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>
