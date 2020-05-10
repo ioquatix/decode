@@ -36,13 +36,13 @@ module Decode
 			end
 			
 			# Parse the input yielding definitions.
-			# @block `{|definition| ...}`
+			# @block {|definition| ... }
 			# @yield definition [Definition]
 			def definitions_for(input, &block)
 			end
 			
 			# Parse the input yielding interleaved comments and code segments.
-			# @block `{|segment| ...}`
+			# @block {|segment| ... }
 			# @yield segment [Segment]
 			def segments_for(input, &block)
 			end

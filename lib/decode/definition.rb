@@ -152,7 +152,7 @@ module Decode
 		
 		# Structured access to the definitions comments.
 		#
-		# @return [Documentation | Nil] A `Documentation` if this definition has comments.
+		# @return [Documentation | Nil] A {Documentation} instance if this definition has comments.
 		def documentation
 			if @comments&.any?
 				@documentation ||= Documentation.new(@comments)

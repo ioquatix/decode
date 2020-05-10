@@ -43,7 +43,7 @@ module Decode
 		attr :language
 		
 		# An interface for accsssing the documentation of the definition.
-		# @return [Documentation | nil] A `Documentation` if this definition has comments.
+		# @return [Documentation | nil] A {Documentation} instance if this definition has comments.
 		def documentation
 			if @comments&.any?
 				@documentation ||= Documentation.new(@comments, @language)

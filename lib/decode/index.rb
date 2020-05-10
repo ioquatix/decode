@@ -75,7 +75,7 @@ module Decode
 		
 		# Lookup the specified reference and return matching definitions.
 		#
-		# @param reference [Reference] The reference to match.
+		# @param reference [Language::Reference] The reference to match.
 		# @param relative_to [Definition] Lookup the reference relative to the scope of this definition.
 		def lookup(reference, relative_to: nil)
 			if reference.absolute? || relative_to.nil?

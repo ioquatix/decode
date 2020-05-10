@@ -32,6 +32,14 @@ module Decode
 				@path = nil
 			end
 			
+			def to_s
+				"{#{self.language} #{self.identifier}}"
+			end
+			
+			def inspect
+				"\#<#{self.class} {#{self.identifier}}>"
+			end
+			
 			# The identifier part of the reference.
 			# @attr [String]
 			attr :identifier

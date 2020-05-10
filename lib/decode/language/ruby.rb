@@ -40,20 +40,26 @@ module Decode
 			end
 			
 			# Generate a language-specific reference.
+			# @param identifier [String] A valid identifier.
 			def self.reference_for(identifier)
 				Reference.new(identifier, self)
 			end
 			
 			# Parse the input yielding definitions.
-			# @block `{|definition| ...}`
-			# @yield definition [Definition]
+			# @param input [File] The input file which contains the source code.
+			# @block {|definition| ...} Receives the definitions extracted from the source code.
+			# @yield definition [Definition] The source code definition including methods, classes, etc.
+			# @returns [Enumerator(Segment)] If no block given.
 			def self.definitions_for(input, &block)
 				Parser.new.definitions_for(input, &block)
 			end
 			
-			# Parse the input yielding interleaved comments and code segments.
-			# @block `{|segment| ...}`
+			# Parse the input yielding segments.
+			# Segments are constructed from a block of top level comments followed by a block of code.
+			# @param input [File] The input file which contains the source code.
+			# @block {|segment| ...}
 			# @yield segment [Segment]
+			# @return [Enumerator(Segment)] If no block given.
 			def self.segments_for(input, &block)
 				Parser.new.segments_for(input, &block)
 			end

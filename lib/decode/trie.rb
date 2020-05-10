@@ -57,7 +57,7 @@ module Decode
 			#
 			# @param path [Array(String)] The current lexical path.
 			#
-			# @block `{|path, node, descend| descend.call}`
+			# @block {|path, node, descend| descend.call}
 			# @yield path [Array(String)] The current lexical path.
 			# @yield node [Node] The current node which is being traversed.
 			# @yield descend [Proc] The recursive method for traversing children.
@@ -102,7 +102,7 @@ module Decode
 		
 		# Enumerate all lexical scopes under the specified path.
 		#
-		# @block `{|path, values| ...}`
+		# @block {|path, values| ...}
 		# @yield path [Array(String)] The lexical path.
 		# @yield values [Array(Object)] The values that exist at the given path.
 		def each(path = [], &block)
