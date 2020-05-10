@@ -32,9 +32,6 @@ RSpec.describe Decode::Index do
 		expect(subject.definitions).to include(
 			"Decode::Documentation",
 			"Decode::Documentation#initialize",
-			"Decode::Documentation#description",
-			"Decode::Documentation#attributes",
-			"Decode::Documentation#parameters",
 		)
 	end
 	

@@ -1,6 +1,6 @@
 
 # Process the given source root and report on comment coverage.
-# @param root [String] The root path to index.
+# @parameter root [String] The root path to index.
 def coverage(root)
 	require 'build/files/glob'
 	require 'decode/index'

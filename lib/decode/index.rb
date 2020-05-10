@@ -38,26 +38,26 @@ module Decode
 		end
 		
 		# All supported languages for this index.
-		# @attr [Languages]
+		# @attribute [Languages]
 		attr :languages
 		
 		# All source files that have been parsed.
-		# @attr [Array(Source)]
+		# @attribute [Array(Source)]
 		attr :sources
 		
 		# All definitions which have been parsed.
-		# @attr [Array(Symbol)]
+		# @attribute [Array(Symbol)]
 		attr :definitions
 		
 		# A (prefix) trie of lexically scoped definitions.
-		# @attr [Trie]
+		# @attribute [Trie]
 		
 		attr :trie
 		
 		# Updates the index by parsing the specified files.
 		# All extracted definitions are merged into the existing index.
 		#
-		# @param paths [Array(String)] The source file paths.
+		# @parameter paths [Array(String)] The source file paths.
 		def update(paths)
 			paths.each do |path|
 				if source = @languages.source_for(path)
@@ -75,8 +75,8 @@ module Decode
 		
 		# Lookup the specified reference and return matching definitions.
 		#
-		# @param reference [Language::Reference] The reference to match.
-		# @param relative_to [Definition] Lookup the reference relative to the scope of this definition.
+		# @parameter reference [Language::Reference] The reference to match.
+		# @parameter relative_to [Definition] Lookup the reference relative to the scope of this definition.
 		def lookup(reference, relative_to: nil)
 			if reference.absolute? || relative_to.nil?
 				lexical_path = []

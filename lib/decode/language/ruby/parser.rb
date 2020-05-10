@@ -207,7 +207,7 @@ module Decode
 				end
 				
 				KIND_ATTRIBUTE = /\A
-					(@(?<kind>attr)\s+(?<value>.*?))|
+					(@(?<kind>attribute)\s+(?<value>.*?))|
 					(@define\s+(?<kind>)\s+(?<value>.*?))
 				\Z/x
 				
@@ -279,6 +279,14 @@ module Decode
 						end
 						
 						yield segment if segment
+					else
+						# One top level segment:
+						segment = Segment.new(
+							extract_comments_for(node, comments),
+							Ruby,	node
+						)
+						
+						yield segment
 					end
 				end
 			end

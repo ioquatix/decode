@@ -31,17 +31,17 @@ module Decode
 			end
 			
 			# A mutable array of all values that terminate at this node.
-			# @attr [Array]
+			# @attribute [Array]
 			attr_accessor :values
 			
 			# A hash table of all children nodes, indexed by name.
-			# @attr [Hash(String, Node)]
+			# @attribute [Hash(String, Node)]
 			attr :children
 			
 			# Look up a lexical path starting at this node.
 			#
-			# @param path [Array(String)] The path to resolve.
-			# @return [Node | Nil]
+			# @parameter path [Array(String)] The path to resolve.
+			# @returns [Node | Nil]
 			def lookup(path, index = 0)
 				if index < path.size
 					if child = @children[path[index]]
@@ -55,7 +55,7 @@ module Decode
 			# Traverse the trie from this node.
 			# Invoke `descend.call` to traverse the children of the current node.
 			#
-			# @param path [Array(String)] The current lexical path.
+			# @parameter path [Array(String)] The current lexical path.
 			#
 			# @block {|path, node, descend| descend.call}
 			# @yield path [Array(String)] The current lexical path.
@@ -76,12 +76,12 @@ module Decode
 		end
 		
 		# The root of the trie.
-		# @attr [Node]
+		# @attribute [Node]
 		attr :root
 		
 		# Insert the specified value at the given path into the trie.
-		# @param path [Array(String)] The lexical path where the value will be inserted.
-		# @param value [Object] The value to insert.
+		# @parameter path [Array(String)] The lexical path where the value will be inserted.
+		# @parameter value [Object] The value to insert.
 		def insert(path, value)
 			node = @root
 			
@@ -94,8 +94,8 @@ module Decode
 		
 		# Lookup the values at the specified path.
 		#
-		# @param path [Array(String)] The lexical path which contains the values.
-		# @return [Array(Object) | Nil] The values that existed (or not) at the specified path.
+		# @parameter path [Array(String)] The lexical path which contains the values.
+		# @returns [Array(Object) | Nil] The values that existed (or not) at the specified path.
 		def lookup(path)
 			@root.lookup(path)
 		end

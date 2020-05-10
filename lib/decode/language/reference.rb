@@ -23,7 +23,7 @@ module Decode
 		# An reference which can be resolved to zero or more definitions.
 		class Reference
 			# Initialize the reference.
-			# @param identifier [String] The identifier part of the reference.
+			# @parameter identifier [String] The identifier part of the reference.
 			def initialize(identifier, language)
 				@identifier = identifier
 				@language = language
@@ -41,7 +41,7 @@ module Decode
 			end
 			
 			# The identifier part of the reference.
-			# @attr [String]
+			# @attribute [String]
 			attr :identifier
 			
 			# The language associated with this reference.
@@ -77,7 +77,7 @@ module Decode
 			end
 			
 			# The lexical path of the reference.
-			# @return [Array(String)]
+			# @returns [Array(String)]
 			def path
 				@path ||= self.lexical_path.map{|_, name| name.to_sym}
 			end

@@ -18,46 +18,61 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative '../../definition'
+require_relative 'text'
 
 module Decode
-	module Language
-		module Ruby
-			# A Ruby-specific definition.
-			class Definition < Decode::Definition
-				# Initialize the definition from the syntax tree node.
-				def initialize(node, *arguments, **options)
-					super(*arguments, **options)
+	module Comment
+		class Tags
+			def self.build
+				directives = Hash.new
+				
+				yield directives
+				
+				return self.new(directives)
+			end
+			
+			def initialize(directives)
+				@directives = directives
+			end
+			
+			def valid_indentation?(line, level)
+				line.start_with?('  ' * level) || line.start_with?("\t" * level)
+			end
+			
+			PATTERN = /\A\s*@(?<directive>.*?)(\s+(?<remainder>.*?))?\Z/
+			
+			def parse(lines, level = 0, &block)
+				while line = lines.first
+					# Is it at the right indentation level:
+					return unless valid_indentation?(line, level)
 					
-					@node = node
-				end
-				
-				def nested_name
-					"\##{@name}"
-				end
-				
-				# The parser syntax tree node.
-				attr :node
-				
-				def multiline?
-					@node.location.line != @node.location.last_line
-				end
-				
-				# The source code associated with the definition.
-				# @returns [String]
-				def text
-					expression = @node.location.expression
-					lines = expression.source.lines
-					if lines.count == 1
-						return lines.first
+					# We are going to consume the line:
+					lines.shift
+					
+					# Match it against a tag:
+					if match = PATTERN.match(line)
+						if klass = @directives[match[:directive]]
+							yield klass.parse(
+								match[:directive], match[:remainder],
+								lines, self, level
+							)
+						else
+							# Ignore unknown directive.
+						end
+					
+					# Or it's just text:
 					else
-						indentation = expression.source_line[/\A\s+/]
-						
-						# Remove all the indentation:
-						lines.each{|line| line.sub!(indentation, '')}
-						
-						return lines.join
+						yield Text.new(line.strip)
 					end
+				end
+			end
+			
+			def ignore(lines, level = 0)
+				if line = lines.first
+					# Is it at the right indentation level:
+					return unless valid_indentation?(line, level)
+					
+					lines.shift
 				end
 			end
 		end

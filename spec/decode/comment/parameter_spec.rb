@@ -18,41 +18,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'documentation'
+require 'decode/source'
+require 'decode/language/ruby'
 
-module Decode
-	# A chunk of code with an optional preceeding comment block.
-	#
-	#	~~~ ruby
-	#	# Get the first segment from a source file:
-	#	segment = source.segments.first
-	#	~~~
-	#
-	class Segment
-		def initialize(comments, language)
-			@comments = comments
-			@language = language
-		end
+RSpec.describe Decode::Comment::Parameter do
+	let(:language) {Decode::Language::Ruby}
+	let(:source) {Decode::Source.new(path, language)}
+	let(:documentation) {source.segments.first.documentation}
+	
+	context 'with simple parameters' do
+		let(:path) {File.expand_path("fixtures/parameters.rb", __dir__)}
 		
-		# The preceeding comments.
-		# @attribute [Array(String)]
-		attr :comments
-		
-		# The language of the code attached to this segment.
-		# @attribute [Language]
-		attr :language
-		
-		# An interface for accsssing the documentation of the definition.
-		# @returns [Documentation | nil] A {Documentation} instance if this definition has comments.
-		def documentation
-			if @comments&.any?
-				@documentation ||= Documentation.new(@comments, @language)
-			end
-		end
-		
-		# The source code trailing the comments.
-		# @returns [String | nil]
-		def code
+		it "should have parameter nodes" do
+			expect(documentation.children[0]).to be_kind_of(Decode::Comment::Parameter)
+			expect(documentation.children[0]).to have_attributes(
+				type: "Integer",
+				details: "The x co-ordinate.",
+			)
+			
+			expect(documentation.children[0].text).to be == []
+			
+			expect(documentation.children[1]).to be_kind_of(Decode::Comment::Parameter)
+			expect(documentation.children[1]).to have_attributes(
+				type: "Integer",
+				details: "The y co-ordinate.",
+			)
+			
+			expect(documentation.children[1].text).to be == []
 		end
 	end
 end

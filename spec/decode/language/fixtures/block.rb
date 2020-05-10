@@ -4,10 +4,10 @@
 add(:local) do
 	# The default hostname for the connection.
 	# @name hostname
-	# @attr [String]
+	# @attribute [String]
 	hostname "localhost"
 	
 	# The default context for managing the connection.
-	# @attr [Context]
+	# @attribute [Context]
 	context {Context.new(hostname)}
 end

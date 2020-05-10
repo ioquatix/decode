@@ -40,7 +40,7 @@ module Decode
 				end
 				
 				# The source code trailing the comments.
-				# @return [String | nil]
+				# @returns [String | nil]
 				def code
 					@expression.source
 				end

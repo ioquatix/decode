@@ -18,41 +18,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'documentation'
+require_relative 'tag'
 
 module Decode
-	# A chunk of code with an optional preceeding comment block.
-	#
-	#	~~~ ruby
-	#	# Get the first segment from a source file:
-	#	segment = source.segments.first
-	#	~~~
-	#
-	class Segment
-		def initialize(comments, language)
-			@comments = comments
-			@language = language
-		end
-		
-		# The preceeding comments.
-		# @attribute [Array(String)]
-		attr :comments
-		
-		# The language of the code attached to this segment.
-		# @attribute [Language]
-		attr :language
-		
-		# An interface for accsssing the documentation of the definition.
-		# @returns [Documentation | nil] A {Documentation} instance if this definition has comments.
-		def documentation
-			if @comments&.any?
-				@documentation ||= Documentation.new(@comments, @language)
+	module Comment
+		# Describes a named method parameter.
+		#
+		# - `@parameter age [Float] The users age.`
+		#
+		class Parameter < Tag
+			PATTERN = /\A(?<name>.*?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+			
+			def self.build(directive, match)
+				node = self.new(directive, match[:name], match[:type])
+				
+				if details = match[:details]
+					node.add(Text.new(details))
+				end
+				
+				return node
 			end
-		end
-		
-		# The source code trailing the comments.
-		# @returns [String | nil]
-		def code
+			
+			def initialize(directive, name, type)
+				super(directive)
+				
+				@name = name
+				@type = type
+			end
+			
+			# The name of the parameter.
+			# @attribute [String]
+			attr :name
+			
+			# The type of the attribute.
+			# @attribute [String]
+			attr :type
+			
+			# The details associated with the tag.
+			# @attribute [String | Nil]
+			attr :details
 		end
 	end
 end

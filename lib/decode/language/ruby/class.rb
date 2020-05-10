@@ -62,13 +62,13 @@ module Decode
 			# A Ruby-specific singleton class.
 			class Singleton < Definition
 				# A singleton class is a container for other definitions.
-				# @return [Boolean]
+				# @returns [Boolean]
 				def container?
 					true
 				end
 				
 				# Typically, a singleton class does not contain other definitions.
-				# @return [Boolean]
+				# @returns [Boolean]
 				def nested?
 					false
 				end
