@@ -65,6 +65,13 @@ e.g. <code>def puts(*lines, separator: "\n")</code>.</p>
 		self.short_form
 	end
 end</code></pre>
+						</details><h3 id="Decode::Language::Ruby::Method#qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>The fully qualified name of the block.
+e.g. <code>::Barnyard#foo</code>.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def qualified_form
+	self.qualified_name
+end</code></pre>
 						</details>	</main>
 
 		

@@ -100,8 +100,18 @@ end</code></pre>
 		return text if text.any?
 	end
 end</code></pre>
-						</details><h3 id="Decode::Comment::Node#traverse"><code class="language-ruby">def traverse(&amp;block)</code></h3><p>Traverse the tags from this node using <a href="index.html#Decode%3A%3AComment%3A%3ANode%23each"><code class="language-ruby">def each(&amp;block)</code></a>.
-Invoke <code>descend.call</code> to traverse the children of the current node.</p>
+						</details><h3 id="Decode::Comment::Node#traverse"><code class="language-ruby">def traverse(&amp;block)</code></h3><p>Traverse the tags from this node using <a href="index.html#Decode%3A%3AComment%3A%3ANode%23each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.
+Invoke <code>descend.call(child)</code> to recursively traverse the specified child.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>yields</strong>　<code class="syntax language-ruby">{|node, descend| descend.call}</code></dt><dd><dl>
+<dt>
+					<strong>parameter</strong>　<code class="syntax">node</code>　<a href="index.html"><code class="language-ruby">class Decode::Comment::Node</code></a></dt><dd><p>The current node which is being traversed.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">descend</code>　<code class="language-ruby">Proc | Nil</code></dt><dd><p>The recursive method for traversing children.</p>
+</dd>					</dl></dd></dl>
+</details>
 <details>
 							<summary><h4>Implementation</h4></summary>
 							<pre><code class="language-ruby">def traverse(&amp;block)
