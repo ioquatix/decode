@@ -52,9 +52,15 @@ module Decode
 					end
 				end
 				
+				# The fully qualified name of the block.
+				# e.g. `::Barnyard#foo`.
+				def qualified_form
+					self.qualified_name
+				end
+				
 				def convert(kind)
 					case kind
-					when :attr
+					when :attribute
 						Attribute.new(@node, @name,
 							comments: @comments, parent: @parent, language: @language
 						)
