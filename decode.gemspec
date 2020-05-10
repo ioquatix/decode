@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
 	
 	spec.required_ruby_version = "~> 2.5"
 	
-	spec.files = Dir.glob('{lib,bake}/**/*', base: __dir__)
+	spec.files = Dir['{lib,bake}/**/*', base: __dir__]
 	spec.require_paths = ["lib"]
 	
 	spec.add_dependency "parser"
