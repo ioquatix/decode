@@ -40,7 +40,7 @@ module Decode
 			class Parser
 				# Extract definitions from the given input file.
 				def definitions_for(input, &block)
-					top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
+					top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
 					
 					if top
 						walk_definitions(top, comments, &block)
@@ -241,7 +241,7 @@ module Decode
 				
 				# Extract segments from the given input file.
 				def segments_for(input, &block)
-					top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
+					top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
 					
 					# We delete any leading comments:
 					line = 0

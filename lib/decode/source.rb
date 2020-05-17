@@ -25,6 +25,7 @@ module Decode
 	class Source
 		def initialize(path, language)
 			@path = path
+			@buffer = nil
 			@language = language
 		end
 		
@@ -36,11 +37,10 @@ module Decode
 		# @attribute [Language::Generic]
 		attr :language
 		
-		# Open the source file for reading.
-		# @yields {|file| ...} The opened {File} instance.
-		# 	@parameter file [File]
-		def open(&block)
-			File.open(@path, &block)
+		# Read the source file into an internal buffer/cache.
+		# @returns [String]
+		def read
+			@buffer ||= File.read(@path).freeze
 		end
 		
 		# Open the source file and read all definitions.
@@ -50,9 +50,7 @@ module Decode
 		def definitions(&block)
 			return to_enum(:definitions) unless block_given?
 			
-			self.open do |file|
-				@language.definitions_for(file, &block)
-			end
+			@language.definitions_for(self.read, &block)
 		end
 		
 		# Open the source file and read all segments.
@@ -62,9 +60,7 @@ module Decode
 		def segments(&block)
 			return to_enum(:segments) unless block_given?
 			
-			self.open do |file|
-				@language.segments_for(file, &block)
-			end
+			@language.segments_for(self.read, &block)
 		end
 	end
 end
