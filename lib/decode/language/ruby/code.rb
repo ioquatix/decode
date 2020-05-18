@@ -19,18 +19,63 @@
 # THE SOFTWARE.
 
 require_relative 'definition'
+require_relative '../../rewriter'
+
+require 'parser/current'
 
 module Decode
 	module Language
 		module Ruby
 			# A Ruby-specific block of code.
 			class Code
-				def initialize(text, index, relative_to: nil, language: nil)
+				def initialize(text, index, relative_to: nil, language: relative_to&.language)
 					@text = text
-					@root = = ::Parser::CurrentRuby.parse(text)
+					@root = ::Parser::CurrentRuby.parse(text)
 					@index = index
 					@relative_to = relative_to
 					@language = language
+				end
+				
+				def rewriter
+					rewriter = Decode::Rewriter.new(@text)
+					
+					if @index
+						self.extract(@root, rewriter)
+					end
+					
+					return rewriter
+				end
+				
+				private
+				
+				def extract(node, rewriter)
+					case node&.type
+					when :send
+						if reference = Reference.from_const(node, @language)
+							if definition = @index.lookup(reference, relative_to: @relative_to)
+								expression = node.location.selector
+								range = expression.begin_pos...expression.end_pos
+								rewriter << Link.new(range, definition)
+							end
+						end
+						
+						# Extract constants from arguments:
+						children = node.children[2..].each do |node|
+							extract(node, rewriter)
+						end
+					when :const
+						if reference = Reference.from_const(node, @language)
+							if definition = @index.lookup(reference, relative_to: @relative_to)
+								expression = node.location.name
+								range = expression.begin_pos...expression.end_pos
+								rewriter << Link.new(range, definition)
+							end
+						end
+					when :begin
+						node.children.each do |child|
+							extract(child, rewriter)
+						end
+					end
 				end
 			end
 		end

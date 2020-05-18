@@ -18,79 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Decode
-	module Code
-		class Rewriter
-			def initialize(source)
-				@source = source
-				@matches = matches
-			end
-			
-			def << match
-				@matches << match
-			end
-			
-			def text_for(range)
-				@source.read[range]
-			end
-			
-			def apply
-				output = []
-				offset = 0
-				
-				@matches.sort.each do |match|
-					if match.offset > offset
-						output << text_for(offset...match.offset)
-					end
-					
-					offset += @match.apply(output, self)
-				end
-			end
-		end
+require 'decode/index'
+require 'decode/source'
+require 'decode/language/ruby'
+
+RSpec.describe Decode::Language::Ruby do
+	let(:path) {File.expand_path("fixtures/types.rb", __dir__)}
+	let(:source) {Decode::Source.new(path, described_class)}
+	let(:index) {Decode::Index.new}
+	let(:code) {source.code(index)}
+	
+	it "can extract some constants" do
+		index.update([path])
 		
-		class Match
-			def initialize(range)
-				@range = range
-			end
-			
-			attr :range
-			
-			def apply(source)
-				return source[range]
-			end
-			
-			def <=> other
-				@range.min <=> other.range.min
-			end
-			
-			def offset
-				@range.min
-			end
-			
-			def size
-				@range.size
-			end
-			
-			def apply(output, rewriter)
-				output << rewriter.text_for(@range)
-			end
-			
-			return self.size
-		end
-		
-		class Link < Match
-			def initialize(range, definition)
-				@definition = definition
-			end
-			
-			def apply(output, rewriter)
-				output << rewriter.link_to(
-					@definition,
-					rewriter.text_for(@range)
-				)
-				
-				return self.size
-			end
-		end
+		expect(code.rewriter.matches).to_not be_empty
 	end
 end

@@ -20,6 +20,7 @@
 
 require_relative 'ruby/reference'
 require_relative 'ruby/parser'
+require_relative 'ruby/code'
 
 require_relative '../comment/tags'
 require_relative '../comment/parameter'
@@ -85,6 +86,10 @@ module Decode
 			# @returns [Enumerator(Segment)] If no block given.
 			def self.segments_for(input, &block)
 				Parser.new.segments_for(input, &block)
+			end
+			
+			def self.code_for(text, index, relative_to: nil)
+				Code.new(text, index, relative_to: relative_to, language: self)
 			end
 		end
 	end

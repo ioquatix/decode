@@ -18,44 +18,83 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative '../reference'
-
 module Decode
-	module Language
-		module Ruby
-			# An Ruby-specific reference which can be resolved to zero or more definitions.
-			class Reference < Language::Reference
-				def self.from_const(node, language)
-					lexical_path = append_const(node)
-					
-					return self.new(node.location.expression.source, language, lexical_path)
+	class Rewriter
+		def initialize(text)
+			@text = text
+			@matches = []
+		end
+		
+		attr :text
+		
+		attr :matches
+		
+		def << match
+			@matches << match
+		end
+		
+		def text_for(range)
+			@text[range]
+		end
+		
+		def apply
+			output = []
+			offset = 0
+			
+			@matches.sort.each do |match|
+				if match.offset > offset
+					output << text_for(offset...match.offset)
 				end
 				
-				def self.append_const(node, path = [])
-					parent, name = node.children
-					
-					if parent
-						append_const(parent, path)
-					end
-					
-					case node.type
-					when :const
-						path << ['::', name]
-					when :cbase
-						path << ['::', nil]
-					when :send
-						path << ['#', name]
-					else
-						raise ArgumentError, "Could not determine reference for #{node}!"
-					end
-					
-					return path
-				end
-				
-				def split(text)
-					text.scan(/(::|\.|#|:)?([^:.#]+)/)
-				end
+				offset += @match.apply(output, self)
 			end
+			
+			return output.join
+		end
+	end
+	
+	class Match
+		def initialize(range)
+			@range = range
+		end
+		
+		attr :range
+		
+		def apply(source)
+			return source[range]
+		end
+		
+		def <=> other
+			@range.min <=> other.range.min
+		end
+		
+		def offset
+			@range.min
+		end
+		
+		def size
+			@range.size
+		end
+		
+		def apply(output, rewriter)
+			output << rewriter.text_for(@range)
+			
+			return self.size
+		end
+	end
+	
+	class Link < Match
+		def initialize(range, definition)
+			@definition = definition
+		end
+		
+		def apply(output, rewriter)
+			output << rewriter.link_to(
+				@definition,
+				rewriter.text_for(@range)
+			)
+			
+			return self.size
 		end
 	end
 end

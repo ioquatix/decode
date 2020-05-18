@@ -62,5 +62,9 @@ module Decode
 			
 			@language.segments_for(self.read, &block)
 		end
+		
+		def code(index = nil, relative_to: nil)
+			@language.code_for(self.read, index, relative_to: relative_to)
+		end
 	end
 end

@@ -24,11 +24,11 @@ module Decode
 		class Reference
 			# Initialize the reference.
 			# @parameter identifier [String] The identifier part of the reference.
-			def initialize(identifier, language)
+			def initialize(identifier, language, lexical_path = nil)
 				@identifier = identifier
 				@language = language
 				
-				@lexical_path = nil
+				@lexical_path = lexical_path
 				@path = nil
 			end
 			
@@ -67,14 +67,22 @@ module Decode
 				@lexical_path ||= self.split(@identifier)
 			end
 			
+			def priority(definition, prefix)
+				if definition.start_with?(prefix)
+					return 0
+				elsif prefix.nil?
+					return 1
+				else
+					return 2
+				end
+			end
+			
 			def best(definitions)
 				prefix, name = lexical_path.last
 				
-				definitions.select do |definition|
-					definition.language == @language && (
-						prefix.nil? || definition.start_with?(prefix)
-					)
-				end
+				definitions = definitions.select{|definition| definition.language == @language}
+				
+				return definitions.sort_by{|definition| self.priority(definition, prefix)}
 			end
 			
 			# The lexical path of the reference.
