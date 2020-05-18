@@ -18,30 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'decode/index'
-require 'decode/source'
-require 'decode/language/ruby'
-require 'decode/syntax/rewriter'
+require_relative 'match'
 
-RSpec.describe Decode::Language::Ruby do
-	let(:path) {File.expand_path("fixtures/types.rb", __dir__)}
-	let(:source) {Decode::Source.new(path, described_class)}
-	let(:index) {Decode::Index.new}
-	let(:code) {source.code(index)}
-	
-	it "can extract some constants" do
-		index.update([path])
-		
-		expect(code.extract).to_not be_empty
-	end
-	
-	it "can rewrite code" do
-		index.update([path])
-		
-		rewriter = Decode::Syntax::Rewriter.new(code.text)
-		
-		code.extract(rewriter)
-		
-		expect(rewriter.apply).to include('[Tuple]([String], [Integer])')
+module Decode
+	module Syntax
+		class Link < Match
+			def initialize(range, definition)
+				@definition = definition
+				
+				super(range)
+			end
+			
+			def apply(output, rewriter)
+				output << rewriter.link_to(
+					@definition,
+					rewriter.text_for(@range)
+				)
+				
+				return self.size
+			end
+		end
 	end
 end

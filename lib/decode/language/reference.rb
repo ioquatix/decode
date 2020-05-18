@@ -68,10 +68,10 @@ module Decode
 			end
 			
 			def priority(definition, prefix)
-				if definition.start_with?(prefix)
-					return 0
-				elsif prefix.nil?
+				if prefix.nil?
 					return 1
+				elsif definition.start_with?(prefix)
+					return 0
 				else
 					return 2
 				end

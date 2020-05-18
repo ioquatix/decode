@@ -19,7 +19,7 @@
 # THE SOFTWARE.
 
 require_relative 'definition'
-require_relative '../../rewriter'
+require_relative '../../syntax/link'
 
 require 'parser/current'
 
@@ -36,44 +36,46 @@ module Decode
 					@language = language
 				end
 				
-				def rewriter
-					rewriter = Decode::Rewriter.new(@text)
-					
+				attr :text
+				
+				attr :language
+				
+				def extract(into = [])
 					if @index
-						self.extract(@root, rewriter)
+						self.traverse(@root, into)
 					end
 					
-					return rewriter
+					return into
 				end
 				
 				private
 				
-				def extract(node, rewriter)
+				def traverse(node, into)
 					case node&.type
 					when :send
 						if reference = Reference.from_const(node, @language)
 							if definition = @index.lookup(reference, relative_to: @relative_to)
 								expression = node.location.selector
 								range = expression.begin_pos...expression.end_pos
-								rewriter << Link.new(range, definition)
+								into << Syntax::Link.new(range, definition)
 							end
 						end
 						
 						# Extract constants from arguments:
 						children = node.children[2..].each do |node|
-							extract(node, rewriter)
+							traverse(node, into)
 						end
 					when :const
 						if reference = Reference.from_const(node, @language)
 							if definition = @index.lookup(reference, relative_to: @relative_to)
 								expression = node.location.name
 								range = expression.begin_pos...expression.end_pos
-								rewriter << Link.new(range, definition)
+								into << Syntax::Link.new(range, definition)
 							end
 						end
 					when :begin
 						node.children.each do |child|
-							extract(child, rewriter)
+							traverse(child, into)
 						end
 					end
 				end

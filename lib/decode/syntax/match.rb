@@ -19,82 +19,35 @@
 # THE SOFTWARE.
 
 module Decode
-	class Rewriter
-		def initialize(text)
-			@text = text
-			@matches = []
-		end
-		
-		attr :text
-		
-		attr :matches
-		
-		def << match
-			@matches << match
-		end
-		
-		def text_for(range)
-			@text[range]
-		end
-		
-		def apply
-			output = []
-			offset = 0
-			
-			@matches.sort.each do |match|
-				if match.offset > offset
-					output << text_for(offset...match.offset)
-				end
-				
-				offset += @match.apply(output, self)
+	module Syntax
+		class Match
+			def initialize(range)
+				@range = range
 			end
 			
-			return output.join
-		end
-	end
-	
-	class Match
-		def initialize(range)
-			@range = range
-		end
-		
-		attr :range
-		
-		def apply(source)
-			return source[range]
-		end
-		
-		def <=> other
-			@range.min <=> other.range.min
-		end
-		
-		def offset
-			@range.min
-		end
-		
-		def size
-			@range.size
-		end
-		
-		def apply(output, rewriter)
-			output << rewriter.text_for(@range)
+			attr :range
 			
-			return self.size
-		end
-	end
-	
-	class Link < Match
-		def initialize(range, definition)
-			@definition = definition
-		end
-		
-		def apply(output, rewriter)
-			output << rewriter.link_to(
-				@definition,
-				rewriter.text_for(@range)
-			)
+			def apply(source)
+				return source[range]
+			end
 			
-			return self.size
+			def <=> other
+				@range.min <=> other.range.min
+			end
+			
+			def offset
+				@range.min
+			end
+			
+			def size
+				@range.size
+			end
+			
+			def apply(output, rewriter)
+				output << rewriter.text_for(@range)
+				
+				return self.size
+			end
 		end
 	end
 end

@@ -77,6 +77,8 @@ module Decode
 			"::#{@name}"
 		end
 		
+		# Does the definition name match the specified prefix?
+		# @returns [Boolean]
 		def start_with?(prefix)
 			self.nested_name.start_with?(prefix)
 		end

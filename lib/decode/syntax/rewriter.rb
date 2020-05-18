@@ -18,30 +18,50 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'decode/index'
-require 'decode/source'
-require 'decode/language/ruby'
-require 'decode/syntax/rewriter'
-
-RSpec.describe Decode::Language::Ruby do
-	let(:path) {File.expand_path("fixtures/types.rb", __dir__)}
-	let(:source) {Decode::Source.new(path, described_class)}
-	let(:index) {Decode::Index.new}
-	let(:code) {source.code(index)}
-	
-	it "can extract some constants" do
-		index.update([path])
-		
-		expect(code.extract).to_not be_empty
-	end
-	
-	it "can rewrite code" do
-		index.update([path])
-		
-		rewriter = Decode::Syntax::Rewriter.new(code.text)
-		
-		code.extract(rewriter)
-		
-		expect(rewriter.apply).to include('[Tuple]([String], [Integer])')
+module Decode
+	module Syntax
+		class Rewriter
+			def initialize(text)
+				@text = text
+				@matches = []
+			end
+			
+			attr :text
+			
+			attr :matches
+			
+			def << match
+				@matches << match
+			end
+			
+			def text_for(range)
+				@text[range]
+			end
+			
+			def apply
+				output = []
+				offset = 0
+				
+				@matches.sort.each do |match|
+					if match.offset > offset
+						output << text_for(offset...match.offset)
+						
+						offset = match.offset
+					end
+					
+					offset += match.apply(output, self)
+				end
+				
+				if offset < @text.size
+					output << text_for(offset...@text.size)
+				end
+				
+				return output.join
+			end
+			
+			def link_to(definition, text)
+				"[#{text}]"
+			end
+		end
 	end
 end
