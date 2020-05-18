@@ -34,17 +34,21 @@ module Decode
 				def self.append_const(node, path = [])
 					parent, name = node.children
 					
-					if parent
+					if parent and parent.type != :cbase
 						append_const(parent, path)
 					end
 					
 					case node.type
 					when :const
-						path << ['::', name]
-					when :cbase
-						path << ['::', nil]
+						if parent && parent.type != :cbase
+							path << ['::', name]
+						else
+							path << [nil, name]
+						end
 					when :send
 						path << ['#', name]
+					when :cbase
+						# Ignore.
 					else
 						raise ArgumentError, "Could not determine reference for #{node}!"
 					end

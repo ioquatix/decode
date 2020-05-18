@@ -29,6 +29,8 @@ module Decode
 				super(range)
 			end
 			
+			attr :definition
+			
 			def apply(output, rewriter)
 				output << rewriter.link_to(
 					@definition,

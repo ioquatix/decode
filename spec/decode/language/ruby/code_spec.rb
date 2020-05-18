@@ -32,7 +32,8 @@ RSpec.describe Decode::Language::Ruby do
 	it "can extract some constants" do
 		index.update([path])
 		
-		expect(code.extract).to_not be_empty
+		matches = code.extract
+		expect(matches).to_not be_empty
 	end
 	
 	it "can rewrite code" do
