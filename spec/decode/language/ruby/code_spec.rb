@@ -42,6 +42,6 @@ RSpec.describe Decode::Language::Ruby do
 		
 		code.extract(rewriter)
 		
-		expect(rewriter.apply).to include('[Tuple]([String], [Integer])')
+		expect(rewriter.apply.join).to include('[Tuple]([String], [Integer])')
 	end
 end

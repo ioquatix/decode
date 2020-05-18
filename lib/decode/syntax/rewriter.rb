@@ -34,12 +34,12 @@ module Decode
 				@matches << match
 			end
 			
+			# Returns a chunk of raw text with no formatting.
 			def text_for(range)
 				@text[range]
 			end
 			
-			def apply
-				output = []
+			def apply(output = [])
 				offset = 0
 				
 				@matches.sort.each do |match|
@@ -47,6 +47,9 @@ module Decode
 						output << text_for(offset...match.offset)
 						
 						offset = match.offset
+					elsif match.offset < offset
+						# Match intersects last output buffer.
+						next
 					end
 					
 					offset += match.apply(output, self)
@@ -56,7 +59,7 @@ module Decode
 					output << text_for(offset...@text.size)
 				end
 				
-				return output.join
+				return output
 			end
 			
 			def link_to(definition, text)
