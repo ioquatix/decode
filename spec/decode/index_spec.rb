@@ -40,13 +40,12 @@ RSpec.describe Decode::Index do
 			subject.update(paths)
 			
 			initialize_reference = languages.reference_for('ruby', 'Decode::Documentation#initialize')
-			initialize_definitions = subject.lookup(initialize_reference)
-			expect(initialize_definitions.size).to be == 1
+			initialize_definition = subject.lookup(initialize_reference)
+			expect(initialize_definition).to_not be_nil
 			
 			source_reference = languages.reference_for('ruby', "Source")
-			source_definitions = subject.lookup(source_reference, relative_to: initialize_definitions.first)
-			expect(source_definitions.size).to be == 1
-			expect(source_definitions.first.qualified_name).to be == "Decode::Source"
+			source_definition = subject.lookup(source_reference, relative_to: initialize_definition)
+			expect(source_definition.qualified_name).to be == "Decode::Source"
 		end
 	end
 end

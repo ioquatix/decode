@@ -80,9 +80,22 @@ module Decode
 			def best(definitions)
 				prefix, name = lexical_path.last
 				
-				definitions = definitions.select{|definition| definition.language == @language}
+				first = nil
+				without_prefix = nil
 				
-				return definitions.sort_by{|definition| self.priority(definition, prefix)}
+				definitions.each do |definition|
+					first ||= definition
+					
+					next unless definition.language == @language
+					
+					if prefix.nil?
+						without_prefix ||= definition
+					elsif definition.start_with?(prefix)
+						return definition
+					end
+				end
+				
+				return without_prefix || first
 			end
 			
 			# The lexical path of the reference.
