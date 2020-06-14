@@ -62,7 +62,7 @@ module Decode
 						end
 						
 						# Extract constants from arguments:
-						children = node.children[2..].each do |node|
+						children = node.children[2..-1].each do |node|
 							traverse(node, into)
 						end
 					when :const
