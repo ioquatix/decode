@@ -42,7 +42,7 @@ module Decode
 				
 				def extract(into = [])
 					if @index
-						self.traverse(@root, into)
+						traverse(@root, into)
 					end
 					
 					return into
