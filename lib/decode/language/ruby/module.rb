@@ -42,6 +42,12 @@ module Decode
 				
 				# The long form is the same as the short form.
 				alias long_form short_form
+				
+				# The fully qualified name of the class.
+				# e.g. `module ::Barnyard::Dog`.
+				def qualified_form
+					"module #{self.qualified_name}"
+				end
 			end
 		end
 	end
