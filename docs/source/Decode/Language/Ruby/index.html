@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../../index.html">Project</a> › <a class="link" href="../../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Language::Ruby</code></h1>
@@ -37,6 +36,7 @@
 		<ul>
 			<li><a href="Module/index.html"><code class="language-ruby">Decode::Language::Ruby::Module</code></a></li>
 			<li><a href="Method/index.html"><code class="language-ruby">Decode::Language::Ruby::Method</code></a></li>
+			<li><a href="Code/index.html"><code class="language-ruby">Decode::Language::Ruby::Code</code></a></li>
 			<li><a href="Definition/index.html"><code class="language-ruby">Decode::Language::Ruby::Definition</code></a></li>
 			<li><a href="Class/index.html"><code class="language-ruby">Decode::Language::Ruby::Class</code></a></li>
 			<li><a href="Singleton/index.html"><code class="language-ruby">Decode::Language::Ruby::Singleton</code></a></li>
@@ -80,9 +80,9 @@ end</code></pre>
 					<strong>yields</strong>　<code class="syntax language-ruby">{|definition| ...}</code></dt><dd><p>Receives the definitions extracted from the source code.</p>
 </dd><dd><dl>
 <dt>
-					<strong>parameter</strong>　<code class="syntax">definition</code>　<a href="Definition/index.html"><code class="language-ruby">class Decode::Language::Ruby::Definition</code></a></dt><dd><p>The source code definition including methods, classes, etc.</p>
+					<strong>parameter</strong>　<code class="syntax">definition</code>　<code class="language-ruby"><a href="Definition/index.html" title="Decode::Language::Ruby::Definition">Definition</a></code></dt><dd><p>The source code definition including methods, classes, etc.</p>
 </dd>					</dl></dd><dt>
-					<strong>returns</strong>　<code class="language-ruby">Enumerator(Segment)</code></dt><dd><p>If no block given.</p>
+					<strong>returns</strong>　<code class="language-ruby">Enumerator(<a href="Segment/index.html" title="Decode::Language::Ruby::Segment">Segment</a>)</code></dt><dd><p>If no block given.</p>
 </dd></dl>
 </details>
 <details>
@@ -99,8 +99,8 @@ Segments are constructed from a block of top level comments followed by a block 
 </dd><dt>
 					<strong>yields</strong>　<code class="syntax language-ruby">{|segment| ...}</code></dt><dd><dl>
 <dt>
-					<strong>parameter</strong>　<code class="syntax">segment</code>　<a href="Segment/index.html"><code class="language-ruby">class Decode::Language::Ruby::Segment</code></a></dt>					</dl></dd><dt>
-					<strong>returns</strong>　<code class="language-ruby">Enumerator(Segment)</code></dt><dd><p>If no block given.</p>
+					<strong>parameter</strong>　<code class="syntax">segment</code>　<code class="language-ruby"><a href="Segment/index.html" title="Decode::Language::Ruby::Segment">Segment</a></code></dt>					</dl></dd><dt>
+					<strong>returns</strong>　<code class="language-ruby">Enumerator(<a href="Segment/index.html" title="Decode::Language::Ruby::Segment">Segment</a>)</code></dt><dd><p>If no block given.</p>
 </dd></dl>
 </details>
 <details>

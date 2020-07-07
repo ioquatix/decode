@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../index.html">Project</a> › <a class="link" href="index.html">Source</a></nav>
-
 		
 		
 	<h1>Source</h1>
@@ -71,6 +70,28 @@
 
 						
 											</li></ul>					</li><li>
+						<a href="Decode/Syntax/index.html"><code class="language-ruby">module Syntax</code></a>
+						
+						
+						<ul class="index"><li>
+						<a href="Decode/Syntax/Link/index.html"><code class="language-ruby">class Link &lt; Match</code></a>
+						
+						
+						<ul class="index"></ul>					</li><li>
+						<a href="Decode/Syntax/Rewriter/index.html"><code class="language-ruby">class Rewriter</code></a>
+						
+						
+						<ul class="index"><li>
+						<a href="Decode/Syntax/Rewriter/index.html#Decode%3A%3ASyntax%3A%3ARewriter%23text_for"><code class="language-ruby">def text_for(range)</code></a>
+						
+							<p>Returns a chunk of raw text with no formatting.</p>
+
+						
+											</li></ul>					</li><li>
+						<a href="Decode/Syntax/Match/index.html"><code class="language-ruby">class Match</code></a>
+						
+						
+						<ul class="index"></ul>					</li></ul>					</li><li>
 						<a href="Decode/Source/index.html"><code class="language-ruby">class Source</code></a>
 						
 							<p>Represents a source file in a specific language.</p>
@@ -89,9 +110,9 @@
 
 						
 											</li><li>
-						<a href="Decode/Source/index.html#Decode%3A%3ASource%23open"><code class="language-ruby">def open(&amp;block)</code></a>
+						<a href="Decode/Source/index.html#Decode%3A%3ASource%23read"><code class="language-ruby">def read</code></a>
 						
-							<p>Open the source file for reading.</p>
+							<p>Read the source file into an internal buffer/cache.</p>
 
 						
 											</li><li>
@@ -227,7 +248,7 @@
 											</li><li>
 						<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23traverse"><code class="language-ruby">def traverse(&amp;block)</code></a>
 						
-							<p>Traverse the tags from this node using <a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.</p>
+							<p>Traverse the tags from this node using <a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23each" title="each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.</p>
 
 						
 											</li></ul>					</li><li>
@@ -314,6 +335,12 @@
 							<p>The short form of the module.</p>
 
 						
+											</li><li>
+						<a href="Decode/Language/Ruby/Module/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AModule%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
+						
+							<p>The fully qualified name of the class.</p>
+
+						
 											</li></ul>					</li><li>
 						<a href="Decode/Language/Ruby/Method/index.html"><code class="language-ruby">class Method &lt; Definition</code></a>
 						
@@ -345,6 +372,12 @@
 
 						
 											</li></ul>					</li><li>
+						<a href="Decode/Language/Ruby/Code/index.html"><code class="language-ruby">class Code</code></a>
+						
+							<p>A Ruby-specific block of code.</p>
+
+						
+						<ul class="index"></ul>					</li><li>
 						<a href="Decode/Language/Ruby/Definition/index.html"><code class="language-ruby">class Definition &lt; Decode::Definition</code></a>
 						
 							<p>A Ruby-specific definition.</p>
@@ -579,7 +612,7 @@
 
 						
 						<ul class="index"><li>
-						<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23initialize"><code class="language-ruby">def initialize(identifier, language)</code></a>
+						<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23initialize"><code class="language-ruby">def initialize(identifier, language, lexical_path = nil)</code></a>
 						
 							<p>Initialize the reference.</p>
 
@@ -771,6 +804,12 @@
 
 						
 											</li><li>
+						<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23start_with%3F"><code class="language-ruby">def start_with?(prefix)</code></a>
+						
+							<p>Does the definition name match the specified prefix?</p>
+
+						
+											</li><li>
 						<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23convert"><code class="language-ruby">def convert(kind)</code></a>
 						
 							<p>Convert this definition into another kind of definition.</p>
@@ -821,7 +860,7 @@
 											</li><li>
 						<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23nested%3F"><code class="language-ruby">def nested?</code></a>
 						
-							<p>Whether this represents a single entity to be documented (along with it’s contents).</p>
+							<p>Whether this represents a single entity to be documented (along with it's contents).</p>
 
 						
 											</li><li>

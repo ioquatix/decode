@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../../index.html">Project</a> › <a class="link" href="../../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Language::Reference</code></h1>
@@ -35,7 +34,7 @@
 		
 		<h2>Definitions</h2>
 		
-		<h3 id="Decode::Language::Reference#initialize"><code class="language-ruby">def initialize(identifier, language)</code></h3><p>Initialize the reference.</p>
+		<h3 id="Decode::Language::Reference#initialize"><code class="language-ruby">def initialize(identifier, language, lexical_path = nil)</code></h3><p>Initialize the reference.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
@@ -44,11 +43,11 @@
 </details>
 <details>
 							<summary><h4>Implementation</h4></summary>
-							<pre><code class="language-ruby">def initialize(identifier, language)
+							<pre><code class="language-ruby">def initialize(identifier, language, lexical_path = nil)
 	@identifier = identifier
 	@language = language
 	
-	@lexical_path = nil
+	@lexical_path = lexical_path
 	@path = nil
 end</code></pre>
 						</details><h3 id="Decode::Language::Reference#identifier"><code class="language-ruby">attr :identifier</code></h3><p>The identifier part of the reference.</p>
@@ -61,7 +60,7 @@ end</code></pre>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>attribute</strong>　<a href="../Generic/index.html"><code class="language-ruby">class Decode::Language::Generic</code></a></dt></dl>
+					<strong>attribute</strong>　<code class="language-ruby">Language::<a href="../Generic/index.html" title="Decode::Language::Generic">Generic</a></code></dt></dl>
 </details>
 <h3 id="Decode::Language::Reference#absolute?"><code class="language-ruby">def absolute?</code></h3><p>Whether the reference starts at the base of the lexical tree.</p>
 <details>

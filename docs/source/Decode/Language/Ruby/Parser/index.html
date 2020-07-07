@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../../../index.html">Project</a> › <a class="link" href="../../../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Language::Ruby::Parser</code></h1>
@@ -39,7 +38,7 @@
 <details>
 							<summary><h4>Implementation</h4></summary>
 							<pre><code class="language-ruby">def definitions_for(input, &amp;block)
-	top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
+	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
 	
 	if top
 		walk_definitions(top, comments, &amp;block)
@@ -165,7 +164,7 @@ end</code></pre>
 <details>
 							<summary><h4>Implementation</h4></summary>
 							<pre><code class="language-ruby">def segments_for(input, &amp;block)
-	top, comments = ::Parser::CurrentRuby.parse_with_comments(input.read)
+	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
 	
 	# We delete any leading comments:
 	line = 0

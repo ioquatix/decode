@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../../index.html">Project</a> › <a class="link" href="../../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Comment::Node</code></h1>
@@ -46,7 +45,7 @@
 	@children = children
 end</code></pre>
 						</details><h3 id="Decode::Comment::Node#children?"><code class="language-ruby">def children?</code></h3><p>Whether this node has any children nodes.
-Ignores <a href="../Text/index.html"><code class="language-ruby">class Decode::Comment::Text</code></a> instances.</p>
+Ignores <a href="../Text/index.html" title="Text"><code class="language-ruby">class Decode::Comment::Text</code></a> instances.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
@@ -61,7 +60,7 @@ end</code></pre>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>parameter</strong>　<code class="syntax">child</code>　<a href="index.html"><code class="language-ruby">class Decode::Comment::Node</code></a></dt><dd><p>The node to add.</p>
+					<strong>parameter</strong>　<code class="syntax">child</code>　<code class="language-ruby"><a href="index.html" title="Decode::Comment::Node">Node</a></code></dt><dd><p>The node to add.</p>
 </dd></dl>
 </details>
 <details>
@@ -100,14 +99,14 @@ end</code></pre>
 		return text if text.any?
 	end
 end</code></pre>
-						</details><h3 id="Decode::Comment::Node#traverse"><code class="language-ruby">def traverse(&amp;block)</code></h3><p>Traverse the tags from this node using <a href="index.html#Decode%3A%3AComment%3A%3ANode%23each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.
+						</details><h3 id="Decode::Comment::Node#traverse"><code class="language-ruby">def traverse(&amp;block)</code></h3><p>Traverse the tags from this node using <a href="index.html#Decode%3A%3AComment%3A%3ANode%23each" title="each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.
 Invoke <code>descend.call(child)</code> to recursively traverse the specified child.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
 					<strong>yields</strong>　<code class="syntax language-ruby">{|node, descend| descend.call}</code></dt><dd><dl>
 <dt>
-					<strong>parameter</strong>　<code class="syntax">node</code>　<a href="index.html"><code class="language-ruby">class Decode::Comment::Node</code></a></dt><dd><p>The current node which is being traversed.</p>
+					<strong>parameter</strong>　<code class="syntax">node</code>　<code class="language-ruby"><a href="index.html" title="Decode::Comment::Node">Node</a></code></dt><dd><p>The current node which is being traversed.</p>
 </dd><dt>
 					<strong>parameter</strong>　<code class="syntax">descend</code>　<code class="language-ruby">Proc | Nil</code></dt><dd><p>The recursive method for traversing children.</p>
 </dd>					</dl></dd></dl>

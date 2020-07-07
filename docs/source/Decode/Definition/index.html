@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Definition</code></h1>
@@ -43,7 +42,7 @@
 </dd><dt>
 					<strong>parameter</strong>　<code class="syntax">parent</code>　<code class="language-ruby">Symbol</code></dt><dd><p>The parent lexical scope.</p>
 </dd><dt>
-					<strong>parameter</strong>　<code class="syntax">language</code>　<a href="../Language/index.html"><code class="language-ruby">module Language</code></a></dt><dd><p>The language in which the symbol is defined in.</p>
+					<strong>parameter</strong>　<code class="syntax">language</code>　<code class="language-ruby"><a href="../Language/index.html" title="Decode::Language">Language</a></code></dt><dd><p>The language in which the symbol is defined in.</p>
 </dd><dt>
 					<strong>parameter</strong>　<code class="syntax">comments</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>The comments associated with the definition.</p>
 </dd></dl>
@@ -78,7 +77,7 @@ e.g. <code>:Decode</code>.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>attribute</strong>　<a href="../Language/Generic/index.html"><code class="language-ruby">class Decode::Language::Generic</code></a></dt></dl>
+					<strong>attribute</strong>　<code class="language-ruby">Language::<a href="../Language/Generic/index.html" title="Decode::Language::Generic">Generic</a></code></dt></dl>
 </details>
 <h3 id="Decode::Definition#comments"><code class="language-ruby">attr :comments</code></h3><p>The comment lines which directly preceeded the definition.</p>
 <details open>
@@ -113,6 +112,17 @@ end</code></pre>
 							<summary><h4>Implementation</h4></summary>
 							<pre><code class="language-ruby">def nested_name
 	&quot;::#{@name}&quot;
+end</code></pre>
+						</details><h3 id="Decode::Definition#start_with?"><code class="language-ruby">def start_with?(prefix)</code></h3><p>Does the definition name match the specified prefix?</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Boolean</code></dt></dl>
+</details>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def start_with?(prefix)
+	self.nested_name.start_with?(prefix)
 end</code></pre>
 						</details><h3 id="Decode::Definition#convert"><code class="language-ruby">def convert(kind)</code></h3><p>Convert this definition into another kind of definition.</p>
 <details>
@@ -165,7 +175,7 @@ e.g. <code>def initialize(kind, name, comments, **options)</code>.</p>
 	self.short_form
 end</code></pre>
 						</details><h3 id="Decode::Definition#qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>A long form which uses the qualified name if possible.
-Defaults to <a href="index.html#Decode%3A%3ADefinition%23long_form"><code class="language-ruby">Decode::Definition#long_form</code></a>.</p>
+Defaults to <a href="index.html#Decode%3A%3ADefinition%23long_form" title="long_form"><code class="language-ruby">Decode::Definition#long_form</code></a>.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
@@ -208,7 +218,7 @@ end</code></pre>
 							<pre><code class="language-ruby">def container?
 	false
 end</code></pre>
-						</details><h3 id="Decode::Definition#nested?"><code class="language-ruby">def nested?</code></h3><p>Whether this represents a single entity to be documented (along with it’s contents).</p>
+						</details><h3 id="Decode::Definition#nested?"><code class="language-ruby">def nested?</code></h3><p>Whether this represents a single entity to be documented (along with it's contents).</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
@@ -223,7 +233,7 @@ end</code></pre>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>returns</strong>　<code class="language-ruby">Documentation | Nil</code></dt><dd><p>A <a href="../Documentation/index.html"><code class="language-ruby">class Decode::Documentation</code></a> instance if this definition has comments.</p>
+					<strong>returns</strong>　<code class="language-ruby">Documentation | Nil</code></dt><dd><p>A <a href="../Documentation/index.html" title="Documentation"><code class="language-ruby">class Decode::Documentation</code></a> instance if this definition has comments.</p>
 </dd></dl>
 </details>
 <details>

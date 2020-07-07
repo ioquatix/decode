@@ -24,7 +24,6 @@
 
 	<body class="">
 		<nav> › <a class="link" href="../../../../../index.html">Project</a> › <a class="link" href="../../../../index.html">Source</a></nav>
-
 		
 		
 	<h1><code class="language-ruby">Decode::Language::Ruby::Module</code></h1>
@@ -47,6 +46,13 @@ e.g. <code>module Barnyard</code>.</p>
 							<summary><h4>Implementation</h4></summary>
 							<pre><code class="language-ruby">def short_form
 	&quot;module #{@name}&quot;
+end</code></pre>
+						</details><h3 id="Decode::Language::Ruby::Module#qualified_form"><code class="language-ruby">def qualified_form</code></h3><p>The fully qualified name of the class.
+e.g. <code>module ::Barnyard::Dog</code>.</p>
+<details>
+							<summary><h4>Implementation</h4></summary>
+							<pre><code class="language-ruby">def qualified_form
+	&quot;module #{self.qualified_name}&quot;
 end</code></pre>
 						</details>	</main>
 
