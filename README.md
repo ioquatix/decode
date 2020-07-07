@@ -10,7 +10,7 @@ As part of my effort to build [better project documentation](https://github.com/
 
 ## Usage
 
-Please see the <a href="https://ioquatix.github.io/decode/">project documentation</a> or serve it locally using `bake utopia:project:serve`.
+Please see the [project documentation](https://ioquatix.github.io/decode/).
 
 ## Contributing
 
