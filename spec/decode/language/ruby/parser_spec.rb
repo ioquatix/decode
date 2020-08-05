@@ -195,6 +195,21 @@ RSpec.describe Decode::Language::Ruby do
 			expect(definitions[4].long_form).to be == "context {Context.new(hostname)}"
 		end
 		
+		it 'has text' do
+			expect(definitions[2].text).to be == <<~TEXT.chomp
+			add(:local) do
+				# The default hostname for the connection.
+				# @name hostname
+				# @attribute [String]
+				hostname "localhost"
+				
+				# The default context for managing the connection.
+				# @attribute [Context]
+				context {Context.new(hostname)}
+			end
+			TEXT
+		end
+		
 		it 'has correct nesting' do
 			expect(definitions[2]).to be_container
 			expect(definitions[4]).to_not be_container

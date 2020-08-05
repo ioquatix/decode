@@ -51,10 +51,10 @@ module Decode
 					if lines.count == 1
 						return lines.first
 					else
-						indentation = expression.source_line[/\A\s+/]
-						
-						# Remove all the indentation:
-						lines.each{|line| line.sub!(indentation, '')}
+						if indentation = expression.source_line[/\A\s+/]
+							# Remove all the indentation:
+							lines.each{|line| line.sub!(indentation, '')}
+						end
 						
 						return lines.join
 					end
