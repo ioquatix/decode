@@ -1,25 +1,28 @@
 
-require_relative 'lib/decode/version'
+require_relative "lib/decode/version"
 
 Gem::Specification.new do |spec|
 	spec.name = "decode"
 	spec.version = Decode::VERSION
-	spec.authors = ["Samuel Williams"]
-	spec.email = ["samuel.williams@oriontransfer.co.nz"]
 	
 	spec.summary = "Code analysis for documentation generation."
-	spec.homepage = "https://github.com/ioquatix/decode"
+	spec.authors = ["Samuel Williams"]
 	spec.license = "MIT"
 	
-	spec.required_ruby_version = "~> 2.5"
+	spec.homepage = "https://github.com/ioquatix/decode"
 	
-	spec.files = Dir['{lib,bake}/**/*', base: __dir__]
-	spec.require_paths = ["lib"]
+	spec.metadata = {
+		"funding_uri" => "https://github.com/sponsors/ioquatix/",
+	}
+	
+	spec.files = Dir.glob('{bake,lib}/**/*', File::FNM_DOTMATCH, base: __dir__)
+	
+	spec.required_ruby_version = ">= 2.5"
 	
 	spec.add_dependency "parser"
 	
-	spec.add_development_dependency 'build-files'
-	spec.add_development_dependency 'covered'
-	spec.add_development_dependency 'bundler'
-	spec.add_development_dependency 'rspec'
+	spec.add_development_dependency "build-files"
+	spec.add_development_dependency "bundler"
+	spec.add_development_dependency "covered"
+	spec.add_development_dependency "rspec"
 end

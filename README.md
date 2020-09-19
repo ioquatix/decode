@@ -2,7 +2,7 @@
 
 A Ruby code analysis tool and documentation generator.
 
-[![Development](https://github.com/ioquatix/decode/workflows/Development/badge.svg)](https://github.com/ioquatix/decode/actions?workflow=Development)
+[![Development Status](https://github.com/ioquatix/decode/workflows/Development/badge.svg)](https://github.com/ioquatix/decode/actions?workflow=Development)
 
 ## Motivation
 
@@ -16,11 +16,11 @@ Please see the [project documentation](https://ioquatix.github.io/decode/).
 
 We welcome contributions to this project.
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1.  Fork it
+2.  Create your feature branch (`git checkout -b my-new-feature`)
+3.  Commit your changes (`git commit -am 'Add some feature'`)
+4.  Push to the branch (`git push origin my-new-feature`)
+5.  Create new Pull Request
 
 ## License
 

@@ -11,6 +11,7 @@ jobs:
       matrix:
         os:
           - ubuntu
+          - macos
         
         ruby:
           - 2.5
@@ -30,21 +31,14 @@ jobs:
           - os: ubuntu
             ruby: head
             experimental: true
-          - os: ubuntu
-            ruby: 2.6
-            experimental: false
-            env: COVERAGE=PartialSummary,Coveralls
     
     steps:
-    - uses: actions/checkout@v1
-    - uses: ruby/setup-ruby@v1
+    - uses: actions/checkout@v2
+    - uses: ioquatix/setup-ruby@master
       with:
         ruby-version: ${{matrix.ruby}}
-    
-    - name: Install dependencies
-      run: ${{matrix.env}} bundle install
+        bundler-cache: true
     
     - name: Run tests
       timeout-minutes: 5
-      run: |
-        ${{matrix.env}} bundle exec rspec
+      run: ${{matrix.env}} bundle exec rspec
