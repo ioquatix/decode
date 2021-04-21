@@ -29,13 +29,13 @@ module Decode
 		def initialize(name, parent: nil, language: parent.language, comments: nil)
 			@name = name
 			
-			@comments = comments
-			@language = language
 			@parent = parent
+			@language = language
+			
+			@comments = comments
 			
 			@path = nil
 			@qualified_name = nil
-			@documentation = nil
 		end
 		
 		def to_s

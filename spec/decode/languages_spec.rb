@@ -31,7 +31,7 @@ RSpec.describe Decode::Languages do
 				expect(reference).to be_kind_of Decode::Language::Ruby::Reference
 				
 				expect(reference.identifier).to be == "Foo::Bar"
-				expect(reference.language).to be == Decode::Language::Ruby
+				expect(reference.language.name).to be == "ruby"
 			end
 		end
 		
@@ -47,14 +47,13 @@ RSpec.describe Decode::Languages do
 		end
 		
 		context 'with default language' do
-			subject(:reference) {languages.parse_reference('Foo::Bar', default_language: Decode::Language::Ruby)}
+			subject(:reference) {languages.parse_reference('Foo::Bar', default_language: Decode::Language::Ruby.new)}
 			
 			it 'can generate language specific references' do
 				expect(reference).to be_kind_of Decode::Language::Ruby::Reference
 				
 				expect(reference.identifier).to be == "Foo::Bar"
-				expect(reference.language).to be == Decode::Language::Ruby
-
+				expect(reference.language.name).to be == "ruby"
 			end
 		end
 	end

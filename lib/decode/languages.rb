@@ -26,7 +26,7 @@ module Decode
 	class Languages
 		def self.all
 			self.new.tap do |languages|
-				languages.add(Language::Ruby)
+				languages.add(Language::Ruby.new)
 			end
 		end
 		

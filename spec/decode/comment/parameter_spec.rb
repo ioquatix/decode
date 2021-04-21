@@ -22,7 +22,7 @@ require 'decode/source'
 require 'decode/language/ruby'
 
 RSpec.describe Decode::Comment::Parameter do
-	let(:language) {Decode::Language::Ruby}
+	let(:language) {Decode::Language::Ruby.new}
 	let(:source) {Decode::Source.new(path, language)}
 	let(:documentation) {source.segments.first.documentation}
 	

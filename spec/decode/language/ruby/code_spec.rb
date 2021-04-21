@@ -25,7 +25,8 @@ require 'decode/syntax/rewriter'
 
 RSpec.describe Decode::Language::Ruby do
 	let(:path) {File.expand_path("fixtures/types.rb", __dir__)}
-	let(:source) {Decode::Source.new(path, described_class)}
+	let(:language) {described_class.new}
+	let(:source) {Decode::Source.new(path, language)}
 	let(:index) {Decode::Index.new}
 	let(:code) {source.code(index)}
 	

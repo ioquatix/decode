@@ -18,23 +18,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'decode/source'
-require 'decode/language/ruby'
+require_relative 'reference'
+require_relative 'parser'
+require_relative 'code'
 
-RSpec.describe Decode::Comment::Returns do
-	let(:language) {Decode::Language::Ruby.new}
-	let(:source) {Decode::Source.new(path, language)}
-	let(:documentation) {source.segments.first.documentation}
-	
-	context 'with nested parameters' do
-		let(:path) {File.expand_path("fixtures/returns.rb", __dir__)}
-		
-		it "should have returns node" do
-			expect(documentation.children[0]).to be_kind_of(Decode::Comment::Returns)
-			expect(documentation.children[0]).to have_attributes(
-				type: "Integer",
-				text: ["The number of items."],
-			)
+module Decode
+	module Language
+		module Ruby
+			# The Ruby language.
+			class Generic < Language::Generic
+				EXTENSIONS = ['.rb', '.ru']
+				
+				def parser
+					@parser ||= Parser.new(self)
+				end
+				
+				# Generate a language-specific reference.
+				# @parameter identifier [String] A valid identifier.
+				def reference_for(identifier)
+					Reference.new(identifier, self)
+				end
+				
+				def code_for(text, index, relative_to: nil)
+					Code.new(text, index, relative_to: relative_to, language: self)
+				end
+			end
 		end
 	end
 end

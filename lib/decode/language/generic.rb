@@ -19,32 +19,75 @@
 # THE SOFTWARE.
 
 require_relative 'reference'
+require_relative '../documentation'
 
 module Decode
 	module Language
 		# The Ruby language.
 		class Generic
-			def initialize(name)
+			EXTENSIONS = []
+			
+			TAGS = Comment::Tags.build do |tags|
+				tags['attribute'] = Comment::Attribute
+				tags['parameter'] = Comment::Parameter
+				tags['yields'] = Comment::Yields
+				tags['returns'] = Comment::Returns
+				tags['raises'] = Comment::Raises
+				tags['throws'] = Comment::Throws
+				
+				tags['reentrant'] = Comment::Pragma
+				tags['deprecated'] = Comment::Pragma
+				tags['blocking'] = Comment::Pragma
+				tags['asynchronous'] = Comment::Pragma
+			end
+			
+			def initialize(name, extensions: self.class::EXTENSIONS, tags: self.class::TAGS)
 				@name = name
+				@extensions = extensions
+				@tags = tags
 			end
 			
 			attr :name
 			
-			# Generate a generic reference.
+			def names
+				[@name]
+			end
+			
+			attr :extensions
+			
+			attr :tags
+			
+			# Generate a language-specific reference.
+			# @parameter identifier [String] A valid identifier.
 			def reference_for(identifier)
 				Reference.new(identifier, self)
 			end
 			
-			# Parse the input yielding definitions.
-			# @block {|definition| ... }
-			# @yield definition [Definition]
-			def definitions_for(input, &block)
+			def parser
+				nil
 			end
 			
-			# Parse the input yielding interleaved comments and code segments.
-			# @block {|segment| ... }
-			# @yield segment [Segment]
+			# Parse the input yielding definitions.
+			# @parameter input [File] The input file which contains the source code.
+			# @yields {|definition| ...} Receives the definitions extracted from the source code.
+			# 	@parameter definition [Definition] The source code definition including methods, classes, etc.
+			# @returns [Enumerator(Segment)] If no block given.
+			def definitions_for(input, &block)
+				if parser = self.parser
+					parser.definitions_for(input, &block)
+				end
+			end
+			
+			# Parse the input yielding segments.
+			# Segments are constructed from a block of top level comments followed by a block of code.
+			# @parameter input [File] The input file which contains the source code.
+			# @yields {|segment| ...}
+			# 	@parameter segment [Segment]
+			# @returns [Enumerator(Segment)] If no block given.
 			def segments_for(input, &block)
+				if parser = self.parser
+					parser.segments_for(input, &block)
+				end
 			end
 		end
 	end

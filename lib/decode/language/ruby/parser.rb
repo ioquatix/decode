@@ -38,6 +38,10 @@ module Decode
 		module Ruby
 			# The Ruby source code parser.
 			class Parser
+				def initialize(language)
+					@language = language
+				end
+				
 				# Extract definitions from the given input file.
 				def definitions_for(input, &block)
 					top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
@@ -84,7 +88,7 @@ module Decode
 							node, node.children[0].children[1],
 							comments: extract_comments_for(node, comments),
 							parent: parent,
-							language: Ruby
+							language: @language
 						)
 						
 						yield definition
@@ -96,7 +100,7 @@ module Decode
 						definition = Class.new(
 							node, node.children[0].children[1],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: Ruby
+							parent: parent, language: @language
 						)
 						
 						yield definition
@@ -108,7 +112,7 @@ module Decode
 						definition = Singleton.new(
 							node, node.children[0],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: Ruby
+							parent: parent, language: @language
 						)
 						
 						yield definition
@@ -120,7 +124,7 @@ module Decode
 						definition = Method.new(
 							node, node.children[0],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: Ruby
+							parent: parent, language: @language
 						)
 						
 						yield definition
@@ -128,7 +132,7 @@ module Decode
 						definition = Function.new(
 							node, node.children[1],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: Ruby
+							parent: parent, language: @language
 						)
 						
 						yield definition
@@ -136,18 +140,19 @@ module Decode
 						definition = Constant.new(
 							node, node.children[1],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: Ruby
+							parent: parent, language: @language
 						)
 						
 						yield definition
 					when :send
 						name = node.children[1]
+						
 						case name
 						when :attr, :attr_reader, :attr_writer, :attr_accessor
 							definition = Attribute.new(
 								node, name_for(node.children[2]),
 								comments: extract_comments_for(node, comments),
-								parent: parent, language: Ruby
+								parent: parent, language: @language
 							)
 							
 							yield definition
@@ -157,7 +162,7 @@ module Decode
 								definition = Call.new(
 									node, name_for(node, extracted_comments),
 									comments: extracted_comments,
-									parent: parent, language: Ruby
+									parent: parent, language: @language
 								)
 								
 								yield definition
@@ -171,7 +176,7 @@ module Decode
 								node, name,
 								comments: extracted_comments,
 								parent: scope_for(extracted_comments, parent, &block),
-								language: Ruby
+								language: @language
 							)
 							
 							if kind = kind_for(node, extracted_comments)
@@ -229,7 +234,7 @@ module Decode
 					comments&.each do |comment|
 						if match = comment.match(SCOPE_ATTRIBUTE)
 							return match[:names].split(/\s+/).map(&:to_sym).inject(nil) do |memo, name|
-								scope = Scope.new(name, parent: memo, language: Ruby)
+								scope = Scope.new(name, parent: memo, language: @language)
 								yield scope
 								scope
 							end
@@ -268,11 +273,11 @@ module Decode
 							if segment.nil?
 								segment = Segment.new(
 									extract_comments_for(child, comments),
-									Ruby,	child
+									@language,	child
 								)
 							elsif next_comments = extract_comments_for(child, comments)
 								yield segment if segment
-								segment = Segment.new(next_comments, Ruby, child)
+								segment = Segment.new(next_comments, @language, child)
 							else
 								segment.expand(child)
 							end
@@ -283,7 +288,7 @@ module Decode
 						# One top level segment:
 						segment = Segment.new(
 							extract_comments_for(node, comments),
-							Ruby,	node
+							@language, node
 						)
 						
 						yield segment

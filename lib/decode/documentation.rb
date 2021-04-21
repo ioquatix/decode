@@ -20,6 +20,7 @@
 
 require_relative 'comment/node'
 
+require_relative 'comment/tags'
 require_relative 'comment/attribute'
 require_relative 'comment/parameter'
 require_relative 'comment/pragma'
