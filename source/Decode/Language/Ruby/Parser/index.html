@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Decode::Language::Ruby::Parser</title>
+		
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<link rel="icon" type="image/png" href="../../../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		
+		<script src="../../../../../_static/links.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+		//]]>
+		</script>
+	</head>
+
+	<body>
+		<header> › <a class="link" href="../../../../../index.html">Project</a> › <a class="link" href="../../../../index.html">Source</a></header>
+		
+		<main>
+			
+	<h1><code class="language-ruby">Decode::Language::Ruby::Parser</code></h1>
+	
+	<p>The Ruby source code parser.</p>
+	
+	
+	<section>
+	<h2>Definitions</h2>
+	
+	<section id="Decode::Language::Ruby::Parser#definitions_for"><h3><code class="language-ruby">def definitions_for(input, &amp;block)</code></h3><p>Extract definitions from the given input file.</p>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def definitions_for(input, &amp;block)
+	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+	
+	if top
+		walk_definitions(top, comments, &amp;block)
+	end
+end</code></pre>
+					</details></section><section id="Decode::Language::Ruby::Parser#walk_definitions"><h3><code class="language-ruby">def walk_definitions(node, comments, parent = nil, &amp;block)</code></h3><p>Walk over the syntax tree and extract relevant definitions with their associated comments.</p>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def walk_definitions(node, comments, parent = nil, &amp;block)
+	case node.type
+	when :begin
+		node.children.each do |child|
+			walk_definitions(child, comments, parent, &amp;block)
+		end
+	when :module
+		definition = Module.new(
+			node, node.children[0].children[1],
+			comments: extract_comments_for(node, comments),
+			parent: parent,
+			language: @language
+		)
+		
+		yield definition
+		
+		if children = node.children[1]
+			walk_definitions(children, comments, definition, &amp;block)
+		end
+	when :class
+		definition = Class.new(
+			node, node.children[0].children[1],
+			comments: extract_comments_for(node, comments),
+			parent: parent, language: @language
+		)
+		
+		yield definition
+		
+		if children = node.children[2]
+			walk_definitions(children, comments, definition, &amp;block)
+		end
+	when :sclass
+		definition = Singleton.new(
+			node, node.children[0],
+			comments: extract_comments_for(node, comments),
+			parent: parent, language: @language
+		)
+		
+		yield definition
+		
+		if children = node.children[1]
+			walk_definitions(children, comments, definition, &amp;block)
+		end
+	when :def
+		definition = Method.new(
+			node, node.children[0],
+			comments: extract_comments_for(node, comments),
+			parent: parent, language: @language
+		)
+		
+		yield definition
+	when :defs
+		definition = Function.new(
+			node, node.children[1],
+			comments: extract_comments_for(node, comments),
+			parent: parent, language: @language
+		)
+		
+		yield definition
+	when :casgn
+		definition = Constant.new(
+			node, node.children[1],
+			comments: extract_comments_for(node, comments),
+			parent: parent, language: @language
+		)
+		
+		yield definition
+	when :send
+		name = node.children[1]
+		
+		case name
+		when :attr, :attr_reader, :attr_writer, :attr_accessor
+			definition = Attribute.new(
+				node, name_for(node.children[2]),
+				comments: extract_comments_for(node, comments),
+				parent: parent, language: @language
+			)
+			
+			yield definition
+		else
+			extracted_comments = extract_comments_for(node, comments)
+			if kind = kind_for(node, extracted_comments)
+				definition = Call.new(
+					node, name_for(node, extracted_comments),
+					comments: extracted_comments,
+					parent: parent, language: @language
+				)
+				
+				yield definition
+			end
+		end
+	when :block
+		extracted_comments = extract_comments_for(node, comments)
+		
+		if name = name_for(node, extracted_comments)
+			definition = Block.new(
+				node, name,
+				comments: extracted_comments,
+				parent: scope_for(extracted_comments, parent, &amp;block),
+				language: @language
+			)
+			
+			if kind = kind_for(node, extracted_comments)
+				definition = definition.convert(kind)
+			end
+			
+			yield definition
+			
+			if children = node.children[2]
+				walk_definitions(children, comments, definition, &amp;block)
+			end
+		end
+	end
+end</code></pre>
+					</details></section><section id="Decode::Language::Ruby::Parser#segments_for"><h3><code class="language-ruby">def segments_for(input, &amp;block)</code></h3><p>Extract segments from the given input file.</p>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def segments_for(input, &amp;block)
+	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+	
+	# We delete any leading comments:
+	line = 0
+	
+	while comment = comments.first
+		if comment.location.line == line
+			comments.pop
+			line += 1
+		else
+			break
+		end
+	end
+	
+	# Now we iterate over the syntax tree and generate segments:
+	walk_segments(top, comments, &amp;block)
+end</code></pre>
+					</details></section>	</section>
+
+				
+			<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>
+		</main>
+	</body>
+</html>
