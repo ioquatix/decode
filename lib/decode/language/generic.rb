@@ -35,10 +35,14 @@ module Decode
 				tags['raises'] = Comment::Raises
 				tags['throws'] = Comment::Throws
 				
-				tags['reentrant'] = Comment::Pragma
 				tags['deprecated'] = Comment::Pragma
+				
+				tags['reentrant'] = Comment::Pragma
 				tags['blocking'] = Comment::Pragma
 				tags['asynchronous'] = Comment::Pragma
+				
+				tags['public'] = Comment::Pragma
+				tags['private'] = Comment::Pragma
 			end
 			
 			def initialize(name, extensions: self.class::EXTENSIONS, tags: self.class::TAGS)
