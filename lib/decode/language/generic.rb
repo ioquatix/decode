@@ -37,8 +37,6 @@ module Decode
 				
 				tags['deprecated'] = Comment::Pragma
 				
-				tags['reentrant'] = Comment::Pragma
-				tags['blocking'] = Comment::Pragma
 				tags['asynchronous'] = Comment::Pragma
 				
 				tags['public'] = Comment::Pragma
