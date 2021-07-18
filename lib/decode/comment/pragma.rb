@@ -30,13 +30,15 @@ module Decode
 		# - `@asynchronous This method may yield.`
 		#
 		class Pragma < Tag
-			PATTERN = /\A(?<details>.*?)?\Z/
+			def self.parse(directive, text, lines, tags, level = 0)
+				self.build(directive, text)
+			end
 			
-			def self.build(directive, match)
+			def self.build(directive, text)
 				node = self.new(directive)
 				
-				if details = match[:details]
-					node.add(Text.new(details))
+				if text
+					node.add(Text.new(text))
 				end
 				
 				return node

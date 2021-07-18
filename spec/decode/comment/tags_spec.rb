@@ -18,37 +18,27 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require_relative 'node'
+require 'decode/source'
+require 'decode/language/ruby'
 
-module Decode
-	module Comment
-		class Tag < Node
-			def self.match(text)
-				self::PATTERN.match(text)
-			end
-			
-			def self.parse(directive, text, lines, tags, level = 0)
-				if match = self.match(text)
-					node = self.build(directive, match)
-					
-					tags.parse(lines, level + 1) do |child|
-						node.add(child)
-					end
-					
-					return node
-				else
-					# Consume all nested nodes:
-					tags.ignore(lines, level + 1)
-				end
-			end
-			
-			def initialize(directive)
-				@directive = directive
-			end
-			
-			# The directive that generated the tag.
-			# @attribute [String]
-			attr :directive
+RSpec.describe Decode::Comment::Tags do
+	let(:language) {Decode::Language::Ruby.new}
+	let(:source) {Decode::Source.new(path, language)}
+	let(:segments) {source.segments.to_a}
+	
+	context 'with pragmas' do
+		let(:path) {File.expand_path("fixtures/pragmas.rb", __dir__)}
+		let(:public_method) {segments[0]}
+		let(:private_method) {segments[1]}
+		
+		it "should have public directive" do
+			pragma = public_method.documentation.children.first
+			expect(pragma.directive).to be == "public"
+		end
+		
+		it "should have private directive" do
+			pragma = private_method.documentation.children.first
+			expect(pragma.directive).to be == "private"
 		end
 	end
 end
