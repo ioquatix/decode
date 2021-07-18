@@ -54,6 +54,14 @@ module Decode
 				end
 			end
 			
+			def filter(klass)
+				return to_enum(:filter, klass) unless block_given?
+				
+				@children&.each do |child|
+					yield child if child.is_a?(klass)
+				end
+			end
+			
 			# Any lines of text associated wtih this node.
 			# @returns [Array(String) | Nil] The lines of text.
 			def text
