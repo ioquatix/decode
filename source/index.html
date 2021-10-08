@@ -2,7 +2,7 @@
 <html>
 	<head>
 		
-			<title>Source</title>
+			<title>Overview</title>
 		
 		<meta charset="UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -29,883 +29,559 @@
 		
 		<main>
 			
-	<h1>Source</h1>
+	<h1>Overview</h1>
 	
 	<ul class="index"><li>
-					<a href="Decode/index.html"><code class="language-ruby">module Decode</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Segment/index.html"><code class="language-ruby">class Segment</code></a>
-					
-						<p>A chunk of code with an optional preceeding comment block.</p>
-
+						<a href="http://localhost:44975/source/Decode/index"><code class="language-ruby">module Decode</code></a>
+						
+						
+						
 					
 					<ul class="index"><li>
-					<a href="Decode/Segment/index.html#Decode%3A%3ASegment%23comments"><code class="language-ruby">attr :comments</code></a>
-					
-						<p>The preceeding comments.</p>
+						<a href="Decode/Documentation/index.html"><code class="language-ruby">class Documentation &lt; Comment::Node</code></a>
+						
+						
+						
+							<p>Structured access to a set of comment lines.</p>
 
+					
+					<ul class="index"><li>
 					
 									</li><li>
-					<a href="Decode/Segment/index.html#Decode%3A%3ASegment%23language"><code class="language-ruby">attr :language</code></a>
-					
-						<p>The language of the code attached to this segment.</p>
-
 					
 									</li><li>
-					<a href="Decode/Segment/index.html#Decode%3A%3ASegment%23documentation"><code class="language-ruby">def documentation</code></a>
-					
-						<p>An interface for accsssing the documentation of the definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Segment/index.html#Decode%3A%3ASegment%23code"><code class="language-ruby">def code</code></a>
-					
-						<p>The source code trailing the comments.</p>
-
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Languages/index.html"><code class="language-ruby">class Languages</code></a>
-					
-						<p>A context for looking up languages based on file extension or name.</p>
+						<a href="Decode/Segment/index.html"><code class="language-ruby">class Segment</code></a>
+						
+						
+						
+							<p>A chunk of code with an optional preceeding comment block.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Languages/index.html#Decode%3A%3ALanguages%23parse_reference"><code class="language-ruby">def parse_reference(text, default_language: nil)</code></a>
 					
-						<p>Parse a language agnostic reference:</p>
-
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Index/index.html"><code class="language-ruby">class Index</code></a>
-					
-						<p>A list of definitions organised for quick lookup and lexical enumeration.</p>
+						<a href="Decode/Languages/index.html"><code class="language-ruby">class Languages</code></a>
+						
+						
+						
+							<p>A context for looking up languages based on file extension or name.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23initialize"><code class="language-ruby">def initialize(languages = Languages.all)</code></a>
-					
-						<p>Initialize an empty index.</p>
-
-					
-									</li><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23languages"><code class="language-ruby">attr :languages</code></a>
-					
-						<p>All supported languages for this index.</p>
-
-					
-									</li><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23sources"><code class="language-ruby">attr :sources</code></a>
-					
-						<p>All source files that have been parsed.</p>
-
-					
-									</li><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23definitions"><code class="language-ruby">attr :definitions</code></a>
-					
-						<p>All definitions which have been parsed.</p>
-
-					
-									</li><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23update"><code class="language-ruby">def update(paths)</code></a>
-					
-						<p>Updates the index by parsing the specified files.</p>
-
-					
-									</li><li>
-					<a href="Decode/Index/index.html#Decode%3A%3AIndex%23lookup"><code class="language-ruby">def lookup(reference, relative_to: nil)</code></a>
-					
-						<p>Lookup the specified reference and return matching definitions.</p>
-
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Documentation/index.html"><code class="language-ruby">class Documentation &lt; Comment::Node</code></a>
-					
-						<p>Structured access to a set of comment lines.</p>
+						<a href="Decode/Scope/index.html"><code class="language-ruby">class Scope &lt; Definition</code></a>
+						
+						
+						
+							<p>An abstract namespace for nesting definitions.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Documentation/index.html#Decode%3A%3ADocumentation%23initialize"><code class="language-ruby">def initialize(comments, language = nil)</code></a>
-					
-						<p>Initialize the documentation with an array of comments, within a specific language.</p>
-
 					
 									</li><li>
-					<a href="Decode/Documentation/index.html#Decode%3A%3ADocumentation%23comments"><code class="language-ruby">attr :comments</code></a>
-					
-						<p>The underlying comments from which the documentation is extracted.</p>
-
-					
-									</li><li>
-					<a href="Decode/Documentation/index.html#Decode%3A%3ADocumentation%23language"><code class="language-ruby">attr :language</code></a>
-					
-						<p>The language in which the documentation was extracted from.</p>
-
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Language/index.html"><code class="language-ruby">module Language</code></a>
-					
-						<p>Language specific parsers and definitions.</p>
+						<a href="Decode/Source/index.html"><code class="language-ruby">class Source</code></a>
+						
+						
+						
+							<p>Represents a source file in a specific language.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Language/Reference/index.html"><code class="language-ruby">class Reference</code></a>
-					
-						<p>An reference which can be resolved to zero or more definitions.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23initialize"><code class="language-ruby">def initialize(identifier, language, lexical_path = nil)</code></a>
-					
-						<p>Initialize the reference.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23identifier"><code class="language-ruby">attr :identifier</code></a>
-					
-						<p>The identifier part of the reference.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23language"><code class="language-ruby">attr :language</code></a>
-					
-						<p>The language associated with this reference.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23absolute%3F"><code class="language-ruby">def absolute?</code></a>
-					
-						<p>Whether the reference starts at the base of the lexical tree.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Reference/index.html#Decode%3A%3ALanguage%3A%3AReference%23path"><code class="language-ruby">def path</code></a>
-					
-						<p>The lexical path of the reference.</p>
-
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Language/Generic/index.html"><code class="language-ruby">class Generic</code></a>
-					
-						<p>The Ruby language.</p>
+						<a href="Decode/Trie/index.html"><code class="language-ruby">class Trie</code></a>
+						
+						
+						
+							<p>A prefix-trie data structure for fast lexical lookups.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Language/Generic/index.html#Decode%3A%3ALanguage%3A%3AGeneric%23reference_for"><code class="language-ruby">def reference_for(identifier)</code></a>
-					
-						<p>Generate a language-specific reference.</p>
+						<a href="Decode/Trie/Node/index.html"><code class="language-ruby">class Node</code></a>
+						
+						
+						
+							<p>A single node in the trie.</p>
 
+					
+					<ul class="index"><li>
 					
 									</li><li>
-					<a href="Decode/Language/Generic/index.html#Decode%3A%3ALanguage%3A%3AGeneric%23definitions_for"><code class="language-ruby">def definitions_for(input, &amp;block)</code></a>
-					
-						<p>Parse the input yielding definitions.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Generic/index.html#Decode%3A%3ALanguage%3A%3AGeneric%23segments_for"><code class="language-ruby">def segments_for(input, &amp;block)</code></a>
 					
-						<p>Parse the input yielding segments.</p>
-
+									</li><li>
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/index.html"><code class="language-ruby">module Ruby</code></a>
-					
-						<p>An interface for extracting information from Ruby source code.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Segment/index.html"><code class="language-ruby">class Segment &lt; Decode::Segment</code></a>
-					
-						<p>A Ruby specific code segment.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Segment/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ASegment%23node"><code class="language-ruby">attr :node</code></a>
-					
-						<p>The parser syntax tree node.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Ruby/Segment/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ASegment%23code"><code class="language-ruby">def code</code></a>
 					
-						<p>The source code trailing the comments.</p>
-
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Reference/index.html"><code class="language-ruby">class Reference &lt; Language::Reference</code></a>
+						<a href="Decode/Definition/index.html"><code class="language-ruby">class Definition</code></a>
+						
+						
+						
+							<p>A symbol with attached documentation.</p>
+
 					
-						<p>An Ruby-specific reference which can be resolved to zero or more definitions.</p>
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/index.html"><code class="language-ruby">module Language</code></a>
+						
+						
+						
+							<p>Language specific parsers and definitions.</p>
+
+					
+					<ul class="index"><li>
+						<a href="Decode/Language/Reference/index.html"><code class="language-ruby">class Reference</code></a>
+						
+						
+						
+							<p>An reference which can be resolved to zero or more definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/index.html"><code class="language-ruby">module Ruby</code></a>
+						
+						
+						
+							<p>An interface for extracting information from Ruby source code.</p>
+
+					
+					<ul class="index"><li>
+						<a href="Decode/Language/Ruby/Segment/index.html"><code class="language-ruby">class Segment &lt; Decode::Segment</code></a>
+						
+						
+						
+							<p>A Ruby specific code segment.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Class/index.html"><code class="language-ruby">class Class &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific class.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Singleton/index.html"><code class="language-ruby">class Singleton &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific singleton class.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Reference/index.html"><code class="language-ruby">class Reference &lt; Language::Reference</code></a>
+						
+						
+						
+							<p>An Ruby-specific reference which can be resolved to zero or more definitions.</p>
 
 					
 					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Code/index.html"><code class="language-ruby">class Code</code></a>
+						<a href="Decode/Language/Ruby/Function/index.html"><code class="language-ruby">class Function &lt; Method</code></a>
+						
+						
+						
+							<p>A Ruby-specific function.</p>
+
 					
-						<p>A Ruby-specific block of code.</p>
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Parser/index.html"><code class="language-ruby">class Parser</code></a>
+						
+						
+						
+							<p>The Ruby source code parser.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Definition/index.html"><code class="language-ruby">class Definition &lt; Decode::Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific definition.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Generic/index.html"><code class="language-ruby">class Generic &lt; Language::Generic</code></a>
+						
+						
+						
+							<p>The Ruby language.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific attribute.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Module/index.html"><code class="language-ruby">class Module &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific module.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Method/index.html"><code class="language-ruby">class Method &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific method.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Block/index.html"><code class="language-ruby">class Block &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific block which might carry other definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Code/index.html"><code class="language-ruby">class Code</code></a>
+						
+						
+						
+							<p>A Ruby-specific block of code.</p>
 
 					
 					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Generic/index.html"><code class="language-ruby">class Generic &lt; Language::Generic</code></a>
-					
-						<p>The Ruby language.</p>
+						<a href="Decode/Language/Ruby/Call/index.html"><code class="language-ruby">class Call &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific block which might carry other definitions.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Generic/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AGeneric%23reference_for"><code class="language-ruby">def reference_for(identifier)</code></a>
 					
-						<p>Generate a language-specific reference.</p>
-
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
 					
 									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Block/index.html"><code class="language-ruby">class Block &lt; Definition</code></a>
-					
-						<p>A Ruby-specific block which might carry other definitions.</p>
+						<a href="Decode/Language/Ruby/Constant/index.html"><code class="language-ruby">class Constant &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific constant.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Block/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ABlock%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>A block can sometimes be a container for other definitions.</p>
-
 					
 									</li><li>
-					<a href="Decode/Language/Ruby/Block/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ABlock%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the block.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Block/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ABlock%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>The long form of the block.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Block/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ABlock%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>The fully qualified name of the block.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Module/index.html"><code class="language-ruby">class Module &lt; Definition</code></a>
-					
-						<p>A Ruby-specific module.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Module/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AModule%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>A module is a container for other definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Module/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AModule%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the module.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Module/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AModule%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>The fully qualified name of the class.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Definition/index.html"><code class="language-ruby">class Definition &lt; Decode::Definition</code></a>
-					
-						<p>A Ruby-specific definition.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Definition/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ADefinition%23initialize"><code class="language-ruby">def initialize(node, *arguments, **options)</code></a>
-					
-						<p>Initialize the definition from the syntax tree node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Definition/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ADefinition%23node"><code class="language-ruby">attr :node</code></a>
-					
-						<p>The parser syntax tree node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Definition/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ADefinition%23text"><code class="language-ruby">def text</code></a>
-					
-						<p>The source code associated with the definition.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Class/index.html"><code class="language-ruby">class Class &lt; Definition</code></a>
-					
-						<p>A Ruby-specific class.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Class/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AClass%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>A class is a container for other definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Class/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AClass%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the class.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Class/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AClass%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>The long form of the class.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Class/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AClass%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>The fully qualified name of the class.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Singleton/index.html"><code class="language-ruby">class Singleton &lt; Definition</code></a>
-					
-						<p>A Ruby-specific singleton class.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Singleton/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ASingleton%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>A singleton class is a container for other definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Singleton/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ASingleton%23nested%3F"><code class="language-ruby">def nested?</code></a>
-					
-						<p>Typically, a singleton class does not contain other definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Singleton/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ASingleton%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the class.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Parser/index.html"><code class="language-ruby">class Parser</code></a>
-					
-						<p>The Ruby source code parser.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Parser/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AParser%23definitions_for"><code class="language-ruby">def definitions_for(input, &amp;block)</code></a>
-					
-						<p>Extract definitions from the given input file.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Parser/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AParser%23walk_definitions"><code class="language-ruby">def walk_definitions(node, comments, parent = nil, &amp;block)</code></a>
-					
-						<p>Walk over the syntax tree and extract relevant definitions with their associated comments.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Parser/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AParser%23segments_for"><code class="language-ruby">def segments_for(input, &amp;block)</code></a>
-					
-						<p>Extract segments from the given input file.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Function/index.html"><code class="language-ruby">class Function &lt; Method</code></a>
-					
-						<p>A Ruby-specific function.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Function/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AFunction%23arguments_node"><code class="language-ruby">def arguments_node</code></a>
-					
-						<p>The node which contains the function arguments.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Definition</code></a>
-					
-						<p>A Ruby-specific attribute.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Attribute/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AAttribute%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the attribute.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Method/index.html"><code class="language-ruby">class Method &lt; Definition</code></a>
-					
-						<p>A Ruby-specific method.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Method/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AMethod%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the method.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Method/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AMethod%23arguments_node"><code class="language-ruby">def arguments_node</code></a>
-					
-						<p>The node which contains the function arguments.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Method/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AMethod%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>The long form of the method.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Method/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AMethod%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>The fully qualified name of the block.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Call/index.html"><code class="language-ruby">class Call &lt; Definition</code></a>
-					
-						<p>A Ruby-specific block which might carry other definitions.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Call/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ACall%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>A block can sometimes be a container for other definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Call/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ACall%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the class.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Call/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ACall%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>The long form of the class.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Call/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3ACall%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>The fully qualified name of the block.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Language/Ruby/Constant/index.html"><code class="language-ruby">class Constant &lt; Definition</code></a>
-					
-						<p>A Ruby-specific constant.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Language/Ruby/Constant/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AConstant%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>The short form of the constant.</p>
-
-					
-									</li><li>
-					<a href="Decode/Language/Ruby/Constant/index.html#Decode%3A%3ALanguage%3A%3ARuby%3A%3AConstant%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>The long form of the constant.</p>
-
-					
-									</li></ul>				</li></ul>				</li></ul>				</li><li>
-					<a href="Decode/Trie/index.html"><code class="language-ruby">class Trie</code></a>
-					
-						<p>A prefix-trie data structure for fast lexical lookups.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Trie/Node/index.html"><code class="language-ruby">class Node</code></a>
-					
-						<p>A single node in the trie.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Trie/Node/index.html#Decode%3A%3ATrie%3A%3ANode%23values"><code class="language-ruby">attr_accessor :values</code></a>
-					
-						<p>A mutable array of all values that terminate at this node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/Node/index.html#Decode%3A%3ATrie%3A%3ANode%23children"><code class="language-ruby">attr :children</code></a>
-					
-						<p>A hash table of all children nodes, indexed by name.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/Node/index.html#Decode%3A%3ATrie%3A%3ANode%23lookup"><code class="language-ruby">def lookup(path, index = 0)</code></a>
-					
-						<p>Look up a lexical path starting at this node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/Node/index.html#Decode%3A%3ATrie%3A%3ANode%23traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></a>
-					
-						<p>Traverse the trie from this node.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23initialize"><code class="language-ruby">def initialize</code></a>
-					
-						<p>Initialize an empty trie.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23root"><code class="language-ruby">attr :root</code></a>
-					
-						<p>The root of the trie.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23insert"><code class="language-ruby">def insert(path, value)</code></a>
-					
-						<p>Insert the specified value at the given path into the trie.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23lookup"><code class="language-ruby">def lookup(path)</code></a>
-					
-						<p>Lookup the values at the specified path.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23each"><code class="language-ruby">def each(path = [], &amp;block)</code></a>
-					
-						<p>Enumerate all lexical scopes under the specified path.</p>
-
-					
-									</li><li>
-					<a href="Decode/Trie/index.html#Decode%3A%3ATrie%23traverse"><code class="language-ruby">def traverse(path = [], &amp;block)</code></a>
-					
-						<p>Traverse the trie.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Source/index.html"><code class="language-ruby">class Source</code></a>
-					
-						<p>Represents a source file in a specific language.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Source/index.html#Decode%3A%3ASource%23path"><code class="language-ruby">attr :path</code></a>
-					
-						<p>The path of the source file.</p>
-
-					
-									</li><li>
-					<a href="Decode/Source/index.html#Decode%3A%3ASource%23language"><code class="language-ruby">attr :language</code></a>
-					
-						<p>The language of the source file.</p>
-
-					
-									</li><li>
-					<a href="Decode/Source/index.html#Decode%3A%3ASource%23read"><code class="language-ruby">def read</code></a>
-					
-						<p>Read the source file into an internal buffer/cache.</p>
-
-					
-									</li><li>
-					<a href="Decode/Source/index.html#Decode%3A%3ASource%23definitions"><code class="language-ruby">def definitions(&amp;block)</code></a>
-					
-						<p>Open the source file and read all definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Source/index.html#Decode%3A%3ASource%23segments"><code class="language-ruby">def segments(&amp;block)</code></a>
-					
-						<p>Open the source file and read all segments.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Definition/index.html"><code class="language-ruby">class Definition</code></a>
-					
-						<p>A symbol with attached documentation.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23initialize"><code class="language-ruby">def initialize(name, parent: nil, language: parent.language, comments: nil)</code></a>
-					
-						<p>Initialize the symbol.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23name"><code class="language-ruby">attr :name</code></a>
-					
-						<p>The symbol name.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23parent"><code class="language-ruby">attr :parent</code></a>
-					
-						<p>The parent definition, defining lexical scope.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23language"><code class="language-ruby">attr :language</code></a>
-					
-						<p>The language the symbol is defined within.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23comments"><code class="language-ruby">attr :comments</code></a>
-					
-						<p>The comment lines which directly preceeded the definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23qualified_name"><code class="language-ruby">def qualified_name</code></a>
-					
-						<p>The qualified name is an absolute name which includes any and all namespacing.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23nested_name"><code class="language-ruby">def nested_name</code></a>
-					
-						<p>The name of this definition plus the nesting prefix.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23start_with%3F"><code class="language-ruby">def start_with?(prefix)</code></a>
-					
-						<p>Does the definition name match the specified prefix?</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23convert"><code class="language-ruby">def convert(kind)</code></a>
-					
-						<p>Convert this definition into another kind of definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23path"><code class="language-ruby">def path</code></a>
-					
-						<p>The lexical scope as an array of names.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23short_form"><code class="language-ruby">def short_form</code></a>
-					
-						<p>A short form of the definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23long_form"><code class="language-ruby">def long_form</code></a>
-					
-						<p>A long form of the definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23qualified_form"><code class="language-ruby">def qualified_form</code></a>
-					
-						<p>A long form which uses the qualified name if possible.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23multiline%3F"><code class="language-ruby">def multiline?</code></a>
-					
-						<p>Whether the definition spans multiple lines.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23text"><code class="language-ruby">def text</code></a>
-					
-						<p>The full text of the definition.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23container%3F"><code class="language-ruby">def container?</code></a>
-					
-						<p>Whether this definition can contain nested definitions.</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23nested%3F"><code class="language-ruby">def nested?</code></a>
-					
-						<p>Whether this represents a single entity to be documented (along with it's contents).</p>
-
-					
-									</li><li>
-					<a href="Decode/Definition/index.html#Decode%3A%3ADefinition%23documentation"><code class="language-ruby">def documentation</code></a>
-					
-						<p>Structured access to the definitions comments.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Comment/index.html"><code class="language-ruby">module Comment</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Comment/Throws/index.html"><code class="language-ruby">class Throws &lt; Attribute</code></a>
-					
-						<p>Identifies that a method might throw a specific symbol.</p>
-
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Pragma/index.html"><code class="language-ruby">class Pragma &lt; Tag</code></a>
-					
-						<p>Asserts a specific property about the method signature.</p>
-
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Tag/index.html"><code class="language-ruby">class Tag &lt; Node</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Comment/Tag/index.html#Decode%3A%3AComment%3A%3ATag%23directive"><code class="language-ruby">attr :directive</code></a>
-					
-						<p>The directive that generated the tag.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Comment/Returns/index.html"><code class="language-ruby">class Returns &lt; Attribute</code></a>
-					
-						<p>Describes a return value.</p>
-
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Tags/index.html"><code class="language-ruby">class Tags</code></a>
-					
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Parameter/index.html"><code class="language-ruby">class Parameter &lt; Tag</code></a>
-					
-						<p>Describes a named method parameter.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Comment/Parameter/index.html#Decode%3A%3AComment%3A%3AParameter%23name"><code class="language-ruby">attr :name</code></a>
-					
-						<p>The name of the parameter.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Parameter/index.html#Decode%3A%3AComment%3A%3AParameter%23type"><code class="language-ruby">attr :type</code></a>
-					
-						<p>The type of the attribute.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Comment/Node/index.html"><code class="language-ruby">class Node</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23initialize"><code class="language-ruby">def initialize(children = nil)</code></a>
-					
-						<p>Initialize the node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23children%3F"><code class="language-ruby">def children?</code></a>
-					
-						<p>Whether this node has any children nodes.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23add"><code class="language-ruby">def add(child)</code></a>
-					
-						<p>Add a child node to this node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23children"><code class="language-ruby">attr :children</code></a>
-					
-						<p>Any children of this node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23each"><code class="language-ruby">def each(&amp;block)</code></a>
-					
-						<p>Enumerate all non-text children nodes.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23text"><code class="language-ruby">def text</code></a>
-					
-						<p>Any lines of text associated wtih this node.</p>
-
-					
-									</li><li>
-					<a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23traverse"><code class="language-ruby">def traverse(&amp;block)</code></a>
-					
-						<p>Traverse the tags from this node using <a href="Decode/Comment/Node/index.html#Decode%3A%3AComment%3A%3ANode%23each" title="each"><code class="language-ruby">Decode::Comment::Node#each</code></a>.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Comment/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Tag</code></a>
-					
-						<p>Describes an attribute type.</p>
-
-					
-					<ul class="index"><li>
-					<a href="Decode/Comment/Attribute/index.html#Decode%3A%3AComment%3A%3AAttribute%23type"><code class="language-ruby">attr :type</code></a>
-					
-						<p>The type of the attribute.</p>
-
-					
-									</li></ul>				</li><li>
-					<a href="Decode/Comment/Raises/index.html"><code class="language-ruby">class Raises &lt; Attribute</code></a>
-					
-						<p>Identifies that a method might raise an exception.</p>
-
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Yields/index.html"><code class="language-ruby">class Yields &lt; Tag</code></a>
-					
-						<p>Describes a block parameter.</p>
-
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Comment/Text/index.html"><code class="language-ruby">class Text</code></a>
-					
-						<p>A structured comment.</p>
-
-					
-					<ul class="index"></ul>				</li></ul>				</li><li>
-					<a href="Decode/Syntax/index.html"><code class="language-ruby">module Syntax</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Syntax/Link/index.html"><code class="language-ruby">class Link &lt; Match</code></a>
-					
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Syntax/Match/index.html"><code class="language-ruby">class Match</code></a>
-					
-					
-					<ul class="index"></ul>				</li><li>
-					<a href="Decode/Syntax/Rewriter/index.html"><code class="language-ruby">class Rewriter</code></a>
-					
-					
-					<ul class="index"><li>
-					<a href="Decode/Syntax/Rewriter/index.html#Decode%3A%3ASyntax%3A%3ARewriter%23text_for"><code class="language-ruby">def text_for(range)</code></a>
-					
-						<p>Returns a chunk of raw text with no formatting.</p>
-
 					
 									</li></ul>				</li></ul>				</li><li>
-					<a href="Decode/Scope/index.html"><code class="language-ruby">class Scope &lt; Definition</code></a>
-					
-						<p>An abstract namespace for nesting definitions.</p>
+						<a href="Decode/Language/Generic/index.html"><code class="language-ruby">class Generic</code></a>
+						
+						
+						
+							<p>The Ruby language.</p>
 
 					
 					<ul class="index"><li>
-					<a href="Decode/Scope/index.html#Decode%3A%3AScope%23short_form"><code class="language-ruby">def short_form</code></a>
-					
 					
 									</li><li>
-					<a href="Decode/Scope/index.html#Decode%3A%3AScope%23container%3F"><code class="language-ruby">def container?</code></a>
 					
-						<p>Scopes are always containers.</p>
+									</li><li>
+					
+									</li></ul>				</li></ul>				</li><li>
+						<a href="Decode/Index/index.html"><code class="language-ruby">class Index</code></a>
+						
+						
+						
+							<p>A list of definitions organised for quick lookup and lexical enumeration.</p>
 
 					
-									</li></ul>				</li></ul>				</li></ul>
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Syntax/index"><code class="language-ruby">module Syntax</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+						<a href="http://localhost:44975/source/Decode/Syntax/Rewriter/index"><code class="language-ruby">class Rewriter</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Syntax/Match/index"><code class="language-ruby">class Match</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Syntax/Link/index"><code class="language-ruby">class Link &lt; Match</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Comment/index"><code class="language-ruby">module Comment</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+						<a href="http://localhost:44975/source/Decode/Comment/Tag/index"><code class="language-ruby">class Tag &lt; Node</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Raises/index.html"><code class="language-ruby">class Raises &lt; Attribute</code></a>
+						
+						
+						
+							<p>Identifies that a method might raise an exception.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Yields/index.html"><code class="language-ruby">class Yields &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes a block parameter.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Parameter/index.html"><code class="language-ruby">class Parameter &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes a named method parameter.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Comment/Tags/index"><code class="language-ruby">class Tags</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes an attribute type.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Text/index.html"><code class="language-ruby">class Text</code></a>
+						
+						
+						
+							<p>A structured comment.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Throws/index.html"><code class="language-ruby">class Throws &lt; Attribute</code></a>
+						
+						
+						
+							<p>Identifies that a method might throw a specific symbol.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Pragma/index.html"><code class="language-ruby">class Pragma &lt; Tag</code></a>
+						
+						
+						
+							<p>Asserts a specific property about the method signature.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Returns/index.html"><code class="language-ruby">class Returns &lt; Attribute</code></a>
+						
+						
+						
+							<p>Describes a return value.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="http://localhost:44975/source/Decode/Comment/Node/index"><code class="language-ruby">class Node</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li></ul>				</li></ul>				</li></ul>
 				
 			<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>
 		</main>
