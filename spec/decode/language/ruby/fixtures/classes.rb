@@ -6,3 +6,6 @@ end
 
 class << self
 end
+
+class My::Nested::Child
+end

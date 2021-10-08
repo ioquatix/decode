@@ -98,7 +98,7 @@ module Decode
 						end
 					when :class
 						definition = Class.new(
-							node, node.children[0].children[1],
+							node, class_name_for(node.children[0]),
 							comments: extract_comments_for(node, comments),
 							parent: parent, language: @language
 						)
@@ -208,6 +208,14 @@ module Decode
 						return node.children[1]
 					when :block
 						return node.children[0].children[1]
+					end
+				end
+				
+				def class_name_for(node)
+					if prefix = node.children[0]
+						"#{class_name_for(prefix)}::#{node.children[1]}"
+					else
+						node.children[1]
 					end
 				end
 				
