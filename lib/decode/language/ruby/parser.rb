@@ -85,7 +85,7 @@ module Decode
 						end
 					when :module
 						definition = Module.new(
-							node, node.children[0].children[1],
+							node, nested_name_for(node.children[0]),
 							comments: extract_comments_for(node, comments),
 							parent: parent,
 							language: @language
@@ -98,7 +98,7 @@ module Decode
 						end
 					when :class
 						definition = Class.new(
-							node, class_name_for(node.children[0]),
+							node, nested_name_for(node.children[0]),
 							comments: extract_comments_for(node, comments),
 							parent: parent, language: @language
 						)
@@ -211,9 +211,9 @@ module Decode
 					end
 				end
 				
-				def class_name_for(node)
+				def nested_name_for(node)
 					if prefix = node.children[0]
-						"#{class_name_for(prefix)}::#{node.children[1]}"
+						"#{nested_name_for(prefix)}::#{node.children[1]}".to_sym
 					else
 						node.children[1]
 					end

@@ -73,6 +73,29 @@ RSpec.describe Decode::Language::Ruby do
 		end
 	end
 	
+	context 'with nested modules' do
+		let(:path) {File.expand_path("fixtures/nested_modules.rb", __dir__)}
+		
+		it 'can extract definitions' do
+			expect(definitions).to_not be_empty
+		end
+		
+		it 'has short form' do
+			expect(definitions[0].short_form).to be == 'module X::Y'
+			expect(definitions[1].short_form).to be == 'module Z'
+		end
+		
+		it 'has long form' do
+			expect(definitions[0].long_form).to be == 'module X::Y'
+			expect(definitions[1].long_form).to be == 'module Z'
+		end
+		
+		it 'has fully qualified form' do
+			expect(definitions[0].qualified_form).to be == 'module X::Y'
+			expect(definitions[1].qualified_form).to be == 'module X::Y::Z'
+		end
+	end
+	
 	context 'with instance methods' do
 		let(:path) {File.expand_path("fixtures/instance_methods.rb", __dir__)}
 		
