@@ -57,19 +57,17 @@ e.g. <code>class Animal</code>.</p>
 <details>
 						<summary><h4>Implementation</h4></summary>
 						<pre><code class="language-ruby">def short_form
-	&quot;class #{@name}&quot;
+	&quot;class #{path_name.last}&quot;
 end</code></pre>
 					</details></section><section id="Decode::Language::Ruby::Class#long_form"><h3><code class="language-ruby">def long_form</code></h3><p>The long form of the class.
 e.g. <code>class Dog &lt; Animal</code>.</p>
 <details>
 						<summary><h4>Implementation</h4></summary>
 						<pre><code class="language-ruby">def long_form
-	if super_node = @node.children[1]
-		@node.location.keyword.join(
-			super_node.location.expression
-		).source
+	if super_class = self.super_class
+		&quot;#{qualified_form} &lt; #{super_class}&quot;
 	else
-		self.short_form
+		qualified_form
 	end
 end</code></pre>
 					</details></section><section id="Decode::Language::Ruby::Class#qualified_form"><h3><code class="language-ruby">def qualified_form</code></h3><p>The fully qualified name of the class.
