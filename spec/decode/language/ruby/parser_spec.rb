@@ -39,7 +39,7 @@ RSpec.describe Decode::Language::Ruby do
 			expect(definitions[0].short_form).to be == 'class Parent'
 			expect(definitions[1].short_form).to be == 'class Child'
 			expect(definitions[2].short_form).to be == 'class << (self)'
-			expect(definitions[3].short_form).to be == 'class My::Nested::Child'
+			expect(definitions[3].short_form).to be == 'class Child'
 		end
 		
 		it 'has long form' do
@@ -64,7 +64,7 @@ RSpec.describe Decode::Language::Ruby do
 		
 		it 'has long form' do
 			expect(definitions[0].long_form).to be == 'module X'
-			expect(definitions[1].long_form).to be == 'module Y'
+			expect(definitions[1].long_form).to be == 'module X::Y'
 		end
 		
 		it 'has fully qualified form' do
@@ -81,7 +81,7 @@ RSpec.describe Decode::Language::Ruby do
 		end
 		
 		it 'has short form' do
-			expect(definitions[0].short_form).to be == 'module X::Y'
+			expect(definitions[0].short_form).to be == 'module Y'
 			expect(definitions[1].short_form).to be == 'module Z'
 		end
 		
@@ -91,7 +91,7 @@ RSpec.describe Decode::Language::Ruby do
 		
 		it 'has long form' do
 			expect(definitions[0].long_form).to be == 'module X::Y'
-			expect(definitions[1].long_form).to be == 'module Z'
+			expect(definitions[1].long_form).to be == 'module X::Y::Z'
 		end
 		
 		it 'has fully qualified form' do

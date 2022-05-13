@@ -37,7 +37,7 @@ module Decode
 				# The short form of the class.
 				# e.g. `class Animal`.
 				def short_form
-					"class #{@name}"
+					"class #{path_name.last}"
 				end
 				
 				# The long form of the class.
@@ -48,7 +48,7 @@ module Decode
 							super_node.location.expression
 						).source
 					else
-						self.short_form
+						self.qualified_form
 					end
 				end
 				

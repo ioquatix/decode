@@ -37,11 +37,12 @@ module Decode
 				# The short form of the module.
 				# e.g. `module Barnyard`.
 				def short_form
-					"module #{@name}"
+					"module #{path_name.last}"
 				end
 				
-				# The long form is the same as the short form.
-				alias long_form short_form
+				def long_form
+					qualified_form
+				end
 				
 				# The fully qualified name of the class.
 				# e.g. `module ::Barnyard::Dog`.
