@@ -43,12 +43,16 @@ module Decode
 				# The long form of the class.
 				# e.g. `class Dog < Animal`.
 				def long_form
-					if super_node = @node.children[1]
-						@node.location.keyword.join(
-							super_node.location.expression
-						).source
+					if super_class = self.super_class
+						"#{qualified_form} < #{super_class}"
 					else
-						self.qualified_form
+						qualified_form
+					end
+				end
+				
+				def super_class
+					if super_node = @node.children[1]
+						super_node.location.expression.source
 					end
 				end
 				
