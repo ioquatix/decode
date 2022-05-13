@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Overview</title>
+		
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<link rel="icon" type="image/png" href="../_static/icon.png"/>
+		<link rel="stylesheet" href="../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../_components/jquery/jquery.min.js"></script>
+		<script src="../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		<script src="../_components/mermaid/mermaid.min.js"></script>
+		
+		<script src="../_static/links.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+			
+			let isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+			let config = {theme: 'light'};
+			if (isDarkMode) config.theme = 'dark';
+			else config.theme = 'forest';
+			mermaid.initialize(config);
+		//]]>
+		</script>
+	</head>
+
+	<body>
+		<header> › <a class="link" href="../index.html">Project</a> › <a class="link" href="index.html">Source</a></header>
+		
+		<main>
+			
+	<h1>Overview</h1>
+	
+	<ul class="index"><li>
+						<a href="Decode/index.html"><code class="language-ruby">module Decode</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+						<a href="Decode/Comment/index.html"><code class="language-ruby">module Comment</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+						<a href="Decode/Comment/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes an attribute type.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Node/index.html"><code class="language-ruby">class Node</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Parameter/index.html"><code class="language-ruby">class Parameter &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes a named method parameter.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Pragma/index.html"><code class="language-ruby">class Pragma &lt; Tag</code></a>
+						
+						
+						
+							<p>Asserts a specific property about the method signature.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Raises/index.html"><code class="language-ruby">class Raises &lt; Attribute</code></a>
+						
+						
+						
+							<p>Identifies that a method might raise an exception.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Returns/index.html"><code class="language-ruby">class Returns &lt; Attribute</code></a>
+						
+						
+						
+							<p>Describes a return value.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Tag/index.html"><code class="language-ruby">class Tag &lt; Node</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Comment/Tags/index.html"><code class="language-ruby">class Tags</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Text/index.html"><code class="language-ruby">class Text</code></a>
+						
+						
+						
+							<p>A structured comment.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Throws/index.html"><code class="language-ruby">class Throws &lt; Attribute</code></a>
+						
+						
+						
+							<p>Identifies that a method might throw a specific symbol.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Comment/Yields/index.html"><code class="language-ruby">class Yields &lt; Tag</code></a>
+						
+						
+						
+							<p>Describes a block parameter.</p>
+
+					
+					<ul class="index"></ul>				</li></ul>				</li><li>
+						<a href="Decode/Definition/index.html"><code class="language-ruby">class Definition</code></a>
+						
+						
+						
+							<p>A symbol with attached documentation.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Documentation/index.html"><code class="language-ruby">class Documentation &lt; Comment::Node</code></a>
+						
+						
+						
+							<p>Structured access to a set of comment lines.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Index/index.html"><code class="language-ruby">class Index</code></a>
+						
+						
+						
+							<p>A list of definitions organised for quick lookup and lexical enumeration.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/index.html"><code class="language-ruby">module Language</code></a>
+						
+						
+						
+							<p>Language specific parsers and definitions.</p>
+
+					
+					<ul class="index"><li>
+						<a href="Decode/Language/Generic/index.html"><code class="language-ruby">class Generic</code></a>
+						
+						
+						
+							<p>The Ruby language.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Reference/index.html"><code class="language-ruby">class Reference</code></a>
+						
+						
+						
+							<p>An reference which can be resolved to zero or more definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/index.html"><code class="language-ruby">module Ruby</code></a>
+						
+						
+						
+							<p>An interface for extracting information from Ruby source code.</p>
+
+					
+					<ul class="index"><li>
+						<a href="Decode/Language/Ruby/Attribute/index.html"><code class="language-ruby">class Attribute &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific attribute.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Block/index.html"><code class="language-ruby">class Block &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific block which might carry other definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Call/index.html"><code class="language-ruby">class Call &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific block which might carry other definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Class/index.html"><code class="language-ruby">class Class &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific class.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Singleton/index.html"><code class="language-ruby">class Singleton &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific singleton class.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Code/index.html"><code class="language-ruby">class Code</code></a>
+						
+						
+						
+							<p>A Ruby-specific block of code.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Constant/index.html"><code class="language-ruby">class Constant &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific constant.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Definition/index.html"><code class="language-ruby">class Definition &lt; Decode::Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific definition.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Function/index.html"><code class="language-ruby">class Function &lt; Method</code></a>
+						
+						
+						
+							<p>A Ruby-specific function.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Generic/index.html"><code class="language-ruby">class Generic &lt; Language::Generic</code></a>
+						
+						
+						
+							<p>The Ruby language.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Method/index.html"><code class="language-ruby">class Method &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific method.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Module/index.html"><code class="language-ruby">class Module &lt; Definition</code></a>
+						
+						
+						
+							<p>A Ruby-specific module.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Parser/index.html"><code class="language-ruby">class Parser</code></a>
+						
+						
+						
+							<p>The Ruby source code parser.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Reference/index.html"><code class="language-ruby">class Reference &lt; Language::Reference</code></a>
+						
+						
+						
+							<p>An Ruby-specific reference which can be resolved to zero or more definitions.</p>
+
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Language/Ruby/Segment/index.html"><code class="language-ruby">class Segment &lt; Decode::Segment</code></a>
+						
+						
+						
+							<p>A Ruby specific code segment.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li></ul>				</li></ul>				</li><li>
+						<a href="Decode/Languages/index.html"><code class="language-ruby">class Languages</code></a>
+						
+						
+						
+							<p>A context for looking up languages based on file extension or name.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Scope/index.html"><code class="language-ruby">class Scope &lt; Definition</code></a>
+						
+						
+						
+							<p>An abstract namespace for nesting definitions.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Segment/index.html"><code class="language-ruby">class Segment</code></a>
+						
+						
+						
+							<p>A chunk of code with an optional preceeding comment block.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Source/index.html"><code class="language-ruby">class Source</code></a>
+						
+						
+						
+							<p>Represents a source file in a specific language.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+						<a href="Decode/Syntax/index.html"><code class="language-ruby">module Syntax</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+						<a href="Decode/Syntax/Link/index.html"><code class="language-ruby">class Link &lt; Match</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Syntax/Match/index.html"><code class="language-ruby">class Match</code></a>
+						
+						
+						
+					
+					<ul class="index"></ul>				</li><li>
+						<a href="Decode/Syntax/Rewriter/index.html"><code class="language-ruby">class Rewriter</code></a>
+						
+						
+						
+					
+					<ul class="index"><li>
+					
+									</li></ul>				</li></ul>				</li><li>
+						<a href="Decode/Trie/index.html"><code class="language-ruby">class Trie</code></a>
+						
+						
+						
+							<p>A prefix-trie data structure for fast lexical lookups.</p>
+
+					
+					<ul class="index"><li>
+						<a href="Decode/Trie/Node/index.html"><code class="language-ruby">class Node</code></a>
+						
+						
+						
+							<p>A single node in the trie.</p>
+
+					
+					<ul class="index"><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li><li>
+					
+									</li></ul>				</li></ul>				</li></ul>
+				
+			<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>
+		</main>
+	</body>
+</html>

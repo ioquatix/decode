@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+			<title>Decode::Index</title>
+		
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		
+		<link rel="icon" type="image/png" href="../../../_static/icon.png"/>
+		<link rel="stylesheet" href="../../../_static/site.css" type="text/css" media="screen"/>
+		
+		<script src="../../../_components/jquery/jquery.min.js"></script>
+		<script src="../../../_components/jquery-syntax/jquery.syntax.min.js"></script>
+		<script src="../../../_components/mermaid/mermaid.min.js"></script>
+		
+		<script src="../../../_static/links.js"></script>
+		
+		<script type="text/javascript">
+		//<![CDATA[
+			jQuery(function($) {
+				$.syntax();
+			});
+			
+			let isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+			let config = {theme: 'light'};
+			if (isDarkMode) config.theme = 'dark';
+			else config.theme = 'forest';
+			mermaid.initialize(config);
+		//]]>
+		</script>
+	</head>
+
+	<body>
+		<header> › <a class="link" href="../../../index.html">Project</a> › <a class="link" href="../../index.html">Source</a></header>
+		
+		<main>
+			
+	<h1><code class="language-ruby">Decode::Index</code></h1>
+	
+	<p>A list of definitions organised for quick lookup and lexical enumeration.</p>
+	
+	
+	
+	
+	<section>
+	<h2>Definitions</h2>
+	
+	<section id="Decode::Index#initialize"><h3><code class="language-ruby">def initialize(languages = Languages.all)</code></h3><p>Initialize an empty index.</p>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def initialize(languages = Languages.all)
+	@languages = languages
+	
+	@sources = {}
+	@definitions = {}
+	
+	# This is essentially a prefix tree:
+	@trie = Trie.new
+end</code></pre>
+					</details></section><section id="Decode::Index#languages"><h3><code class="language-ruby">attr :languages</code></h3><p>All supported languages for this index.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby"><a href="../Languages/index.html" title="Decode::Languages">Languages</a></code></dt></dl>
+</details>
+</section><section id="Decode::Index#sources"><h3><code class="language-ruby">attr :sources</code></h3><p>All source files that have been parsed.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Array(<a href="../Source/index.html" title="Decode::Source">Source</a>)</code></dt></dl>
+</details>
+</section><section id="Decode::Index#definitions"><h3><code class="language-ruby">attr :definitions</code></h3><p>All definitions which have been parsed.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby">Array(Symbol)</code></dt></dl>
+</details>
+</section><section id="Decode::Index#trie"><h3><code class="language-ruby">attr :trie</code></h3><p>A (prefix) trie of lexically scoped definitions.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>attribute</strong>　<code class="language-ruby"><a href="../Trie/index.html" title="Decode::Trie">Trie</a></code></dt></dl>
+</details>
+</section><section id="Decode::Index#update"><h3><code class="language-ruby">def update(paths)</code></h3><p>Updates the index by parsing the specified files.
+All extracted definitions are merged into the existing index.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">paths</code>　<code class="language-ruby">Array(String)</code></dt><dd><p>The source file paths.</p>
+</dd></dl>
+</details>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def update(paths)
+	paths.each do |path|
+		if source = @languages.source_for(path)
+			@sources[path] = source
+			
+			source.definitions do |symbol|
+				# $stderr.puts &quot;Adding #{symbol.qualified_name} to #{symbol.lexical_path.join(' -&gt; ')}&quot;
+				
+				@definitions[symbol.qualified_name] = symbol
+				@trie.insert(symbol.path, symbol)
+			end
+		end
+	end
+end</code></pre>
+					</details></section><section id="Decode::Index#lookup"><h3><code class="language-ruby">def lookup(reference, relative_to: nil)</code></h3><p>Lookup the specified reference and return matching definitions.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>parameter</strong>　<code class="syntax">reference</code>　<code class="language-ruby">Language::<a href="../Language/Reference/index.html" title="Decode::Language::Reference">Reference</a></code></dt><dd><p>The reference to match.</p>
+</dd><dt>
+					<strong>parameter</strong>　<code class="syntax">relative_to</code>　<code class="language-ruby"><a href="../Definition/index.html" title="Decode::Definition">Definition</a></code></dt><dd><p>Lookup the reference relative to the scope of this definition.</p>
+</dd></dl>
+</details>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def lookup(reference, relative_to: nil)
+	if reference.absolute? || relative_to.nil?
+		lexical_path = []
+	else
+		lexical_path = relative_to.path.dup
+	end
+	
+	path = reference.path
+	
+	while true
+		node = @trie.lookup(lexical_path)
+		
+		if node.children[path.first]
+			if target = node.lookup(path)
+				return reference.best(target.values)
+			else
+				return nil
+			end
+		end
+		
+		break if lexical_path.empty?
+		lexical_path.pop
+	end
+end</code></pre>
+					</details></section>	</section>
+	
+	
+
+				
+			<footer>Documentation generated by <a href="https://github.com/socketry/utopia-project">Utopia::Project</a>.</footer>
+		</main>
+	</body>
+</html>
+
