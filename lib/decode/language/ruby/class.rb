@@ -57,6 +57,10 @@ module Decode
 				def qualified_form
 					"class #{self.qualified_name}"
 				end
+				
+				def path_name
+					@name.to_s.split('::').map(&:to_sym)
+				end
 			end
 			
 			# A Ruby-specific singleton class.

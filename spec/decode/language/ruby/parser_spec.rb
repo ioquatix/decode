@@ -85,6 +85,10 @@ RSpec.describe Decode::Language::Ruby do
 			expect(definitions[1].short_form).to be == 'module Z'
 		end
 		
+		it 'has full path' do
+			expect(definitions[1].path).to be == [:X, :Y, :Z]
+		end
+		
 		it 'has long form' do
 			expect(definitions[0].long_form).to be == 'module X::Y'
 			expect(definitions[1].long_form).to be == 'module Z'

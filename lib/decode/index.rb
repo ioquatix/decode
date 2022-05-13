@@ -51,7 +51,6 @@ module Decode
 		
 		# A (prefix) trie of lexically scoped definitions.
 		# @attribute [Trie]
-		
 		attr :trie
 		
 		# Updates the index by parsing the specified files.

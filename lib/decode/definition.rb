@@ -97,11 +97,15 @@ module Decode
 				@path
 			elsif @parent
 				# Merge with parent:
-				@path = [*@parent.path, @name].freeze
+				@path = [*@parent.path, *path_name].freeze
 			else
 				# At top:
-				@path = [@name].freeze
+				@path = path_name.freeze
 			end
+		end
+		
+		def path_name
+			[@name]
 		end
 		
 		alias lexical_path path
