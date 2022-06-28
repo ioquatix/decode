@@ -36,7 +36,11 @@
 		
 		<main>
 			
-	<h1><code class="language-ruby">Decode::Language::Ruby::Parser</code></h1>
+	<h1>Decode::Language::Ruby::Parser</h1>
+	
+	<p>
+		<code class="language-ruby">class Decode::Language::Ruby::Parser</code>
+	</p>
 	
 	<p>The Ruby source code parser.</p>
 	
@@ -46,11 +50,11 @@
 	<section>
 	<h2>Definitions</h2>
 	
-	<section id="Decode::Language::Ruby::Parser#definitions_for"><h3><code class="language-ruby">def definitions_for(input, &amp;block)</code></h3><p>Extract definitions from the given input file.</p>
+	<section id="Decode::Language::Ruby::Parser#definitions_for"><h3><code class="language-ruby">def definitions_for(source, &amp;block)</code></h3><p>Extract definitions from the given input file.</p>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def definitions_for(input, &amp;block)
-	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+						<pre><code class="language-ruby">def definitions_for(source, &amp;block)
+	top, comments = self.parse_source(source)
 	
 	if top
 		walk_definitions(top, comments, &amp;block)
@@ -173,11 +177,11 @@ end</code></pre>
 		end
 	end
 end</code></pre>
-					</details></section><section id="Decode::Language::Ruby::Parser#segments_for"><h3><code class="language-ruby">def segments_for(input, &amp;block)</code></h3><p>Extract segments from the given input file.</p>
+					</details></section><section id="Decode::Language::Ruby::Parser#segments_for"><h3><code class="language-ruby">def segments_for(source, &amp;block)</code></h3><p>Extract segments from the given input file.</p>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def segments_for(input, &amp;block)
-	top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+						<pre><code class="language-ruby">def segments_for(source, &amp;block)
+	top, comments = self.parse_source(source)
 	
 	# We delete any leading comments:
 	line = 0

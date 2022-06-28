@@ -36,7 +36,11 @@
 		
 		<main>
 			
-	<h1><code class="language-ruby">Decode::Language::Generic</code></h1>
+	<h1>Decode::Language::Generic</h1>
+	
+	<p>
+		<code class="language-ruby">class Decode::Language::Generic</code>
+	</p>
 	
 	<p>The Ruby language.</p>
 	
@@ -58,11 +62,11 @@
 						<pre><code class="language-ruby">def reference_for(identifier)
 	Reference.new(identifier, self)
 end</code></pre>
-					</details></section><section id="Decode::Language::Generic#definitions_for"><h3><code class="language-ruby">def definitions_for(input, &amp;block)</code></h3><p>Parse the input yielding definitions.</p>
+					</details></section><section id="Decode::Language::Generic#definitions_for"><h3><code class="language-ruby">def definitions_for(source, &amp;block)</code></h3><p>Parse the input yielding definitions.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>parameter</strong>　<code class="syntax">input</code>　<code class="language-ruby">File</code></dt><dd><p>The input file which contains the source code.</p>
+					<strong>parameter</strong>　<code class="syntax">source</code>　<code class="language-ruby"><a href="../../Source/index.html" title="Decode::Source">Source</a></code></dt><dd><p>The input source file which contains the source code.</p>
 </dd><dt>
 					<strong>yields</strong>　<code class="syntax language-ruby">{|definition| ...}</code></dt><dd><p>Receives the definitions extracted from the source code.</p>
 </dd><dd><dl>
@@ -74,17 +78,17 @@ end</code></pre>
 </details>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def definitions_for(input, &amp;block)
+						<pre><code class="language-ruby">def definitions_for(source, &amp;block)
 	if parser = self.parser
-		parser.definitions_for(input, &amp;block)
+		parser.definitions_for(source, &amp;block)
 	end
 end</code></pre>
-					</details></section><section id="Decode::Language::Generic#segments_for"><h3><code class="language-ruby">def segments_for(input, &amp;block)</code></h3><p>Parse the input yielding segments.
+					</details></section><section id="Decode::Language::Generic#segments_for"><h3><code class="language-ruby">def segments_for(source, &amp;block)</code></h3><p>Parse the input yielding segments.
 Segments are constructed from a block of top level comments followed by a block of code.</p>
 <details open>
 	<summary><h4>Signature</h4></summary>
 	<dl><dt>
-					<strong>parameter</strong>　<code class="syntax">input</code>　<code class="language-ruby">File</code></dt><dd><p>The input file which contains the source code.</p>
+					<strong>parameter</strong>　<code class="syntax">source</code>　<code class="language-ruby"><a href="../../Source/index.html" title="Decode::Source">Source</a></code></dt><dd><p>The input source file which contains the source code.</p>
 </dd><dt>
 					<strong>yields</strong>　<code class="syntax language-ruby">{|segment| ...}</code></dt><dd><dl>
 <dt>
@@ -94,9 +98,9 @@ Segments are constructed from a block of top level comments followed by a block 
 </details>
 <details>
 						<summary><h4>Implementation</h4></summary>
-						<pre><code class="language-ruby">def segments_for(input, &amp;block)
+						<pre><code class="language-ruby">def segments_for(source, &amp;block)
 	if parser = self.parser
-		parser.segments_for(input, &amp;block)
+		parser.segments_for(source, &amp;block)
 	end
 end</code></pre>
 					</details></section>	</section>

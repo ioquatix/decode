@@ -36,7 +36,11 @@
 		
 		<main>
 			
-	<h1><code class="language-ruby">Decode::Source</code></h1>
+	<h1>Decode::Source</h1>
+	
+	<p>
+		<code class="language-ruby">class Decode::Source</code>
+	</p>
 	
 	<p>Represents a source file in a specific language.</p>
 	
@@ -86,7 +90,7 @@ end</code></pre>
 						<pre><code class="language-ruby">def definitions(&amp;block)
 	return to_enum(:definitions) unless block_given?
 	
-	@language.definitions_for(self.read, &amp;block)
+	@language.definitions_for(self, &amp;block)
 end</code></pre>
 					</details></section><section id="Decode::Source#segments"><h3><code class="language-ruby">def segments(&amp;block)</code></h3><p>Open the source file and read all segments.</p>
 <details open>
@@ -104,7 +108,7 @@ end</code></pre>
 						<pre><code class="language-ruby">def segments(&amp;block)
 	return to_enum(:segments) unless block_given?
 	
-	@language.segments_for(self.read, &amp;block)
+	@language.segments_for(self, &amp;block)
 end</code></pre>
 					</details></section>	</section>
 	

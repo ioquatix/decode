@@ -36,7 +36,11 @@
 		
 		<main>
 			
-	<h1><code class="language-ruby">Decode::Definition</code></h1>
+	<h1>Decode::Definition</h1>
+	
+	<p>
+		<code class="language-ruby">class Decode::Definition</code>
+	</p>
 	
 	<p>A symbol with attached documentation.</p>
 	
@@ -254,6 +258,18 @@ end</code></pre>
 	if @comments&amp;.any?
 		@documentation ||= Documentation.new(@comments, @language)
 	end
+end</code></pre>
+					</details></section><section id="Decode::Definition#location"><h3><code class="language-ruby">def location</code></h3><p>The location of the definition.</p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Location | Nil</code></dt><dd><p>A <a href="../Location/index.html" title="Location"><code class="language-ruby">class Decode::Location</code></a> instance if this definition has a location.</p>
+</dd></dl>
+</details>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def location
+	nil
 end</code></pre>
 					</details></section>	</section>
 	
