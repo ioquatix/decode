@@ -42,9 +42,19 @@ module Decode
 					@language = language
 				end
 				
+				# Parse the given source object, can be a string or a Source instance.
+				# @parameter source [String | Source] The source to parse.
+				private def parse_source(source)
+					if source.is_a?(Source)
+						::Parser::CurrentRuby.parse_with_comments(source.read, source.path)
+					else
+						::Parser::CurrentRuby.parse_with_comments(source)
+					end
+				end
+				
 				# Extract definitions from the given input file.
-				def definitions_for(input, &block)
-					top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+				def definitions_for(source, &block)
+					top, comments = self.parse_source(source)
 					
 					if top
 						walk_definitions(top, comments, &block)
@@ -253,8 +263,8 @@ module Decode
 				end
 				
 				# Extract segments from the given input file.
-				def segments_for(input, &block)
-					top, comments = ::Parser::CurrentRuby.parse_with_comments(input)
+				def segments_for(source, &block)
+					top, comments = self.parse_source(source)
 					
 					# We delete any leading comments:
 					line = 0

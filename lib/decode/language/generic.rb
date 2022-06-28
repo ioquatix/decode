@@ -70,25 +70,25 @@ module Decode
 			end
 			
 			# Parse the input yielding definitions.
-			# @parameter input [File] The input file which contains the source code.
+			# @parameter source [Source] The input source file which contains the source code.
 			# @yields {|definition| ...} Receives the definitions extracted from the source code.
 			# 	@parameter definition [Definition] The source code definition including methods, classes, etc.
 			# @returns [Enumerator(Segment)] If no block given.
-			def definitions_for(input, &block)
+			def definitions_for(source, &block)
 				if parser = self.parser
-					parser.definitions_for(input, &block)
+					parser.definitions_for(source, &block)
 				end
 			end
 			
 			# Parse the input yielding segments.
 			# Segments are constructed from a block of top level comments followed by a block of code.
-			# @parameter input [File] The input file which contains the source code.
+			# @parameter source [Source] The input source file which contains the source code.
 			# @yields {|segment| ...}
 			# 	@parameter segment [Segment]
 			# @returns [Enumerator(Segment)] If no block given.
-			def segments_for(input, &block)
+			def segments_for(source, &block)
 				if parser = self.parser
-					parser.segments_for(input, &block)
+					parser.segments_for(source, &block)
 				end
 			end
 		end

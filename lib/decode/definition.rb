@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative 'location'
+
 module Decode
 	# A symbol with attached documentation.
 	class Definition
@@ -167,6 +169,13 @@ module Decode
 			if @comments&.any?
 				@documentation ||= Documentation.new(@comments, @language)
 			end
+		end
+		
+		# The location of the definition.
+		#
+		# @returns [Location | Nil] A {Location} instance if this definition has a location.
+		def location
+			nil
 		end
 	end
 end

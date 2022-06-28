@@ -59,6 +59,12 @@ module Decode
 						return lines.join
 					end
 				end
+				
+				def location
+					expression = @node.location.expression
+					
+					Location.new(expression.source_buffer.name, expression.line)
+				end
 			end
 		end
 	end

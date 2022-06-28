@@ -50,7 +50,7 @@ module Decode
 		def definitions(&block)
 			return to_enum(:definitions) unless block_given?
 			
-			@language.definitions_for(self.read, &block)
+			@language.definitions_for(self, &block)
 		end
 		
 		# Open the source file and read all segments.
@@ -60,7 +60,7 @@ module Decode
 		def segments(&block)
 			return to_enum(:segments) unless block_given?
 			
-			@language.segments_for(self.read, &block)
+			@language.segments_for(self, &block)
 		end
 		
 		def code(index = nil, relative_to: nil)

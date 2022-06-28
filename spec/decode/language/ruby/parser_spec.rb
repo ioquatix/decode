@@ -35,6 +35,14 @@ RSpec.describe Decode::Language::Ruby do
 			expect(definitions).to_not be_empty
 		end
 		
+		it 'has a location' do
+			location = definitions.first.location
+			expect(location).to_not be_nil
+			expect(location.path).to be == path
+			expect(location.line).to be == 1
+			expect(location.to_s).to be == "#{path}:1"
+		end
+		
 		it 'has short form' do
 			expect(definitions[0].short_form).to be == 'class Parent'
 			expect(definitions[1].short_form).to be == 'class Child'
