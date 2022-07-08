@@ -40,10 +40,12 @@ module Decode
 			@qualified_name = nil
 		end
 		
-		def to_s
+		def inspect
 			"\#<#{self.class} #{qualified_name}>"
 		end
 		
+		alias to_s inspect
+
 		# The symbol name.
 		# e.g. `:Decode`.
 		# @attribute [Symbol]
