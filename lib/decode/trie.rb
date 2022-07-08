@@ -31,7 +31,7 @@ module Decode
 			end
 			
 			def inspect
-				"#<#{self.class} #{@children.size} children"
+				"#<#{self.class} #{@children.size} children>"
 			end
 
 			alias to_s inspect
