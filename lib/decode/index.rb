@@ -37,6 +37,12 @@ module Decode
 			@trie = Trie.new
 		end
 		
+		def inspect
+			"#<#{self.class} #{@definitions.size} definition(s)>"
+		end
+
+		alias to_s inspect
+
 		# All supported languages for this index.
 		# @attribute [Languages]
 		attr :languages
