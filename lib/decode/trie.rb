@@ -30,6 +30,12 @@ module Decode
 				@children = Hash.new
 			end
 			
+			def inspect
+				"#<#{self.class} #{@children.size} children"
+			end
+
+			alias to_s inspect
+
 			# A mutable array of all values that terminate at this node.
 			# @attribute [Array]
 			attr_accessor :values
