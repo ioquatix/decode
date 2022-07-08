@@ -119,16 +119,18 @@ module Decode
 							walk_definitions(children, comments, definition, &block)
 						end
 					when :sclass
-						definition = Singleton.new(
-							node, node.children[0],
-							comments: extract_comments_for(node, comments),
-							parent: parent, language: @language
-						)
-						
-						yield definition
-						
-						if children = node.children[1]
-							walk_definitions(children, comments, definition, &block)
+						if name = singleton_name_for(node.children[0])
+							definition = Singleton.new(
+								node, name,
+								comments: extract_comments_for(node, comments),
+								parent: parent, language: @language
+							)
+							
+							yield definition
+							
+							if children = node.children[1]
+								walk_definitions(children, comments, definition, &block)
+							end
 						end
 					when :def
 						definition = Method.new(
@@ -229,6 +231,15 @@ module Decode
 					end
 				end
 				
+				def singleton_name_for(node)
+					case node.type
+					when :const
+						nested_name_for(node)
+					when :self
+						:'self'
+					end
+				end
+
 				KIND_ATTRIBUTE = /\A
 					(@(?<kind>attribute)\s+(?<value>.*?))|
 					(@define\s+(?<kind>)\s+(?<value>.*?))

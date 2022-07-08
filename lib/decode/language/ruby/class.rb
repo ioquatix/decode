@@ -69,6 +69,10 @@ module Decode
 			
 			# A Ruby-specific singleton class.
 			class Singleton < Definition
+				def nested_name
+					"::class"
+				end
+
 				# A singleton class is a container for other definitions.
 				# @returns [Boolean]
 				def container?
@@ -82,13 +86,39 @@ module Decode
 				end
 				
 				# The short form of the class.
-				# e.g. `class << (self)`.
+				# e.g. `class << self`.
 				def short_form
 					"class << #{@name}"
 				end
 				
 				# The long form is the same as the short form.
 				alias long_form short_form
+
+				def path_name
+					[:class]
+				end
+
+				# The lexical scope as an array of names.
+				# e.g. `[:Decode, :Definition]`
+				# @returns [Array]
+				def path
+					if @path
+						# Cached version:
+						@path
+					else
+						@path = [*self.absolute_path, *self.path_name]
+					end
+				end
+
+				private
+
+				def absolute_path
+					if @parent
+						@parent.path
+					else
+						@name.to_s.split('::').map(&:to_sym)
+					end
+				end
 			end
 		end
 	end

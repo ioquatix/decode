@@ -46,14 +46,14 @@ RSpec.describe Decode::Language::Ruby do
 		it 'has short form' do
 			expect(definitions[0].short_form).to be == 'class Parent'
 			expect(definitions[1].short_form).to be == 'class Child'
-			expect(definitions[2].short_form).to be == 'class << (self)'
+			expect(definitions[2].short_form).to be == 'class << self'
 			expect(definitions[3].short_form).to be == 'class Child'
 		end
 		
 		it 'has long form' do
 			expect(definitions[0].long_form).to be == 'class Parent'
 			expect(definitions[1].long_form).to be == 'class Child < Parent'
-			expect(definitions[2].long_form).to be == 'class << (self)'
+			expect(definitions[2].long_form).to be == 'class << self'
 			expect(definitions[3].long_form).to be == 'class My::Nested::Child'
 		end
 	end
