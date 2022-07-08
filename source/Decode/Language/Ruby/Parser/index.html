@@ -95,16 +95,18 @@ end</code></pre>
 			walk_definitions(children, comments, definition, &amp;block)
 		end
 	when :sclass
-		definition = Singleton.new(
-			node, node.children[0],
-			comments: extract_comments_for(node, comments),
-			parent: parent, language: @language
-		)
-		
-		yield definition
-		
-		if children = node.children[1]
-			walk_definitions(children, comments, definition, &amp;block)
+		if name = singleton_name_for(node.children[0])
+			definition = Singleton.new(
+				node, name,
+				comments: extract_comments_for(node, comments),
+				parent: parent, language: @language
+			)
+			
+			yield definition
+			
+			if children = node.children[1]
+				walk_definitions(children, comments, definition, &amp;block)
+			end
 		end
 	when :def
 		definition = Method.new(

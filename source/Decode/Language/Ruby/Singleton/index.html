@@ -73,11 +73,28 @@ end</code></pre>
 	false
 end</code></pre>
 					</details></section><section id="Decode::Language::Ruby::Singleton#short_form"><h3><code class="language-ruby">def short_form</code></h3><p>The short form of the class.
-e.g. <code>class &lt;&lt; (self)</code>.</p>
+e.g. <code>class &lt;&lt; self</code>.</p>
 <details>
 						<summary><h4>Implementation</h4></summary>
 						<pre><code class="language-ruby">def short_form
 	&quot;class &lt;&lt; #{@name}&quot;
+end</code></pre>
+					</details></section><section id="Decode::Language::Ruby::Singleton#path"><h3><code class="language-ruby">def path</code></h3><p>The lexical scope as an array of names.
+e.g. <code>[:Decode, :Definition]</code></p>
+<details open>
+	<summary><h4>Signature</h4></summary>
+	<dl><dt>
+					<strong>returns</strong>　<code class="language-ruby">Array</code></dt></dl>
+</details>
+<details>
+						<summary><h4>Implementation</h4></summary>
+						<pre><code class="language-ruby">def path
+	if @path
+		# Cached version:
+		@path
+	else
+		@path = [*self.absolute_path, *self.path_name]
+	end
 end</code></pre>
 					</details></section>	</section>
 	
