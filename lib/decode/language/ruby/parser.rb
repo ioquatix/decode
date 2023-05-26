@@ -31,7 +31,7 @@ module Decode
 				# @parameter source [String | Source] The source to parse.
 				private def parse_source(source)
 					if source.is_a?(Source)
-						::Parser::CurrentRuby.parse_with_comments(source.read, source.path)
+						::Parser::CurrentRuby.parse_with_comments(source.read, source.relative_path)
 					else
 						::Parser::CurrentRuby.parse_with_comments(source)
 					end

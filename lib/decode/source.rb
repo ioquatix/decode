@@ -18,6 +18,15 @@ module Decode
 		# @attribute [String] A file-system path.
 		attr :path
 		
+		# The relative path of the source, if it is known.
+		def relative_path
+			if @path.respond_to?(:relative_path)
+				@path.relative_path
+			else
+				@path
+			end
+		end
+		
 		# The language of the source file.
 		# @attribute [Language::Generic]
 		attr :language
