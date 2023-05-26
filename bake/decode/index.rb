@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2020, by Samuel Williams.
 
 # Process the given source root and report on comment coverage.
 # @parameter root [String] The root path to index.
