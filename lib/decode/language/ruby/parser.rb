@@ -74,10 +74,6 @@ module Decode
 				# Walk over the syntax tree and extract relevant definitions with their associated comments.
 				def walk_definitions(node, comments, parent = nil, &block)
 					case node.type
-					when :begin
-						node.children.each do |child|
-							walk_definitions(child, comments, parent, &block)
-						end
 					when :module
 						definition = Module.new(
 							node, nested_name_for(node.children[0]),
@@ -126,10 +122,13 @@ module Decode
 						
 						yield definition
 					when :defs
+						extracted_comments = extract_comments_for(node, comments)
+						
 						definition = Function.new(
 							node, node.children[1],
-							comments: extract_comments_for(node, comments),
-							parent: parent, language: @language
+							comments: extracted_comments,
+							parent: scope_for(extracted_comments, parent, &block),
+							language: @language
 						)
 						
 						yield definition
@@ -184,6 +183,12 @@ module Decode
 							
 							if children = node.children[2]
 								walk_definitions(children, comments, definition, &block)
+							end
+						end
+					else
+						node.children.each do |child|
+							if child.is_a?(::Parser::AST::Node)
+								walk_definitions(child, comments, parent, &block) if child
 							end
 						end
 					end

@@ -129,6 +129,26 @@ describe Decode::Language::Ruby do
 		end
 	end
 	
+	with 'functions' do
+		let(:path) {File.expand_path(".fixtures/functions.rb", __dir__)}
+		
+		it 'can extract definitions' do
+			expect(definitions).not.to be(:empty?)
+		end
+		
+		it 'has short form' do
+			expect(definitions[1].short_form).to be == 'def Foo.bar'
+		end
+		
+		it 'has long form' do
+			expect(definitions[1].long_form).to be == 'def Foo.bar(...)'
+		end
+		
+		it 'has correct path' do
+			expect(definitions[1].path).to be == [:Foo, :bar]
+		end
+	end
+	
 	with 'constants' do
 		let(:path) {File.expand_path(".fixtures/constants.rb", __dir__)}
 		

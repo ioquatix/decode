@@ -29,3 +29,26 @@ def coverage(root)
 	
 	$stderr.puts "#{documented}/#{total} definitions have documentation."
 end
+
+# Process the given source root and report on symbols.
+# @parameter root [String] The root path to index.
+def symbols(root)
+	require 'build/files/glob'
+	require 'decode/index'
+	
+	paths = Build::Files::Path.expand(root).glob("**/*")
+	
+	index = Decode::Index.new
+	index.update(paths)
+	
+	index.trie.traverse do |path, node, descend|
+		level = path.size
+		puts "#{"  " * level}#{path.inspect} -> #{node.values.inspect}"
+		
+		if path.any?
+			puts "#{"  " * level}#{path.join("::")}"
+		end
+		
+		descend.call
+	end
+end
