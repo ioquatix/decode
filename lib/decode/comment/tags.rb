@@ -47,7 +47,7 @@ module Decode
 					
 					# Or it's just text:
 					else
-						yield Text.new(line.strip)
+						yield Text.new(line)
 					end
 				end
 			end

@@ -32,7 +32,7 @@ describe Decode::Comment::Text do
 			
 			expect(parameter.children[0]).to be_a(Decode::Comment::Text)
 			expect(parameter.children[0]).to have_attributes(
-				line: be == "The item will always be negative."
+				line: be == "\t\tThe item will always be negative."
 			)
 		end
 		
@@ -40,6 +40,54 @@ describe Decode::Comment::Text do
 			expect(documentation.text).to be == [
 				"Iterates over all the items.",
 				"For more details see {Array}.",
+			]
+		end
+	end
+	
+	with 'indented code' do
+		let(:path) {File.expand_path(".fixtures/text.rb", __dir__)}
+		let(:documentation) {source.segments.to_a[1].documentation}
+		
+		it "should have text nodes" do
+			expect(documentation.children[0]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[0]).to have_attributes(
+				line: be == "Indented code:"
+			)
+			
+			expect(documentation.children[1]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[1]).to have_attributes(
+				line: be == "``` ruby"
+			)
+			
+			expect(documentation.children[2]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[2]).to have_attributes(
+				line: be == "def indentation"
+			)
+			
+			expect(documentation.children[3]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[3]).to have_attributes(
+				line: be == "\treturn \"Hello World!\""
+			)
+			
+			expect(documentation.children[4]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[4]).to have_attributes(
+				line: be == "end"
+			)
+			
+			expect(documentation.children[5]).to be_a(Decode::Comment::Text)
+			expect(documentation.children[5]).to have_attributes(
+				line: be == "```"
+			)
+		end
+		
+		it "can extract top level text" do
+			expect(documentation.text).to be == [
+				"Indented code:",
+				"``` ruby",
+				"def indentation",
+				"\treturn \"Hello World!\"",
+				"end",
+				"```",
 			]
 		end
 	end
