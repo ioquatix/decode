@@ -52,3 +52,26 @@ def symbols(root)
 		descend.call
 	end
 end
+
+# Print documentation for all definitions.
+# @parameter root [String] The root path to index.
+def documentation(root)
+	require 'build/files/glob'
+	require 'decode/index'
+	
+	paths = Build::Files::Path.expand(root).glob("**/*")
+	
+	index = Decode::Index.new
+	index.update(paths)
+	
+	index.definitions.each do |name, definition|
+		comments = definition.comments
+		
+		if comments
+			puts "## `#{name}`"
+			puts
+			puts comments
+			puts
+		end
+	end
+end
