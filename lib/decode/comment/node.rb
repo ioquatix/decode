@@ -47,7 +47,7 @@ module Decode
 				end
 			end
 			
-			# Any lines of text associated wtih this node.
+			# Any lines of text associated with this node.
 			# @returns [Array(String) | Nil] The lines of text.
 			def text
 				if text = self.extract_text
@@ -55,8 +55,7 @@ module Decode
 				end
 			end
 			
-			# Traverse the tags from this node using {each}.
-			# Invoke `descend.call(child)` to recursively traverse the specified child.
+			# Traverse the tags from this node using {each}. Invoke `descend.call(child)` to recursively traverse the specified child.
 			#
 			# @yields {|node, descend| descend.call}
 			# 	@parameter node [Node] The current node which is being traversed.
