@@ -11,18 +11,26 @@ module Decode
 			# A Ruby-specific definition.
 			class Definition < Decode::Definition
 				# Initialize the definition from the syntax tree node.
-				def initialize(node, *arguments, **options)
+				def initialize(node, *arguments, visibility: nil, **options)
 					super(*arguments, **options)
 					
 					@node = node
+					@visibility = visibility
 				end
 				
 				def nested_name
 					"\##{@name}"
 				end
 				
-				# The parser syntax tree node.
+				# @attribute [Parser::AST::Node] The parser syntax tree node.
 				attr :node
+				
+				# @attribute [Symbol] The visibility of the definition.
+				attr_accessor :visibility
+				
+				def public?
+					@visibility == :public
+				end
 				
 				def multiline?
 					@node.location.line != @node.location.last_line

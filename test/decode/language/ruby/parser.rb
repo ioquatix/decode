@@ -258,4 +258,19 @@ describe Decode::Language::Ruby do
 			expect(definitions[4]).not.to be(:container?)
 		end
 	end
+	
+	with 'private' do
+		let(:path) {File.expand_path(".fixtures/private.rb", __dir__)}
+		
+		it 'can extract definitions' do
+			expect(definitions).not.to be(:empty?)
+		end
+		
+		it 'has public and private methods' do
+			expect(definitions.size).to be == 4
+			expect(definitions[1].visibility).to be == :public
+			expect(definitions[2].visibility).to be == :private
+			expect(definitions[3].visibility).to be == :private
+		end
+	end
 end

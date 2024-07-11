@@ -14,20 +14,36 @@ def coverage(root)
 	index = Decode::Index.new
 	index.update(paths)
 	
-	total = 0
-	documented = 0
+	total_count = 0
+	public_count = 0
+	documented_count = 0
+	
+	missing = []
 	
 	index.definitions.each do |name, definition|
-		total += 1
+		total_count += 1
 		
-		if comments = definition.comments
-			documented += 1
-		else
-			$stderr.puts "#{name}"
+		if definition.public?
+			public_count += 1
+			
+			if comments = definition.comments
+				documented_count += 1
+			elsif definition.public?
+				missing << name
+			end
 		end
 	end
 	
-	$stderr.puts "#{documented}/#{total} definitions have documentation."
+	$stderr.puts "#{documented_count} definitions have documentation, out of #{public_count} public definitions and #{total_count} total definitions."
+	
+	if documented_count < public_count
+		$stderr.puts nil, "Missing documentation for:"
+		missing.each do |name|
+			$stderr.puts "- #{name}"
+		end
+		
+		raise RuntimeError, "Insufficient documentation!"
+	end
 end
 
 # Process the given source root and report on symbols.

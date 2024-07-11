@@ -25,6 +25,17 @@ module Decode
 			class Parser
 				def initialize(language)
 					@language = language
+					@visibility = :public
+					
+					@definitions = Hash.new.compare_by_identity
+				end
+				
+				private def assign_definition(parent, definition)
+					(@definitions[parent] ||= {})[definition.name] = definition
+				end
+				
+				private def lookup_definition(parent, name)
+					(@definitions[parent] ||= {})[name]
 				end
 				
 				# Parse the given source object, can be a string or a Source instance.
@@ -71,6 +82,14 @@ module Decode
 					end
 				end
 				
+				def with_visibility(visibility = :public, &block)
+					saved_visibility = @visibility
+					@visibility = visibility
+					yield
+				ensure
+					@visibility = saved_visibility
+				end
+				
 				# Walk over the syntax tree and extract relevant definitions with their associated comments.
 				def walk_definitions(node, comments, parent = nil, &block)
 					case node.type
@@ -82,10 +101,14 @@ module Decode
 							language: @language
 						)
 						
+						assign_definition(parent, definition)
+						
 						yield definition
 						
 						if children = node.children[1]
-							walk_definitions(children, comments, definition, &block)
+							with_visibility do
+								walk_definitions(children, comments, definition, &block)
+							end
 						end
 					when :class
 						definition = Class.new(
@@ -94,10 +117,14 @@ module Decode
 							parent: parent, language: @language
 						)
 						
+						assign_definition(parent, definition)
+						
 						yield definition
 						
 						if children = node.children[2]
-							walk_definitions(children, comments, definition, &block)
+							with_visibility do
+								walk_definitions(children, comments, definition, &block)
+							end
 						end
 					when :sclass
 						if name = singleton_name_for(node.children[0])
@@ -117,7 +144,7 @@ module Decode
 						definition = Method.new(
 							node, node.children[0],
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: @language
+							parent: parent, language: @language, visibility: @visibility
 						)
 						
 						yield definition
@@ -144,6 +171,14 @@ module Decode
 						name = node.children[1]
 						
 						case name
+						when :public, :protected, :private
+							@visibility = name
+						when :private_constant
+							constant_names_for(node.children[2..]) do |name|
+								if definition = lookup_definition(parent, name)
+									definition.visibility = :private
+								end
+							end
 						when :attr, :attr_reader, :attr_writer, :attr_accessor
 							definition = Attribute.new(
 								node, name_for(node.children[2]),
@@ -261,6 +296,14 @@ module Decode
 					end
 					
 					return parent
+				end
+				
+				def constant_names_for(children)
+					children.each do |node|
+						if node.type == :sym
+							yield node.children[0]
+						end
+					end
 				end
 				
 				# Extract segments from the given input file.

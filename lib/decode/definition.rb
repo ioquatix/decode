@@ -48,6 +48,15 @@ module Decode
 		# @attribute [Array(String)]
 		attr :comments
 		
+		# Whether the definition is considered part of the public interface.
+		#
+		# This is used to determine whether the definition should be documented for coverage purposes.
+		#
+		# @returns [Boolean]
+		def public?
+			true
+		end
+		
 		# The qualified name is an absolute name which includes any and all namespacing.
 		# @returns [String]
 		def qualified_name
