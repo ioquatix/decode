@@ -8,28 +8,27 @@
 def coverage(root)
 	require 'build/files/glob'
 	require 'decode/index'
+	require 'set'
 	
 	paths = Build::Files::Path.expand(root).glob("**/*")
 	
 	index = Decode::Index.new
 	index.update(paths)
 	
-	missing = []
-	public_count = 0
-	documented_count = 0
+	documented = Set.new
+	missing = Set.new
 	
 	index.trie.traverse do |path, node, descend|
 		public_definition = node.values.nil?
 		
 		node.values&.each do |definition|
 			if definition.public?
-				public_count += 1
 				level = path.size
 				
 				if definition.comments.nil?
 					missing << definition.qualified_name
 				else
-					documented_count += 1
+					documented << definition.qualified_name
 				end
 				
 				public_definition = true
@@ -42,6 +41,8 @@ def coverage(root)
 		end
 	end
 	
+	documented_count = documented.size
+	public_count = documented_count + missing.size
 	$stderr.puts "#{documented_count} definitions have documentation, out of #{public_count} public definitions."
 	
 	if documented_count < public_count
