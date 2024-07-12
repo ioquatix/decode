@@ -3,14 +3,17 @@
 # Released under the MIT License.
 # Copyright, 2020, by Samuel Williams.
 
+def initialize(...)
+	super
+	
+	require 'decode/index'
+	require 'set'
+end
+
 # Process the given source root and report on comment coverage.
 # @parameter root [String] The root path to index.
 def coverage(root)
-	require 'build/files/glob'
-	require 'decode/index'
-	require 'set'
-	
-	paths = Build::Files::Path.expand(root).glob("**/*")
+	paths = Dir.glob(File.join(root, "**/*"))
 	
 	index = Decode::Index.new
 	index.update(paths)
@@ -61,10 +64,7 @@ end
 # Process the given source root and report on symbols.
 # @parameter root [String] The root path to index.
 def symbols(root)
-	require 'build/files/glob'
-	require 'decode/index'
-	
-	paths = Build::Files::Path.expand(root).glob("**/*")
+	paths = Dir.glob(File.join(root, "**/*"))
 	
 	index = Decode::Index.new
 	index.update(paths)
@@ -84,10 +84,7 @@ end
 # Print documentation for all definitions.
 # @parameter root [String] The root path to index.
 def documentation(root)
-	require 'build/files/glob'
-	require 'decode/index'
-	
-	paths = Build::Files::Path.expand(root).glob("**/*")
+	paths = Dir.glob(File.join(root, "**/*"))
 	
 	index = Decode::Index.new
 	index.update(paths)

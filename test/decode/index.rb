@@ -10,7 +10,7 @@ describe Decode::Index do
 	let(:index) {subject.new}
 	let(:languages) {index.languages}
 	let(:path) {File.expand_path("../../lib", __dir__)}
-	let(:paths) {Build::Files::Glob.new(path, "**/*.rb")}
+	let(:paths) {Dir.glob(File.join(path, "**/*.rb"))}
 	
 	it 'can extract declarations' do
 		index.update(paths)
