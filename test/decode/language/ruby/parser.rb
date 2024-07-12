@@ -267,13 +267,14 @@ describe Decode::Language::Ruby do
 		end
 		
 		it 'has public and private methods' do
-			expect(definitions.size).to be == 6
+			expect(definitions.size).to be == 7
 			expect(definitions[0].visibility).to be == :public
 			expect(definitions[1].visibility).to be == :public
 			expect(definitions[2].visibility).to be == :public
 			expect(definitions[3].visibility).to be == :private
 			expect(definitions[4].visibility).to be == :private
 			expect(definitions[5].visibility).to be == :public
+			expect(definitions[6].visibility).to be == :public
 		end
 	end
 end

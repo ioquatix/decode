@@ -98,7 +98,7 @@ module Decode
 							node, nested_name_for(node.children[0]),
 							comments: extract_comments_for(node, comments),
 							parent: parent,
-							language: @language
+							language: @language, visibility: :public
 						)
 						
 						assign_definition(parent, definition)

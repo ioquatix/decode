@@ -16,4 +16,7 @@ class Foo
 	end
 	
 	private_constant :Nested
+	
+	module Nested2
+	end
 end
