@@ -41,6 +41,9 @@ def coverage(root)
 		end
 	end
 	
+	# Since there can be multiple definitions for a given symbol, we can ignore any missing definitions that have been documented elsewhere:
+	missing = missing - documented
+	
 	documented_count = documented.size
 	public_count = documented_count + missing.size
 	$stderr.puts "#{documented_count} definitions have documentation, out of #{public_count} public definitions."
