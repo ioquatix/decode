@@ -37,7 +37,7 @@ module Decode
 		attr :sources
 		
 		# All definitions which have been parsed.
-		# @attribute [Array(Symbol)]
+		# @attribute [Hash(String, Definition)]
 		attr :definitions
 		
 		# A (prefix) trie of lexically scoped definitions.

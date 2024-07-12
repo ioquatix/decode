@@ -1,4 +1,7 @@
 class Foo
+	def self.my_public_class_method
+	end
+	
 	def my_public_method
 	end
 	
@@ -8,6 +11,8 @@ class Foo
 	end
 	
 	class Nested
+		def whatever
+		end
 	end
 	
 	private_constant :Nested

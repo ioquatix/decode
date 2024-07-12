@@ -14,27 +14,35 @@ def coverage(root)
 	index = Decode::Index.new
 	index.update(paths)
 	
-	total_count = 0
+	missing = []
 	public_count = 0
 	documented_count = 0
 	
-	missing = []
-	
-	index.definitions.each do |name, definition|
-		total_count += 1
+	index.trie.traverse do |path, node, descend|
+		public_definition = node.values.nil?
 		
-		if definition.public?
-			public_count += 1
-			
-			if comments = definition.comments
-				documented_count += 1
-			elsif definition.public?
-				missing << name
+		node.values&.each do |definition|
+			if definition.public?
+				public_count += 1
+				level = path.size
+				
+				if definition.comments.nil?
+					missing << definition.qualified_name
+				else
+					documented_count += 1
+				end
+				
+				public_definition = true
 			end
+		end
+		
+		# Don't descend into non-public definitions:
+		if public_definition
+			descend.call
 		end
 	end
 	
-	$stderr.puts "#{documented_count} definitions have documentation, out of #{public_count} public definitions and #{total_count} total definitions."
+	$stderr.puts "#{documented_count} definitions have documentation, out of #{public_count} public definitions."
 	
 	if documented_count < public_count
 		$stderr.puts nil, "Missing documentation for:"

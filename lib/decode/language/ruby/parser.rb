@@ -25,8 +25,8 @@ module Decode
 			class Parser
 				def initialize(language)
 					@language = language
-					@visibility = :public
 					
+					@visibility = :public
 					@definitions = Hash.new.compare_by_identity
 				end
 				
@@ -114,7 +114,7 @@ module Decode
 						definition = Class.new(
 							node, nested_name_for(node.children[0]),
 							comments: extract_comments_for(node, comments),
-							parent: parent, language: @language
+							parent: parent, language: @language, visibility: :public
 						)
 						
 						assign_definition(parent, definition)
@@ -131,7 +131,7 @@ module Decode
 							definition = Singleton.new(
 								node, name,
 								comments: extract_comments_for(node, comments),
-								parent: parent, language: @language
+								parent: parent, language: @language, visibility: :public
 							)
 							
 							yield definition
@@ -155,7 +155,7 @@ module Decode
 							node, node.children[1],
 							comments: extracted_comments,
 							parent: scope_for(extracted_comments, parent, &block),
-							language: @language
+							language: @language, visibility: @visibility
 						)
 						
 						yield definition
