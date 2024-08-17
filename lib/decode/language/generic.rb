@@ -8,13 +8,13 @@ require_relative '../documentation'
 
 module Decode
 	module Language
-		# The Ruby language.
 		class Generic
 			EXTENSIONS = []
 			
 			TAGS = Comment::Tags.build do |tags|
 				tags['attribute'] = Comment::Attribute
 				tags['parameter'] = Comment::Parameter
+				tags['option'] = Comment::Option
 				tags['yields'] = Comment::Yields
 				tags['returns'] = Comment::Returns
 				tags['raises'] = Comment::Raises

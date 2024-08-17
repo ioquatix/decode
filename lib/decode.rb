@@ -5,3 +5,7 @@
 
 require_relative "decode/version"
 require_relative "decode/index"
+
+# @namespace
+module Decode
+end
