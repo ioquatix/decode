@@ -1,3 +1,6 @@
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
+
 class Foo
 	def self.my_public_class_method
 	end

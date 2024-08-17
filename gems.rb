@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2022, by Samuel Williams.
+# Copyright, 2020-2024, by Samuel Williams.
 
 source "https://rubygems.org"
 
@@ -16,10 +16,12 @@ group :maintenance, optional: true do
 end
 
 group :test do
+	gem 'sus'
+	gem 'covered'
+	gem "rubocop"
+	
 	gem 'bake-test'
 	gem 'bake-test-external'
 	
-	gem 'sus'
-	gem 'covered'
 	gem 'build-files'
 end

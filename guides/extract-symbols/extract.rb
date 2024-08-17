@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2020-2024, by Samuel Williams.
 
 # This example demonstrates how to extract symbols using the index. An instance of {Decode::Index} is used for loading symbols from source code files. These symbols are available as a flat list and as a trie structure. You can look up specific symbols using a reference using {Decode::Index#lookup}.
 require_relative '../../lib/decode/index'

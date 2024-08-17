@@ -16,12 +16,14 @@ Gem::Specification.new do |spec|
 	spec.homepage = "https://github.com/ioquatix/decode"
 	
 	spec.metadata = {
+		"documentation_uri" => "https://ioquatix.github.io/decode/",
 		"funding_uri" => "https://github.com/sponsors/ioquatix/",
+		"source_code_uri" => "https://github.com/ioquatix/decode.git",
 	}
 	
 	spec.files = Dir.glob(['{bake,lib}/**/*', '*.md'], File::FNM_DOTMATCH, base: __dir__)
 	
-	spec.required_ruby_version = ">= 2.5"
+	spec.required_ruby_version = ">= 3.1"
 	
 	spec.add_dependency "parser"
 end
