@@ -3,8 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require 'decode/index'
-require 'build/files/glob'
+require "decode/index"
+require "build/files/glob"
 
 describe Decode::Index do
 	let(:index) {subject.new}
@@ -12,22 +12,22 @@ describe Decode::Index do
 	let(:path) {File.expand_path("../../lib", __dir__)}
 	let(:paths) {Dir.glob(File.join(path, "**/*.rb"))}
 	
-	it 'can extract declarations' do
+	it "can extract declarations" do
 		index.update(paths)
 		
 		expect(index.definitions).to be(:include?, "Decode::Documentation")
 		expect(index.definitions).to be(:include?, "Decode::Documentation#initialize")
 	end
 	
-	with '#lookup' do
-		it 'can lookup relative references' do
+	with "#lookup" do
+		it "can lookup relative references" do
 			index.update(paths)
 			
-			initialize_reference = languages.reference_for('ruby', 'Decode::Documentation#initialize')
+			initialize_reference = languages.reference_for("ruby", "Decode::Documentation#initialize")
 			initialize_definition = index.lookup(initialize_reference)
 			expect(initialize_definition).not.to be_nil
 			
-			source_reference = languages.reference_for('ruby', "Source")
+			source_reference = languages.reference_for("ruby", "Source")
 			source_definition = index.lookup(source_reference, relative_to: initialize_definition)
 			expect(source_definition.qualified_name).to be == "Decode::Source"
 		end

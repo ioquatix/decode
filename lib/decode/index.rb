@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'source'
-require_relative 'trie'
+require_relative "source"
+require_relative "trie"
 
-require_relative 'languages'
+require_relative "languages"
 
 module Decode
 	# A list of definitions organised for quick lookup and lexical enumeration.

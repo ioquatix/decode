@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative '../reference'
+require_relative "../reference"
 
 module Decode
 	module Language
@@ -26,12 +26,12 @@ module Decode
 					case node.type
 					when :const
 						if parent && parent.type != :cbase
-							path << ['::', name]
+							path << ["::", name]
 						else
 							path << [nil, name]
 						end
 					when :send
-						path << ['#', name]
+						path << ["#", name]
 					when :cbase
 						# Ignore.
 					else

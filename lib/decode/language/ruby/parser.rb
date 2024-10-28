@@ -3,20 +3,20 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require 'parser/current'
+require "parser/current"
 
-require_relative '../../scope'
+require_relative "../../scope"
 
-require_relative 'attribute'
-require_relative 'block'
-require_relative 'call'
-require_relative 'class'
-require_relative 'constant'
-require_relative 'function'
-require_relative 'method'
-require_relative 'module'
+require_relative "attribute"
+require_relative "block"
+require_relative "call"
+require_relative "class"
+require_relative "constant"
+require_relative "function"
+require_relative "method"
+require_relative "module"
 
-require_relative 'segment'
+require_relative "segment"
 
 module Decode
 	module Language
@@ -76,7 +76,7 @@ module Decode
 					if comment = prefix.last
 						if comment.location.line == (node.location.line - 1)
 							return prefix.map do |comment|
-								comment.text.sub(/\A\#\s?/, '')
+								comment.text.sub(/\A\#\s?/, "")
 							end
 						end
 					end

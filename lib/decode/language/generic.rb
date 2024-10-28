@@ -3,8 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'reference'
-require_relative '../documentation'
+require_relative "reference"
+require_relative "../documentation"
 
 module Decode
 	module Language
@@ -12,20 +12,20 @@ module Decode
 			EXTENSIONS = []
 			
 			TAGS = Comment::Tags.build do |tags|
-				tags['attribute'] = Comment::Attribute
-				tags['parameter'] = Comment::Parameter
-				tags['option'] = Comment::Option
-				tags['yields'] = Comment::Yields
-				tags['returns'] = Comment::Returns
-				tags['raises'] = Comment::Raises
-				tags['throws'] = Comment::Throws
+				tags["attribute"] = Comment::Attribute
+				tags["parameter"] = Comment::Parameter
+				tags["option"] = Comment::Option
+				tags["yields"] = Comment::Yields
+				tags["returns"] = Comment::Returns
+				tags["raises"] = Comment::Raises
+				tags["throws"] = Comment::Throws
 				
-				tags['deprecated'] = Comment::Pragma
+				tags["deprecated"] = Comment::Pragma
 				
-				tags['asynchronous'] = Comment::Pragma
+				tags["asynchronous"] = Comment::Pragma
 				
-				tags['public'] = Comment::Pragma
-				tags['private'] = Comment::Pragma
+				tags["public"] = Comment::Pragma
+				tags["private"] = Comment::Pragma
 			end
 			
 			def initialize(name, extensions: self.class::EXTENSIONS, tags: self.class::TAGS)

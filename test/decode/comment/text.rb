@@ -3,15 +3,15 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require 'decode/source'
-require 'decode/language/ruby'
+require "decode/source"
+require "decode/language/ruby"
 
 describe Decode::Comment::Text do
 	let(:language) {Decode::Language::Ruby.new}
 	let(:source) {Decode::Source.new(path, language)}
 	let(:documentation) {source.segments.first.documentation}
 	
-	with 'nested text nodes' do
+	with "nested text nodes" do
 		let(:path) {File.expand_path(".fixtures/text.rb", __dir__)}
 		
 		it "should have text nodes" do
@@ -44,7 +44,7 @@ describe Decode::Comment::Text do
 		end
 	end
 	
-	with 'indented code' do
+	with "indented code" do
 		let(:path) {File.expand_path(".fixtures/text.rb", __dir__)}
 		let(:documentation) {source.segments.to_a[1].documentation}
 		

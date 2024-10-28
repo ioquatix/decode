@@ -3,8 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'language/generic'
-require_relative 'language/ruby'
+require_relative "language/generic"
+require_relative "language/ruby"
 
 module Decode
 	# A context for looking up languages based on file extension or name.

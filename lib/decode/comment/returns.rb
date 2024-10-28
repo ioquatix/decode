@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'attribute'
+require_relative "attribute"
 
 module Decode
 	module Comment

@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require 'decode/index'
-require 'decode/source'
-require 'decode/language/ruby'
-require 'decode/syntax/rewriter'
+require "decode/index"
+require "decode/source"
+require "decode/language/ruby"
+require "decode/syntax/rewriter"
 
 describe Decode::Language::Ruby do
 	let(:path) {File.expand_path(".fixtures/types.rb", __dir__)}

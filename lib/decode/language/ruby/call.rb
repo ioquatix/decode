@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'definition'
+require_relative "definition"
 
 module Decode
 	module Language

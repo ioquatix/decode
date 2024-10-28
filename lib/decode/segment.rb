@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'documentation'
+require_relative "documentation"
 
 module Decode
 	# A chunk of code with an optional preceeding comment block.

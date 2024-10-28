@@ -3,16 +3,16 @@
 # Released under the MIT License.
 # Copyright, 2021-2024, by Samuel Williams.
 
-require_relative 'reference'
-require_relative 'parser'
-require_relative 'code'
+require_relative "reference"
+require_relative "parser"
+require_relative "code"
 
 module Decode
 	module Language
 		module Ruby
 			# The Ruby language.
 			class Generic < Language::Generic
-				EXTENSIONS = ['.rb', '.ru']
+				EXTENSIONS = [".rb", ".ru"]
 				
 				def parser
 					@parser ||= Parser.new(self)

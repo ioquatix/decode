@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'text'
+require_relative "text"
 
 module Decode
 	module Comment
@@ -21,7 +21,7 @@ module Decode
 			end
 			
 			def valid_indentation?(line, level)
-				line.start_with?('  ' * level) || line.start_with?("\t" * level)
+				line.start_with?("  " * level) || line.start_with?("\t" * level)
 			end
 			
 			PATTERN = /\A\s*@(?<directive>.*?)(\s+(?<remainder>.*?))?\Z/

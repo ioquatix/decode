@@ -6,8 +6,8 @@
 def initialize(...)
 	super
 	
-	require 'decode/index'
-	require 'set'
+	require "decode/index"
+	require "set"
 end
 
 # Process the given source root and report on comment coverage.

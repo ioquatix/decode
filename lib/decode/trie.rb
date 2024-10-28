@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'source'
+require_relative "source"
 
 module Decode
 	# A prefix-trie data structure for fast lexical lookups.

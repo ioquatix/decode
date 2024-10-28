@@ -3,15 +3,15 @@
 # Released under the MIT License.
 # Copyright, 2021-2024, by Samuel Williams.
 
-require 'decode/source'
-require 'decode/language/ruby'
+require "decode/source"
+require "decode/language/ruby"
 
 describe Decode::Comment::Tags do
 	let(:language) {Decode::Language::Ruby.new}
 	let(:source) {Decode::Source.new(path, language)}
 	let(:segments) {source.segments.to_a}
 	
-	with 'pragmas' do
+	with "pragmas" do
 		let(:path) {File.expand_path(".fixtures/pragmas.rb", __dir__)}
 		let(:public_method) {segments[0]}
 		let(:private_method) {segments[1]}

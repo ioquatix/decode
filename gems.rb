@@ -8,20 +8,20 @@ source "https://rubygems.org"
 gemspec
 
 group :maintenance, optional: true do
-	gem 'bake-gem'
-	gem 'bake-modernize'
+	gem "bake-gem"
+	gem "bake-modernize"
 	
-	gem 'bake-github-pages'
-	gem 'utopia-project'
+	gem "bake-github-pages"
+	gem "utopia-project"
 end
 
 group :test do
-	gem 'sus'
-	gem 'covered'
+	gem "sus"
+	gem "covered"
 	gem "rubocop"
 	
-	gem 'bake-test'
-	gem 'bake-test-external'
+	gem "bake-test"
+	gem "bake-test-external"
 	
-	gem 'build-files'
+	gem "build-files"
 end

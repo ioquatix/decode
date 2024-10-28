@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'language'
+require_relative "language"
 
 module Decode
 	# Represents a source file in a specific language.

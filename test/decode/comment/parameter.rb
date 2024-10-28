@@ -3,15 +3,15 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require 'decode/source'
-require 'decode/language/ruby'
+require "decode/source"
+require "decode/language/ruby"
 
 describe Decode::Comment::Parameter do
 	let(:language) {Decode::Language::Ruby.new}
 	let(:source) {Decode::Source.new(path, language)}
 	let(:documentation) {source.segments.first.documentation}
 	
-	with 'simple parameters' do
+	with "simple parameters" do
 		let(:path) {File.expand_path(".fixtures/parameters.rb", __dir__)}
 		
 		it "should have parameter nodes" do

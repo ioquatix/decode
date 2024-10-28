@@ -3,17 +3,17 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'comment/node'
+require_relative "comment/node"
 
-require_relative 'comment/tags'
-require_relative 'comment/attribute'
-require_relative 'comment/parameter'
-require_relative 'comment/option'
-require_relative 'comment/pragma'
-require_relative 'comment/raises'
-require_relative 'comment/returns'
-require_relative 'comment/throws'
-require_relative 'comment/yields'
+require_relative "comment/tags"
+require_relative "comment/attribute"
+require_relative "comment/parameter"
+require_relative "comment/option"
+require_relative "comment/pragma"
+require_relative "comment/raises"
+require_relative "comment/returns"
+require_relative "comment/throws"
+require_relative "comment/yields"
 
 module Decode
 	# Structured access to a set of comment lines.

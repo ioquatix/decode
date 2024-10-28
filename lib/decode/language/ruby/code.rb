@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'definition'
-require_relative '../../syntax/link'
+require_relative "definition"
+require_relative "../../syntax/link"
 
-require 'parser/current'
+require "parser/current"
 
 module Decode
 	module Language

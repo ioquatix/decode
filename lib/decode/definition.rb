@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'location'
+require_relative "location"
 
 module Decode
 	# A symbol with attached documentation.

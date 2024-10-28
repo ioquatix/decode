@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative '../../definition'
+require_relative "../../definition"
 
 module Decode
 	module Language
@@ -46,7 +46,7 @@ module Decode
 					else
 						if indentation = expression.source_line[/\A\s+/]
 							# Remove all the indentation:
-							lines.each{|line| line.sub!(indentation, '')}
+							lines.each{|line| line.sub!(indentation, "")}
 						end
 						
 						return lines.join

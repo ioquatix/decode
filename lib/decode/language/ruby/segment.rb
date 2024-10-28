@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative '../../segment'
+require_relative "../../segment"
 
 module Decode
 	module Language

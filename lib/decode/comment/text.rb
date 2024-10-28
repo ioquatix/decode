@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2020-2024, by Samuel Williams.
 
-require_relative 'node'
+require_relative "node"
 
 module Decode
 	module Comment
