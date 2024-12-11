@@ -12,7 +12,7 @@ $ bundle add decode
 
 ## Indexing
 
-`decode` turns your source code into a kind of database with rich access to definitions, segments and associated comments. Use {Decode::Index} to build an index of your project by loading in source files:
+`decode` turns your source code into a kind of database with rich access to definitions, segments and associated comments. Use {ruby Decode::Index} to build an index of your project by loading in source files:
 
 ~~~ ruby
 require 'decode/index'
@@ -44,7 +44,7 @@ puts definition.long_form
 
 ## Documentation
 
-The {Decode::Documentation} provides rich access to the comments that preceed a definition. This includes metadata including `@parameter`, `@returns` and other tags.
+The {ruby Decode::Documentation} provides rich access to the comments that preceed a definition. This includes metadata including `@parameter`, `@returns` and other tags.
 
 ~~~ ruby
 lines = definition.documentation.text
