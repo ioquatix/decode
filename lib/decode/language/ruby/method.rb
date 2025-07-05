@@ -10,28 +10,45 @@ module Decode
 		module Ruby
 			# A Ruby-specific method.
 			class Method < Definition
+				def initialize(*arguments, receiver: nil, **options)
+					super(*arguments, **options)
+					@receiver = receiver
+				end
+				
+				attr :receiver
+				
+				def nested_name
+					if @receiver
+						".#{self.name}"
+					else
+						"##{self.name}"
+					end
+				end
+				
 				# The short form of the method.
-				# e.g. `def puts`.
+				# e.g. `def puts` or `def self.puts`.
 				def short_form
-					@node.location.keyword.join(@node.location.name).source
+					if @receiver
+						"def #{@receiver}.#{@node.name}"
+					else
+						"def #{@node.name}"
+					end
 				end
 				
 				# The node which contains the function arguments.
 				def arguments_node
-					if node = @node.children[1]
-						if node.location.expression
-							return node
-						end
-					end
+					@node.parameters
 				end
 				
 				# The long form of the method.
-				# e.g. `def puts(*lines, separator: "\n")`.
+				# e.g. `def puts(*lines, separator: "\n")` or `def self.puts(*lines, separator: "\n")`.
 				def long_form
 					if arguments_node = self.arguments_node
-						@node.location.keyword.join(
-							arguments_node.location.expression
-						).source
+						if @receiver
+							"def #{@receiver}.#{@node.name}(#{arguments_node.location.slice})"
+						else
+							"def #{@node.name}(#{arguments_node.location.slice})"
+						end
 					else
 						self.short_form
 					end
@@ -41,6 +58,17 @@ module Decode
 				# e.g. `::Barnyard#foo`.
 				def qualified_form
 					self.qualified_name
+				end
+				
+				# Override the qualified_name method to handle method name joining correctly
+				def qualified_name
+					@qualified_name ||= begin
+						if @parent
+							[@parent.qualified_name, self.nested_name].join("")
+						else
+							self.nested_name
+						end
+					end
 				end
 				
 				def convert(kind)

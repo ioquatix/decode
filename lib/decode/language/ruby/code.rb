@@ -6,7 +6,7 @@
 require_relative "definition"
 require_relative "../../syntax/link"
 
-require "parser/current"
+require "prism"
 
 module Decode
 	module Language
@@ -15,7 +15,7 @@ module Decode
 			class Code
 				def initialize(text, index, relative_to: nil, language: relative_to&.language)
 					@text = text
-					@root = ::Parser::CurrentRuby.parse(text)
+					@root = ::Prism.parse(text)
 					@index = index
 					@relative_to = relative_to
 					@language = language
@@ -27,7 +27,7 @@ module Decode
 				
 				def extract(into = [])
 					if @index
-						traverse(@root, into)
+						traverse(@root.value, into)
 					end
 					
 					return into
@@ -37,29 +37,34 @@ module Decode
 				
 				def traverse(node, into)
 					case node&.type
-					when :send
+					when :program_node
+						traverse(node.statements, into)
+					when :call_node
 						if reference = Reference.from_const(node, @language)
 							if definition = @index.lookup(reference, relative_to: @relative_to)
-								expression = node.location.selector
-								range = expression.begin_pos...expression.end_pos
+								# Use message_loc for the method name, not the entire call
+								expression = node.message_loc
+								range = expression.start_offset...expression.end_offset
 								into << Syntax::Link.new(range, definition)
 							end
 						end
 						
 						# Extract constants from arguments:
-						children = node.children[2..-1].each do |node|
-							traverse(node, into)
+						if node.arguments
+							node.arguments.arguments.each do |arg_node|
+								traverse(arg_node, into)
+							end
 						end
-					when :const
+					when :constant_read_node
 						if reference = Reference.from_const(node, @language)
 							if definition = @index.lookup(reference, relative_to: @relative_to)
-								expression = node.location.name
-								range = expression.begin_pos...expression.end_pos
+								expression = node.location
+								range = expression.start_offset...expression.end_offset
 								into << Syntax::Link.new(range, definition)
 							end
 						end
-					when :begin
-						node.children.each do |child|
+					when :statements_node
+						node.body.each do |child|
 							traverse(child, into)
 						end
 					end

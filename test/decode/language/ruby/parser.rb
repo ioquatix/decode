@@ -41,6 +41,13 @@ describe Decode::Language::Ruby do
 			expect(definitions[2].long_form).to be == "class << self"
 			expect(definitions[3].long_form).to be == "class My::Nested::Child"
 		end
+		
+		it "should handle singleton classes" do
+			singleton_classes = definitions.select do |definition|
+				definition.is_a?(Decode::Language::Ruby::Singleton)
+			end
+			expect(singleton_classes.size).to be > 0
+		end
 	end
 	
 	with "modules" do
@@ -79,7 +86,7 @@ describe Decode::Language::Ruby do
 		end
 		
 		it "has full path" do
-			expect(definitions[1].path).to be == [:X, :Y, :Z]
+			expect(definitions[1].full_path).to be == [:X, :Y, :Z]
 		end
 		
 		it "has long form" do
@@ -90,6 +97,14 @@ describe Decode::Language::Ruby do
 		it "has fully qualified form" do
 			expect(definitions[0].qualified_form).to be == "module X::Y"
 			expect(definitions[1].qualified_form).to be == "module X::Y::Z"
+		end
+		
+		it "should handle complex constant paths" do
+			# Should have modules with nested paths
+			modules = definitions.select do |definition|
+				definition.is_a?(Decode::Language::Ruby::Module)
+			end
+			expect(modules.size).to be > 0
 		end
 	end
 	
@@ -127,6 +142,18 @@ describe Decode::Language::Ruby do
 			expect(definitions[0].long_form).to be == "def self.without_arguments"
 			expect(definitions[1].long_form).to be == "def self.with_arguments(x = 10)"
 		end
+		
+		it "should handle method definitions with complex receivers" do
+			methods = definitions.select do |definition|
+				definition.is_a?(Decode::Language::Ruby::Method)
+			end
+			
+			# Should have methods with self receivers
+			class_methods = methods.select do |method|
+				method.receiver == "self"
+			end
+			expect(class_methods.size).to be > 0
+		end
 	end
 	
 	with "functions" do
@@ -145,7 +172,7 @@ describe Decode::Language::Ruby do
 		end
 		
 		it "has correct path" do
-			expect(definitions[1].path).to be == [:Foo, :bar]
+			expect(definitions[1].full_path).to be == [:Foo, :bar]
 		end
 	end
 	
@@ -188,6 +215,14 @@ describe Decode::Language::Ruby do
 			expect(definitions[1].long_form).to be == "attr_reader :b"
 			expect(definitions[2].long_form).to be == "attr_writer :c"
 			expect(definitions[3].long_form).to be == "attr_accessor :d"
+		end
+		
+		it "should handle complex attribute definitions" do
+			attributes = definitions.select do |definition|
+				definition.is_a?(Decode::Language::Ruby::Attribute)
+			end
+			
+			expect(attributes.size).to be > 0
 		end
 	end
 	
@@ -275,6 +310,237 @@ describe Decode::Language::Ruby do
 			expect(definitions[4].visibility).to be == :private
 			expect(definitions[5].visibility).to be == :public
 			expect(definitions[6].visibility).to be == :public
+		end
+	end
+	
+	with "inline visibility" do
+		let(:path) {File.expand_path(".fixtures/inline_visibility.rb", __dir__)}
+		
+		it "can extract definitions" do
+			expect(definitions).not.to be(:empty?)
+		end
+		
+		it "handles inline visibility modifiers correctly" do
+			expect(definitions.size).to be == 11
+			
+			# First definition is the class itself
+			expect(definitions[0].name).to be == :VisibilityTest
+			expect(definitions[0].visibility).to be == :public
+			
+			# Test that inline visibility modifiers only affect the specific method
+			expect(definitions[1].name).to be == :public_method_1
+			expect(definitions[1].visibility).to be == :public
+			
+			expect(definitions[2].name).to be == :private_method_1
+			expect(definitions[2].visibility).to be == :private
+			
+			expect(definitions[3].name).to be == :public_method_2
+			expect(definitions[3].visibility).to be == :public  # Should remain public after inline private
+			
+			expect(definitions[4].name).to be == :protected_method_1
+			expect(definitions[4].visibility).to be == :protected
+			
+			expect(definitions[5].name).to be == :public_method_3
+			expect(definitions[5].visibility).to be == :public  # Should remain public after inline protected
+			
+			expect(definitions[6].name).to be == :public_method_4
+			expect(definitions[6].visibility).to be == :public
+			
+			# Test that standalone modifiers still work after inline modifiers
+			expect(definitions[7].name).to be == :private_method_2
+			expect(definitions[7].visibility).to be == :private
+			
+			expect(definitions[8].name).to be == :private_method_3
+			expect(definitions[8].visibility).to be == :private
+			
+			expect(definitions[9].name).to be == :protected_method_2
+			expect(definitions[9].visibility).to be == :protected
+			
+			expect(definitions[10].name).to be == :public_method_5
+			expect(definitions[10].visibility).to be == :public
+		end
+	end
+	
+	with "enumerator functionality" do
+		let(:path) {File.expand_path(".fixtures/classes.rb", __dir__)}
+		
+		it "should return an enumerator when no block is given" do
+			enumerator = language.definitions_for(source)
+			expect(enumerator).to be_a(Enumerator)
+		end
+		
+		it "should yield definitions when enumerator is used" do
+			definitions = language.definitions_for(source).to_a
+			expect(definitions.size).to be > 0
+			
+			definitions.each do |definition|
+				expect(definition).to be_a(Decode::Definition)
+			end
+		end
+		
+		it "should work with enumerator methods" do
+			definitions = language.definitions_for(source)
+			
+			# Test select
+			classes = definitions.select do |definition|
+				definition.is_a?(Decode::Language::Ruby::Class)
+			end
+			expect(classes.size).to be > 0
+			
+			# Test map
+			names = definitions.map(&:name)
+			expect(names.size).to be > 0
+			
+			# Test count
+			count = definitions.count
+			expect(count).to be > 0
+		end
+		
+		it "should provide the same results when called multiple times" do
+			definitions1 = language.definitions_for(source).to_a
+			definitions2 = language.definitions_for(source).to_a
+			
+			expect(definitions1.size).to be == definitions2.size
+			expect(definitions1.map(&:name)).to be == definitions2.map(&:name)
+		end
+	end
+	
+	with "helper methods" do
+		let(:parser) { language.parser }
+		
+		with "#symbol_name_for" do
+			it "should extract symbol names" do
+				code = "alias_method :new_name, :old_name"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				new_name_arg = node.arguments.arguments[0]
+				old_name_arg = node.arguments.arguments[1]
+				
+				expect(parser.send(:symbol_name_for, new_name_arg)).to be == "new_name"
+				expect(parser.send(:symbol_name_for, old_name_arg)).to be == "old_name"
+			end
+			
+			it "should extract string names" do
+				code = 'alias_method "new_name", "old_name"'
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				new_name_arg = node.arguments.arguments[0]
+				old_name_arg = node.arguments.arguments[1]
+				
+				expect(parser.send(:symbol_name_for, new_name_arg)).to be == '"new_name"'
+				expect(parser.send(:symbol_name_for, old_name_arg)).to be == '"old_name"'
+			end
+		end
+		
+		with "#receiver_for" do
+			it "should handle self receiver" do
+				code = "def self.foo; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:receiver_for, node.receiver)).to be == "self"
+			end
+			
+			it "should handle constant receiver" do
+				code = "def Test.foo; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:receiver_for, node.receiver)).to be == "Test"
+			end
+			
+			it "should handle constant path receiver" do
+				code = "def Nested::Class.foo; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:receiver_for, node.receiver)).to be == "Nested"
+			end
+			
+			it "should handle nil receiver" do
+				code = "def foo; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:receiver_for, node.receiver)).to be == nil
+			end
+		end
+		
+		with "#nested_name_for" do
+			it "should handle simple constant" do
+				code = "class Test; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:nested_name_for, node.constant_path)).to be == "Test"
+			end
+			
+			it "should handle nested constant" do
+				code = "class Nested::Test; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:nested_name_for, node.constant_path)).to be == "Nested::Test"
+			end
+			
+			it "should handle nil" do
+				expect(parser.send(:nested_name_for, nil)).to be == nil
+			end
+		end
+		
+		with "#singleton_name_for" do
+			it "should handle self singleton" do
+				code = "class << self; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:singleton_name_for, node)).to be == "self"
+			end
+			
+			it "should handle constant singleton" do
+				code = "class << Test; end"
+				result = Prism.parse(code)
+				node = result.value.statements.body.first
+				
+				expect(parser.send(:singleton_name_for, node)).to be == "Test"
+			end
+		end
+	end
+	
+	with "edge cases" do
+		let(:parser) { language.parser }
+		
+		it "should handle inline visibility with non-method definitions" do
+			code = "private :some_method"
+			
+			definitions = parser.definitions_for(code).to_a
+			
+			# This should not create any definitions but should set visibility state
+			expect(definitions.size).to be == 0
+		end
+		
+		it "should handle attribute with call node argument" do
+			code = "
+			# @name custom_name
+			attr_reader some_method_call()
+			"
+			
+			definitions = parser.definitions_for(code).to_a
+			
+			expect(definitions.size).to be == 1
+			expect(definitions.first.name).to be == :custom_name
+		end
+		
+		it "should handle attribute with block node argument" do
+			code = "
+			# @name block_attr
+			attr_reader { block_content }
+			"
+			
+			definitions = parser.definitions_for(code).to_a
+			
+			expect(definitions.size).to be == 1
+			expect(definitions.first.name).to be == :block_attr
 		end
 	end
 end

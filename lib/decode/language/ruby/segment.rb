@@ -14,20 +14,20 @@ module Decode
 					super(comments, language, **options)
 					
 					@node = node
-					@expression = node.location.expression
+					@expression = node.location
 				end
 				
 				# The parser syntax tree node.
 				attr :node
 				
 				def expand(node)
-					@expression = @expression.join(node.location.expression)
+					@expression = @expression.join(node.location)
 				end
 				
 				# The source code trailing the comments.
 				# @returns [String | nil]
 				def code
-					@expression.source
+					@expression.slice
 				end
 			end
 		end

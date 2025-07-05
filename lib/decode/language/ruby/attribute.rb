@@ -13,17 +13,17 @@ module Decode
 				# The short form of the attribute.
 				# e.g. `attr :value`.
 				def short_form
-					case @node.type
-					when :block
+					case @node&.type
+					when :block_node
 						"#{@name} { ... }"
 					else
-						@node.location.expression.source
+						@node&.location&.slice || @name
 					end
 				end
 				
 				def long_form
-					if @node.location.line == @node.location.last_line
-						@node.location.expression.source
+					if @node&.location&.start_line == @node&.location&.end_line
+						@node.location.slice
 					else
 						short_form
 					end

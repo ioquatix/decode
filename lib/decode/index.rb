@@ -57,7 +57,7 @@ module Decode
 						# $stderr.puts "Adding #{symbol.qualified_name} to #{symbol.lexical_path.join(' -> ')}"
 						
 						@definitions[symbol.qualified_name] = symbol
-						@trie.insert(symbol.path, symbol)
+						@trie.insert(symbol.full_path, symbol)
 					end
 				end
 			end
@@ -71,7 +71,7 @@ module Decode
 			if reference.absolute? || relative_to.nil?
 				lexical_path = []
 			else
-				lexical_path = relative_to.path.dup
+				lexical_path = relative_to.full_path.dup
 			end
 			
 			path = reference.path

@@ -7,6 +7,8 @@ require_relative "reference"
 require_relative "parser"
 require_relative "code"
 
+require_relative "../generic"
+
 module Decode
 	module Language
 		module Ruby

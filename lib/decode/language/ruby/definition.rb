@@ -11,15 +11,11 @@ module Decode
 			# A Ruby-specific definition.
 			class Definition < Decode::Definition
 				# Initialize the definition from the syntax tree node.
-				def initialize(node, *arguments, visibility: nil, **options)
+				def initialize(*arguments, visibility: nil, node: nil, **options)
 					super(*arguments, **options)
 					
-					@node = node
 					@visibility = visibility
-				end
-				
-				def nested_name
-					"\##{@name}"
+					@node = node
 				end
 				
 				# @attribute [Parser::AST::Node] The parser syntax tree node.
@@ -33,18 +29,18 @@ module Decode
 				end
 				
 				def multiline?
-					@node.location.line != @node.location.last_line
+					@node.location.start_line != @node.location.end_line
 				end
 				
 				# The source code associated with the definition.
 				# @returns [String]
 				def text
-					expression = @node.location.expression
-					lines = expression.source.lines
+					expression = @node.location
+					lines = expression.slice.lines
 					if lines.count == 1
 						return lines.first
 					else
-						if indentation = expression.source_line[/\A\s+/]
+						if indentation = expression.slice.lines.first[/\A\s+/]
 							# Remove all the indentation:
 							lines.each{|line| line.sub!(indentation, "")}
 						end
@@ -54,9 +50,9 @@ module Decode
 				end
 				
 				def location
-					expression = @node.location.expression
-					
-					Location.new(expression.source_buffer.name, expression.line)
+					if @source
+						Location.new(@source.path, @node.location.start_line)
+					end
 				end
 			end
 		end

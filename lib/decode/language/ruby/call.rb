@@ -12,22 +12,32 @@ module Decode
 			class Call < Definition
 				# A block can sometimes be a container for other definitions.
 				def container?
-					false
+					@node&.block && @node.block.opening == "do"
 				end
 				
 				# The short form of the class.
 				# e.g. `foo`.
 				def short_form
-					@name.to_s
+					if @node&.block && @node.block.opening == "{"
+						"#{name} { ... }"
+					else
+						name.to_s
+					end
 				end
 				
 				# The long form of the class.
 				# e.g. `foo(:bar)`.
 				def long_form
-					if @node.location.line == @node.location.last_line
-						@node.location.expression.source
+					if @node.location.start_line == @node.location.end_line
+						@node.location.slice
 					else
-						self.short_form
+						# For multiline calls, use the actual call name with arguments
+						if @node.arguments && @node.arguments.arguments.any?
+							arg_text = @node.arguments.arguments.map { |arg| arg.location.slice }.join(", ")
+							"#{@node.name}(#{arg_text})"
+						else
+							@node.name.to_s
+						end
 					end
 				end
 				

@@ -13,29 +13,30 @@ module Decode
 				def self.from_const(node, language)
 					lexical_path = append_const(node)
 					
-					return self.new(node.location.expression.source, language, lexical_path)
+					return self.new(node.location.slice, language, lexical_path)
 				end
 				
 				def self.append_const(node, path = [])
-					parent, name = node.children
-					
-					if parent and parent.type != :cbase
-						append_const(parent, path)
-					end
-					
 					case node.type
-					when :const
-						if parent && parent.type != :cbase
-							path << ["::", name]
+					when :constant_read_node
+						path << [nil, node.name.to_s]
+					when :constant_path_node
+						if node.parent
+							append_const(node.parent, path)
+							path << ["::", node.name.to_s]
 						else
-							path << [nil, name]
+							path << [nil, node.name.to_s]
 						end
-					when :send
-						path << ["#", name]
-					when :cbase
-						# Ignore.
+					when :call_node
+						# For call nodes like Tuple(...), treat them as constant references
+						if node.receiver.nil?
+							path << [nil, node.name.to_s]
+						else
+							append_const(node.receiver, path)
+							path << [".", node.name.to_s]
+						end
 					else
-						raise ArgumentError, "Could not determine reference for #{node}!"
+						raise ArgumentError, "Could not determine reference for #{node.type}!"
 					end
 					
 					return path

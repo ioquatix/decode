@@ -9,20 +9,24 @@ module Decode
 	# A symbol with attached documentation.
 	class Definition
 		# Initialize the symbol.
-		# @parameter name [Symbol] The name of the definition.
+		# @parameter path [Symbol | Array(Symbol)] The path of the definition relatve to the parent.
 		# @parameter parent [Symbol] The parent lexical scope.
 		# @parameter language [Language] The language in which the symbol is defined in.
 		# @parameter comments [Array(String)] The comments associated with the definition.
-		def initialize(name, parent: nil, language: parent.language, comments: nil)
-			@name = name
+		# @parameter source [Source] The source file containing this definition.
+		def initialize(path, parent: nil, language: parent&.language, comments: nil, visibility: :public, source: parent&.source)
+			@path = Array(path).map(&:to_sym)
 			
 			@parent = parent
 			@language = language
+			@source = source
 			
 			@comments = comments
+			@visibility = visibility
 			
-			@path = nil
+			@full_path = nil
 			@qualified_name = nil
+			@nested_name = nil
 		end
 		
 		def inspect
@@ -34,7 +38,27 @@ module Decode
 		# The symbol name.
 		# e.g. `:Decode`.
 		# @attribute [Symbol]
-		attr :name
+		def name
+			@path.last
+		end
+		
+		# The path to the definition, relative to the parent.
+		# @attribute [Array(Symbol)]
+		attr :path
+		
+		# The full path to the definition.
+		def full_path
+			@full_path ||= begin
+				if @parent
+					@parent.full_path + @path
+				else
+					@path
+				end
+			end
+		end
+		
+		# @deprecated Use {#path} instead.
+		alias lexical_path path
 		
 		# The parent definition, defining lexical scope.
 		# @attribute [Definition | Nil]
@@ -43,6 +67,10 @@ module Decode
 		# The language the symbol is defined within.
 		# @attribute [Language::Generic]
 		attr :language
+		
+		# The source file containing this definition.
+		# @attribute [Source | Nil]
+		attr :source
 		
 		# The comment lines which directly preceeded the definition.
 		# @attribute [Array(String)]
@@ -62,17 +90,17 @@ module Decode
 		def qualified_name
 			@qualified_name ||= begin
 				if @parent
-					@parent.qualified_name + self.nested_name
+					[@parent.qualified_name, self.nested_name].join("::")
 				else
-					@name.to_s
+					self.nested_name
 				end
 			end
 		end
 		
-		# The name of this definition plus the nesting prefix.
+		# The name relative to the parent.
 		# @returns [String]
 		def nested_name
-			"::#{@name}"
+			@nested_name ||= "#{@path.join("::")}"
 		end
 		
 		# Does the definition name match the specified prefix?
@@ -85,28 +113,6 @@ module Decode
 		def convert(kind)
 			raise ArgumentError, "Unable to convert #{self} into #{kind}!"
 		end
-		
-		# The lexical scope as an array of names.
-		# e.g. `[:Decode, :Definition]`
-		# @returns [Array]
-		def path
-			if @path
-				# Cached version:
-				@path
-			elsif @parent
-				# Merge with parent:
-				@path = [*@parent.path, *path_name].freeze
-			else
-				# At top:
-				@path = path_name.freeze
-			end
-		end
-		
-		def path_name
-			[@name]
-		end
-		
-		alias lexical_path path
 		
 		# A short form of the definition.
 		# e.g. `def short_form`.
@@ -173,5 +179,9 @@ module Decode
 		def location
 			nil
 		end
+		
+		# The visibility of the definition.
+		# @attribute [Symbol] :public, :private, :protected
+		attr_accessor :visibility
 	end
 end

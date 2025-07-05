@@ -13,7 +13,7 @@ module Decode
 				# The short form of the constant.
 				# e.g. `NAME`.
 				def short_form
-					@node.location.name.source
+					@node.name.to_s
 				end
 				
 				def nested_name
@@ -23,12 +23,12 @@ module Decode
 				# The long form of the constant.
 				# e.g. `NAME = "Alice"`.
 				def long_form
-					if @node.location.line == @node.location.last_line
-						@node.location.expression.source
-					elsif @node.children[2].type == :array
-						"#{@name} = [...]"
-					elsif @node.children[2].type == :hash
-						"#{@name} = {...}"
+					if @node.location.start_line == @node.location.end_line
+						@node.location.slice
+					elsif @node.value&.type == :array_node
+						"#{@node.name} = [...]"
+					elsif @node.value&.type == :hash_node
+						"#{@node.name} = {...}"
 					else
 						self.short_form
 					end
