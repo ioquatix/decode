@@ -58,8 +58,9 @@ module Decode
 			end
 		end
 		
-		# @deprecated Use {path} instead.
-		alias lexical_path path
+		# The lexical path to the definition (full path including all namespaces).
+		# @returns [Array(Symbol)] The complete path from root to this definition.
+		alias lexical_path full_path
 		
 		# @attribute [Definition | Nil] The parent definition, defining lexical scope.
 		attr :parent
