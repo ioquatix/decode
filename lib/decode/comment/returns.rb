@@ -7,10 +7,9 @@ require_relative "attribute"
 
 module Decode
 	module Comment
-		# Describes a return value.
+		# Represents a return value.
 		#
-		# - `@returns [Integer] The person's age.`
-		#
+		# Example: `@returns [Integer] The person's age.`
 		class Returns < Attribute
 		end
 	end

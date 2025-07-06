@@ -8,6 +8,7 @@ require_relative "../documentation"
 
 module Decode
 	module Language
+		# Represents a generic language implementation that can be extended for specific languages.
 		class Generic
 			EXTENSIONS = []
 			
@@ -28,28 +29,43 @@ module Decode
 				tags["private"] = Comment::Pragma
 			end
 			
+			# Initialize a new generic language.
+			# @parameter name [String] The name of the language.
+			# @parameter extensions [Array(String)] File extensions for this language.
+			# @parameter tags [Comment::Tags] The comment tags to recognize.
 			def initialize(name, extensions: self.class::EXTENSIONS, tags: self.class::TAGS)
 				@name = name
 				@extensions = extensions
 				@tags = tags
 			end
 			
+			# The name of this language.
+			# @attribute [String] The language name.
 			attr :name
 			
+			# Get all names for this language.
+			# @returns [Array(String)] An array containing the language name.
 			def names
 				[@name]
 			end
 			
+			# The file extensions this language supports.
+			# @attribute [Array(String)] The supported file extensions.
 			attr :extensions
 			
+			# The comment tags this language recognizes.
+			# @attribute [Comment::Tags] The tag definitions.
 			attr :tags
 			
 			# Generate a language-specific reference.
-			# @parameter identifier [String] A valid identifier.
+			# @parameter identifier [String] A valid identifier for this language.
+			# @returns [Reference] A reference object for the given identifier.
 			def reference_for(identifier)
 				Reference.new(identifier, self)
 			end
 			
+			# Get the parser for this language.
+			# @returns [Parser | Nil] The parser instance, or nil if not available.
 			def parser
 				nil
 			end

@@ -105,6 +105,27 @@ end
 5. **Use Examples**: Include usage examples when the behavior isn't obvious.
 6. **Keep Updated**: Update documentation when you change the code.
 7. **Use @namespace wisely**: Apply to organizational modules to achieve 100% coverage.
+8. **Avoid redundancy**: For simple attributes and methods, attach descriptions directly to pragmas rather than repeating obvious information.
+
+#### Simple Attributes and Methods
+
+For extremely simple attributes and methods where the name clearly indicates the purpose, avoid redundant descriptions. Instead, attach the description directly to the `@attribute` pragma:
+
+```ruby
+# Good - concise and clear:
+# @attribute [String] The name of the parameter.
+attr :name
+
+# @attribute [String] The type of the parameter.
+attr :type
+
+# Avoid - redundant descriptions:
+# The name of the parameter.
+# @attribute [String] The parameter name.
+attr :name
+```
+
+This approach keeps documentation concise while still providing essential type information.
 
 ## Type Signatures
 

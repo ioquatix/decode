@@ -42,8 +42,7 @@ module Decode
 			@path.last
 		end
 		
-		# The path to the definition, relative to the parent.
-		# @attribute [Array(Symbol)]
+		# @attribute [Array(Symbol)] The path to the definition, relative to the parent.
 		attr :path
 		
 		# The full path to the definition.
@@ -60,20 +59,16 @@ module Decode
 		# @deprecated Use {#path} instead.
 		alias lexical_path path
 		
-		# The parent definition, defining lexical scope.
-		# @attribute [Definition | Nil]
+		# @attribute [Definition | Nil] The parent definition, defining lexical scope.
 		attr :parent
 		
-		# The language the symbol is defined within.
-		# @attribute [Language::Generic]
+		# @attribute [Language::Generic] The language the symbol is defined within.
 		attr :language
 		
-		# The source file containing this definition.
-		# @attribute [Source | Nil]
+		# @attribute [Source | Nil] The source file containing this definition.
 		attr :source
 		
-		# The comment lines which directly preceeded the definition.
-		# @attribute [Array(String)]
+		# @attribute [Array(String)] The comment lines which directly preceeded the definition.
 		attr :comments
 		
 		# Whether the definition is considered part of the public interface.

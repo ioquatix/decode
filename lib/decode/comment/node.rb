@@ -26,8 +26,7 @@ module Decode
 				@children << child
 			end
 			
-			# Any children of this node.
-			# @attribute [Array(Node | Text) | Nil]
+			# @attribute [Array(Node | Text) | Nil] Any children of this node.
 			attr :children
 			
 			# Enumerate all non-text children nodes.

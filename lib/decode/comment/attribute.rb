@@ -30,8 +30,7 @@ module Decode
 				@type = type
 			end
 			
-			# The type of the attribute.
-			# @attribute [String]
+			# @attribute [String] The type of the attribute.
 			attr :type
 		end
 	end

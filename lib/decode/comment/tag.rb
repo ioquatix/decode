@@ -31,8 +31,7 @@ module Decode
 				@directive = directive
 			end
 			
-			# The directive that generated the tag.
-			# @attribute [String]
+			# @attribute [String] The directive that generated the tag.
 			attr :directive
 		end
 	end

@@ -31,12 +31,10 @@ module Decode
 			end
 		end
 		
-		# The underlying comments from which the documentation is extracted.
-		# @attribute [Array(String)]
+		# @attribute [Array(String)] The underlying comments from which the documentation is extracted.
 		attr :comments
 		
-		# The language in which the documentation was extracted from.
-		# @attribute [Language::Generic]
+		# @attribute [Language::Generic] The language in which the documentation was extracted from.
 		attr :language
 	end
 end

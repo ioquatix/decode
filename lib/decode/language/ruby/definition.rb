@@ -8,9 +8,13 @@ require_relative "../../definition"
 module Decode
 	module Language
 		module Ruby
-			# A Ruby-specific definition.
+			# Represents a Ruby-specific definition extracted from source code.
 			class Definition < Decode::Definition
 				# Initialize the definition from the syntax tree node.
+				# @parameter arguments [Array] Arguments passed to the parent class.
+				# @parameter visibility [Symbol] The visibility of the definition (:public, :private, :protected).
+				# @parameter node [Parser::AST::Node] The syntax tree node representing this definition.
+				# @parameter options [Hash] Additional options passed to the parent class.
 				def initialize(*arguments, visibility: nil, node: nil, **options)
 					super(*arguments, **options)
 					
@@ -18,22 +22,28 @@ module Decode
 					@node = node
 				end
 				
-				# @attribute [Parser::AST::Node] The parser syntax tree node.
+				# The parser syntax tree node.
+				# @attribute [Parser::AST::Node] The AST node representing this definition.
 				attr :node
 				
-				# @attribute [Symbol] The visibility of the definition.
+				# The visibility of the definition.
+				# @attribute [Symbol] The visibility level (:public, :private, or :protected).
 				attr_accessor :visibility
 				
+				# Check if this definition is public.
+				# @returns [Boolean] True if the definition is public.
 				def public?
 					@visibility == :public
 				end
 				
+				# Check if this definition spans multiple lines.
+				# @returns [Boolean] True if the definition spans multiple lines.
 				def multiline?
 					@node.location.start_line != @node.location.end_line
 				end
 				
 				# The source code associated with the definition.
-				# @returns [String]
+				# @returns [String] The source code text for this definition.
 				def text
 					expression = @node.location
 					lines = expression.slice.lines
@@ -49,6 +59,8 @@ module Decode
 					end
 				end
 				
+				# Get the location of this definition.
+				# @returns [Location | Nil] The location object if source is available.
 				def location
 					if @source
 						Location.new(@source.path, @node.location.start_line)

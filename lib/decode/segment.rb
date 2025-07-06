@@ -19,12 +19,10 @@ module Decode
 			@language = language
 		end
 		
-		# The preceeding comments.
-		# @attribute [Array(String)]
+		# @attribute [Array(String)] The preceeding comments.
 		attr :comments
 		
-		# The language of the code attached to this segment.
-		# @attribute [Language::Generic]
+		# @attribute [Language::Generic] The language of the code attached to this segment.
 		attr :language
 		
 		# An interface for accsssing the documentation of the definition.

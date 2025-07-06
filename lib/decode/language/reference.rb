@@ -25,12 +25,10 @@ module Decode
 				"\#<#{self.class} {#{self.identifier}}>"
 			end
 			
-			# The identifier part of the reference.
-			# @attribute [String]
+			# @attribute [String] The identifier part of the reference.
 			attr :identifier
 			
-			# The language associated with this reference.
-			# @attribute [Language::Generic]
+			# @attribute [Language::Generic] The language associated with this reference.
 			attr :language
 			
 			# Whether the reference starts at the base of the lexical tree.

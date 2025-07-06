@@ -8,6 +8,9 @@ require_relative "language"
 module Decode
 	# Represents a source file in a specific language.
 	class Source
+		# Initialize a new source file.
+		# @parameter path [String] The file-system path to the source file.
+		# @parameter language [Language::Generic] The language parser to use.
 		def initialize(path, language)
 			@path = path
 			@buffer = nil
@@ -15,10 +18,11 @@ module Decode
 		end
 		
 		# The path of the source file.
-		# @attribute [String] A file-system path.
+		# @attribute [String] A file-system path to the source file.
 		attr :path
 		
 		# The relative path of the source, if it is known.
+		# @returns [String] The relative path or the full path if relative path is unknown.
 		def relative_path
 			if @path.respond_to?(:relative_path)
 				@path.relative_path
@@ -28,11 +32,11 @@ module Decode
 		end
 		
 		# The language of the source file.
-		# @attribute [Language::Generic]
+		# @attribute [Language::Generic] The language parser for this source.
 		attr :language
 		
 		# Read the source file into an internal buffer/cache.
-		# @returns [String]
+		# @returns [String] The contents of the source file.
 		def read
 			@buffer ||= File.read(@path).freeze
 		end
@@ -57,6 +61,10 @@ module Decode
 			@language.segments_for(self, &block)
 		end
 		
+		# Generate code representation with optional index for link resolution.
+		# @parameter index [Index] Optional index for resolving links.
+		# @parameter relative_to [Definition] Optional definition to resolve relative references.
+		# @returns [String] The formatted code representation.
 		def code(index = nil, relative_to: nil)
 			@language.code_for(self.read, index, relative_to: relative_to)
 		end

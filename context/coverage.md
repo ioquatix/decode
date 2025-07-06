@@ -6,9 +6,9 @@ This guide explains how to test and monitor documentation coverage in your Ruby 
 
 The Decode gem provides several bake tasks for analyzing your codebase:
 
-- `bake decode:index:coverage` - Check documentation coverage
-- `bake decode:index:symbols` - List all symbols in the codebase  
-- `bake decode:index:documentation` - Extract all documentation
+- `bake decode:index:coverage` - Check documentation coverage.
+- `bake decode:index:symbols` - List all symbols in the codebase.
+- `bake decode:index:documentation` - Extract all documentation.
 
 ## Checking Documentation Coverage
 
@@ -36,17 +36,17 @@ Missing documentation for:
 ```
 
 The coverage check:
-- **Counts only public definitions** (public methods, classes, modules)
-- **Reports the ratio** of documented vs total public definitions
-- **Lists missing documentation** by qualified name
-- **Fails with an error** if coverage is incomplete
+- **Counts only public definitions** (public methods, classes, modules).
+- **Reports the ratio** of documented vs total public definitions.
+- **Lists missing documentation** by qualified name.
+- **Fails with an error** if coverage is incomplete.
 
 ### What Counts as "Documented"
 
 A definition is considered documented if it has:
-- Any comment preceding it
-- Documentation pragmas (like `@parameter`, `@returns`)
-- A `@namespace` pragma (for organizational modules)
+- Any comment preceding it.
+- Documentation pragmas (like `@parameter`, `@returns`).
+- A `@namespace` pragma (for organizational modules).
 
 ```ruby
 # Represents a user in the system.

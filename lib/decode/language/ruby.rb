@@ -7,8 +7,10 @@ require_relative "ruby/generic"
 
 module Decode
 	module Language
-		# An interface for extracting information from Ruby source code.
+		# Represents an interface for extracting information from Ruby source code.
 		module Ruby
+			# Create a new Ruby language instance.
+			# @returns [Ruby::Generic] A configured Ruby language parser.
 			def self.new
 				Generic.new("ruby")
 			end
