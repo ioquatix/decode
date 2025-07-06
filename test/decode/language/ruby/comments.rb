@@ -16,7 +16,7 @@ describe Decode::Language::Ruby do
 			definitions = language.definitions_for(source).to_a
 			# Should have definitions with comments
 			definitions_with_comments = definitions.select do |definition|
-				definition.comments.any?
+				definition.documented?
 			end
 			expect(definitions_with_comments.size).to be > 0
 		end
@@ -28,7 +28,7 @@ describe Decode::Language::Ruby do
 			
 			# Should extract comments properly
 			definitions.each do |definition|
-				if definition.comments.any?
+				if definition.documented?
 					expect(definition.comments).to be_a(Array)
 					expect(definition.comments.first).to be_a(String)
 				end

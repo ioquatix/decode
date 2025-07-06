@@ -19,7 +19,7 @@ def coverage(root)
 	index.update(paths)
 	
 	documented = Set.new
-	missing = Set.new
+	missing = {}
 	
 	index.trie.traverse do |path, node, descend|
 		public_definition = node.values.nil?
@@ -28,10 +28,10 @@ def coverage(root)
 			if definition.public?
 				level = path.size
 				
-				if definition.comments.nil?
-					missing << definition.qualified_name
-				else
+				if definition.documented?
 					documented << definition.qualified_name
+				else
+					missing[definition.qualified_name] ||= definition
 				end
 				
 				public_definition = true
@@ -45,7 +45,9 @@ def coverage(root)
 	end
 	
 	# Since there can be multiple definitions for a given symbol, we can ignore any missing definitions that have been documented elsewhere:
-	missing = missing - documented
+	documented.each do |qualified_name|
+		missing.delete(qualified_name)
+	end
 	
 	documented_count = documented.size
 	public_count = documented_count + missing.size
@@ -53,8 +55,13 @@ def coverage(root)
 	
 	if documented_count < public_count
 		$stderr.puts nil, "Missing documentation for:"
-		missing.each do |name|
-			$stderr.puts "- #{name}"
+		missing.each do |qualified_name, definition|
+			location = definition.location
+			if location
+				$stderr.puts "- #{qualified_name} (#{location.path}:#{location.line})"
+			else
+				$stderr.puts "- #{qualified_name}"
+			end
 		end
 		
 		raise RuntimeError, "Insufficient documentation!"

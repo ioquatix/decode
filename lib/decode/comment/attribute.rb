@@ -24,6 +24,9 @@ module Decode
 				return node
 			end
 			
+			# Initialize a new attribute.
+			# @parameter directive [String] The original directive text.
+			# @parameter type [String] The type of the attribute.
 			def initialize(directive, type)
 				super(directive)
 				

@@ -72,12 +72,16 @@ module Decode
 		attr :comments
 		
 		# Whether the definition is considered part of the public interface.
-		#
 		# This is used to determine whether the definition should be documented for coverage purposes.
-		#
-		# @returns [Boolean]
+		# @returns [Boolean] True if the definition is public.
 		def public?
 			true
+		end
+		
+		# Whether the definition has documentation.
+		# @returns [Boolean] True if the definition has non-empty comments.
+		def documented?
+			@comments&.any?
 		end
 		
 		# The qualified name is an absolute name which includes any and all namespacing.
