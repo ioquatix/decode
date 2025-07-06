@@ -14,6 +14,9 @@ module Decode
 	#	~~~
 	#
 	class Segment
+		# Initialize a new segment.
+		# @parameter comments [Array(String)] The preceeding comments.
+		# @parameter language [Language::Generic] The language of the code.
 		def initialize(comments, language)
 			@comments = comments
 			@language = language

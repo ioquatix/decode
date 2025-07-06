@@ -10,6 +10,10 @@ module Decode
 		module Ruby
 			# Represents an alias statement, e.g., `alias new_name old_name` or `alias_method :new_name, :old_name`
 			class Alias < Definition
+				# Initialize a new alias definition.
+				# @parameter new_name [String] The new name for the alias.
+				# @parameter old_name [String] The original name being aliased.
+				# @parameter options [Hash] Additional options for the definition.
 				def initialize(new_name, old_name, **options)
 					super(new_name, **options)
 					@old_name = old_name
@@ -17,14 +21,17 @@ module Decode
 				
 				attr :old_name
 				
+				# Generate a short form representation of the alias.
 				def short_form
 					"alias #{self.name} #{@old_name}"
 				end
 				
+				# Generate a long form representation of the alias.
 				def long_form
 					"alias #{self.name} #{@old_name}"
 				end
 				
+				# Generate a string representation of the alias.
 				def to_s
 					"#{self.class.name} #{self.name} -> #{@old_name}"
 				end

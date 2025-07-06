@@ -17,10 +17,12 @@ module Decode
 				@path = nil
 			end
 			
+			# Generate a string representation of the reference.
 			def to_s
 				"{#{self.language} #{self.identifier}}"
 			end
 			
+			# Generate a debug representation of the reference.
 			def inspect
 				"\#<#{self.class} {#{self.identifier}}>"
 			end
@@ -36,20 +38,27 @@ module Decode
 				!self.relative?
 			end
 			
+			# Check if this is a relative reference.
 			def relative?
 				prefix, name = self.lexical_path.first
 				
 				return prefix.nil?
 			end
 			
+			# Split an identifier into prefix and name components.
+			# @parameter identifier [String] The identifier to split.
 			def split(identifier)
 				identifier.scan(/(\W+)?(\w+)/)
 			end
 			
+			# Get the lexical path of this reference.
 			def lexical_path
 				@lexical_path ||= self.split(@identifier)
 			end
 			
+			# Calculate the priority of a definition for matching.
+			# @parameter definition [String] The definition to check.
+			# @parameter prefix [String] The prefix to match against.
 			def priority(definition, prefix)
 				if prefix.nil?
 					return 1
@@ -60,6 +69,8 @@ module Decode
 				end
 			end
 			
+			# Find the best matching definition from a list.
+			# @parameter definitions [Array(String)] The definitions to choose from.
 			def best(definitions)
 				prefix, name = lexical_path.last
 				

@@ -29,12 +29,14 @@ module Decode
 			@nested_name = nil
 		end
 		
+		# Generate a debug representation of the definition.
 		def inspect
 			"\#<#{self.class} #{qualified_name}>"
 		end
 		
+		# Generate a string representation of the definition.
 		alias to_s inspect
-
+		
 		# The symbol name.
 		# e.g. `:Decode`.
 		# @attribute [Symbol]
@@ -56,7 +58,7 @@ module Decode
 			end
 		end
 		
-		# @deprecated Use {#path} instead.
+		# @deprecated Use {path} instead.
 		alias lexical_path path
 		
 		# @attribute [Definition | Nil] The parent definition, defining lexical scope.

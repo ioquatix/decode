@@ -15,6 +15,7 @@ module Decode
 					true
 				end
 				
+				# Generate a nested name for the block.
 				def nested_name
 					".#{name}"
 				end
@@ -41,6 +42,8 @@ module Decode
 					self.qualified_name
 				end
 				
+				# Convert the block to a different kind of definition.
+				# @parameter kind [Symbol] The kind to convert to.
 				def convert(kind)
 					case kind
 					when :attribute

@@ -7,11 +7,20 @@ require_relative "node"
 
 module Decode
 	module Comment
+		# Represents a documentation tag parsed from a comment directive.
 		class Tag < Node
+			# Match text against the tag pattern.
+			# @parameter text [String] The text to match.
 			def self.match(text)
 				self::PATTERN.match(text)
 			end
 			
+			# Parse a tag from a directive and text.
+			# @parameter directive [String] The directive name.
+			# @parameter text [String] The directive text.
+			# @parameter lines [Array(String)] The remaining lines.
+			# @parameter tags [Tags] The tags parser.
+			# @parameter level [Integer] The indentation level.
 			def self.parse(directive, text, lines, tags, level = 0)
 				if match = self.match(text)
 					node = self.build(directive, match)
@@ -27,6 +36,8 @@ module Decode
 				end
 			end
 			
+			# Initialize a new tag.
+			# @parameter directive [String] The directive that generated the tag.
 			def initialize(directive)
 				@directive = directive
 			end

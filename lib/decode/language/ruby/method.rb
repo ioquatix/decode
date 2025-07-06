@@ -10,6 +10,10 @@ module Decode
 		module Ruby
 			# A Ruby-specific method.
 			class Method < Definition
+				# Initialize a new method definition.
+				# @parameter arguments [Array] The definition arguments.
+				# @parameter receiver [String] The method receiver (for class methods).
+				# @parameter options [Hash] Additional options.
 				def initialize(*arguments, receiver: nil, **options)
 					super(*arguments, **options)
 					@receiver = receiver
@@ -17,6 +21,7 @@ module Decode
 				
 				attr :receiver
 				
+				# Generate a nested name for the method.
 				def nested_name
 					if @receiver
 						".#{self.name}"
@@ -71,6 +76,8 @@ module Decode
 					end
 				end
 				
+				# Convert the method to a different kind of definition.
+				# @parameter kind [Symbol] The kind to convert to.
 				def convert(kind)
 					case kind
 					when :attribute

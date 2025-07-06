@@ -9,12 +9,15 @@ module Decode
 	module Comment
 		# A structured comment.
 		class Text
+			# Initialize a new text node.
+			# @parameter line [String] The text content.
 			def initialize(line)
 				@line = line
 			end
 			
 			attr :line
 			
+			# Traverse the text node.
 			def traverse
 			end
 		end

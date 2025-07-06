@@ -7,7 +7,10 @@ require_relative "text"
 
 module Decode
 	module Comment
+		# Represents a collection of documentation tags and their parsing logic.
 		class Tags
+			# Build a tags parser with directive mappings.
+			# @parameter block [Proc] A block that yields the directives hash.
 			def self.build
 				directives = Hash.new
 				
@@ -16,16 +19,25 @@ module Decode
 				return self.new(directives)
 			end
 			
+			# Initialize a new tags parser.
+			# @parameter directives [Hash(String, Class)] The directive mappings.
 			def initialize(directives)
 				@directives = directives
 			end
 			
+			# Check if a line has valid indentation for the given level.
+			# @parameter line [String] The line to check.
+			# @parameter level [Integer] The expected indentation level.
 			def valid_indentation?(line, level)
 				line.start_with?("  " * level) || line.start_with?("\t" * level)
 			end
 			
 			PATTERN = /\A\s*@(?<directive>.*?)(\s+(?<remainder>.*?))?\Z/
 			
+			# Parse documentation tags from lines.
+			# @parameter lines [Array(String)] The lines to parse.
+			# @parameter level [Integer] The indentation level.
+			# @parameter block [Proc] A block to yield parsed tags to.
 			def parse(lines, level = 0, &block)
 				while line = lines.first
 					# Is it at the right indentation level:
@@ -52,6 +64,9 @@ module Decode
 				end
 			end
 			
+			# Ignore lines at the specified indentation level.
+			# @parameter lines [Array(String)] The lines to ignore.
+			# @parameter level [Integer] The indentation level.
 			def ignore(lines, level = 0)
 				if line = lines.first
 					# Is it at the right indentation level:

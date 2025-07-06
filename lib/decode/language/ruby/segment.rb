@@ -10,6 +10,11 @@ module Decode
 		module Ruby
 			# A Ruby specific code segment.
 			class Segment < Decode::Segment
+				# Initialize a new Ruby segment.
+				# @parameter comments [Array(String)] The comments for this segment.
+				# @parameter language [Language] The language instance.
+				# @parameter node [Prism::Node] The syntax tree node.
+				# @parameter options [Hash] Additional options.
 				def initialize(comments, language, node, **options)
 					super(comments, language, **options)
 					
@@ -20,6 +25,8 @@ module Decode
 				# The parser syntax tree node.
 				attr :node
 				
+				# Expand the segment to include another node.
+				# @parameter node [Prism::Node] The node to include.
 				def expand(node)
 					@expression = @expression.join(node.location)
 				end

@@ -24,33 +24,13 @@ module Decode
 		module Ruby
 			# The Ruby source code parser.
 			class Parser
+				# Initialize a new Ruby parser.
+				# @parameter language [Language] The language instance.
 				def initialize(language)
 					@language = language
 					
 					@visibility = :public
 					@definitions = Hash.new.compare_by_identity
-				end
-				
-				private def assign_definition(parent, definition)
-					(@definitions[parent] ||= {})[definition.name] = definition
-				end
-				
-				private def lookup_definition(parent, name)
-					(@definitions[parent] ||= {})[name]
-				end
-				
-				private def store_definition(parent, name, definition)
-					(@definitions[parent] ||= {})[name] = definition
-				end
-				
-				# Parse the given source object, can be a string or a Source instance.
-				# @parameter source [String | Source] The source to parse.
-				private def parse_source(source)
-					if source.is_a?(Source)
-						Prism.parse(source.read, filepath: source.path)
-					else
-						Prism.parse(source)
-					end
 				end
 				
 				# Extract definitions from the given input file.
@@ -63,40 +43,6 @@ module Decode
 					# Pass the source to walk_definitions for location tracking
 					source = source.is_a?(Source) ? source : nil
 					walk_definitions(result.value, nil, source, &block)
-				end
-				
-				def extract_comments_for(node, comments)
-					prefix = []
-					
-					while comment = comments.first
-						break if comment.location.line >= node.location.line
-						
-						if last_comment = prefix.last
-							if last_comment.location.line != (comment.location.line - 1)
-								prefix.clear
-							end
-						end
-						
-						prefix << comments.shift
-					end
-					
-					# The last comment must butt up against the node:
-					if comment = prefix.last
-						if comment.location.line == (node.location.line - 1)
-							return prefix.map do |comment|
-								# Remove # and at most one space/tab to preserve indentation
-								comment.slice.sub(/\A\#[\s\t]?/, "")
-							end
-						end
-					end
-				end
-				
-				def with_visibility(visibility = :public, &block)
-					saved_visibility = @visibility
-					@visibility = visibility
-					yield
-				ensure
-					@visibility = saved_visibility
 				end
 				
 				# Walk over the syntax tree and extract relevant definitions with their associated comments.
@@ -317,6 +263,78 @@ module Decode
 					end
 				end
 				
+				# Extract segments from the given input file.
+				def segments_for(source, &block)
+					result = self.parse_source(source)
+					comments = result.comments.reject do |comment|
+						comment.location.slice.start_with?("#!/") || 
+						comment.location.slice.start_with?("# frozen_string_literal:") ||
+						comment.location.slice.start_with?("# Released under the MIT License.") ||
+						comment.location.slice.start_with?("# Copyright,")
+					end
+					
+					# Now we iterate over the syntax tree and generate segments:
+					walk_segments(result.value, comments, &block)
+				end
+				
+				private
+				
+				def assign_definition(parent, definition)
+					(@definitions[parent] ||= {})[definition.name] = definition
+				end
+				
+				def lookup_definition(parent, name)
+					(@definitions[parent] ||= {})[name]
+				end
+				
+				def store_definition(parent, name, definition)
+					(@definitions[parent] ||= {})[name] = definition
+				end
+				
+				# Parse the given source object, can be a string or a Source instance.
+				# @parameter source [String | Source] The source to parse.
+				def parse_source(source)
+					if source.is_a?(Source)
+						Prism.parse(source.read, filepath: source.path)
+					else
+						Prism.parse(source)
+					end
+				end
+				
+				def extract_comments_for(node, comments)
+					prefix = []
+					
+					while comment = comments.first
+						break if comment.location.line >= node.location.line
+						
+						if last_comment = prefix.last
+							if last_comment.location.line != (comment.location.line - 1)
+								prefix.clear
+							end
+						end
+						
+						prefix << comments.shift
+					end
+					
+					# The last comment must butt up against the node:
+					if comment = prefix.last
+						if comment.location.line == (node.location.line - 1)
+							return prefix.map do |comment|
+								# Remove # and at most one space/tab to preserve indentation
+								comment.slice.sub(/\A\#[\s\t]?/, "")
+							end
+						end
+					end
+				end
+				
+				def with_visibility(visibility = :public, &block)
+					saved_visibility = @visibility
+					@visibility = visibility
+					yield
+				ensure
+					@visibility = saved_visibility
+				end
+				
 				NAME_ATTRIBUTE = /\A\#\s*@name\s+(?<value>.*?)\Z/
 				
 				def attribute_name_for(node)
@@ -430,20 +448,6 @@ module Decode
 							yield node.unescaped.to_sym
 						end
 					end
-				end
-				
-				# Extract segments from the given input file.
-				def segments_for(source, &block)
-					result = self.parse_source(source)
-					comments = result.comments.reject do |comment|
-						comment.location.slice.start_with?("#!/") || 
-						comment.location.slice.start_with?("# frozen_string_literal:") ||
-						comment.location.slice.start_with?("# Released under the MIT License.") ||
-						comment.location.slice.start_with?("# Copyright,")
-					end
-					
-					# Now we iterate over the syntax tree and generate segments:
-					walk_segments(result.value, comments, &block)
 				end
 				
 				def walk_segments(node, comments, &block)

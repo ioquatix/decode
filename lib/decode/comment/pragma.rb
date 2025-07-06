@@ -15,10 +15,19 @@ module Decode
 		# - `@asynchronous This method may yield.`
 		#
 		class Pragma < Tag
+			# Parse a pragma directive from text.
+			# @parameter directive [String] The directive name.
+			# @parameter text [String] The directive text.
+			# @parameter lines [Array(String)] The remaining lines.
+			# @parameter tags [Array(Tag)] The collection of tags.
+			# @parameter level [Integer] The indentation level.
 			def self.parse(directive, text, lines, tags, level = 0)
 				self.build(directive, text)
 			end
 			
+			# Build a pragma from a directive and text.
+			# @parameter directive [String] The directive name.
+			# @parameter text [String] The directive text.
 			def self.build(directive, text)
 				node = self.new(directive)
 				
@@ -29,6 +38,8 @@ module Decode
 				return node
 			end
 			
+			# Initialize a new pragma.
+			# @parameter directive [String] The directive name.
 			def initialize(directive)
 				super(directive)
 			end

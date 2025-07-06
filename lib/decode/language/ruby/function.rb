@@ -10,6 +10,7 @@ module Decode
 		module Ruby
 			# A Ruby-specific function.
 			class Function < Method
+				# Generate a nested name for the function.
 				def nested_name
 					".#{@name}"
 				end

@@ -10,12 +10,18 @@ module Decode
 		module Ruby
 			# An Ruby-specific reference which can be resolved to zero or more definitions.
 			class Reference < Language::Reference
+				# Create a reference from a constant node.
+				# @parameter node [Prism::Node] The constant node.
+				# @parameter language [Language] The language instance.
 				def self.from_const(node, language)
 					lexical_path = append_const(node)
 					
 					return self.new(node.location.slice, language, lexical_path)
 				end
 				
+				# Append a constant node to the path.
+				# @parameter node [Prism::Node] The constant node.
+				# @parameter path [Array] The path to append to.
 				def self.append_const(node, path = [])
 					case node.type
 					when :constant_read_node
@@ -42,6 +48,8 @@ module Decode
 					return path
 				end
 				
+				# Split a Ruby identifier into prefix and name components.
+				# @parameter text [String] The text to split.
 				def split(text)
 					text.scan(/(::|\.|#|:)?([^:.#]+)/)
 				end

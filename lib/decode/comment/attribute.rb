@@ -6,6 +6,7 @@
 require_relative "tag"
 
 module Decode
+	# Represents comment parsing and processing functionality.
 	module Comment
 		# Describes an attribute type.
 		#
@@ -14,6 +15,9 @@ module Decode
 		class Attribute < Tag
 			PATTERN = /\A\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
 			
+			# Build an attribute from a directive and match.
+			# @parameter directive [String] The original directive text.
+			# @parameter match [MatchData] The regex match data.
 			def self.build(directive, match)
 				node = self.new(directive, match[:type])
 				

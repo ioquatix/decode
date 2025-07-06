@@ -16,6 +16,7 @@ module Decode
 					@node.name.to_s
 				end
 				
+				# Generate a nested name for the constant.
 				def nested_name
 					"::#{@name}"
 				end

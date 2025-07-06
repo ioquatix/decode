@@ -5,6 +5,7 @@
 
 module Decode
 	module Comment
+		# Represents a node in a comment tree structure.
 		class Node
 			# Initialize the node.
 			# @parameter children [Array(Node) | Nil]
@@ -38,6 +39,8 @@ module Decode
 				end
 			end
 			
+			# Filter children nodes by class type.
+			# @parameter klass [Class] The class to filter by.
 			def filter(klass)
 				return to_enum(:filter, klass) unless block_given?
 				

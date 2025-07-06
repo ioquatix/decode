@@ -21,6 +21,7 @@ module Decode
 					end
 				end
 				
+				# Generate a long form representation of the attribute.
 				def long_form
 					if @node&.location&.start_line == @node&.location&.end_line
 						@node.location.slice

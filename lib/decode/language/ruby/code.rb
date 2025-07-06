@@ -13,6 +13,11 @@ module Decode
 		module Ruby
 			# A Ruby-specific block of code.
 			class Code
+				# Initialize a new code block.
+				# @parameter text [String] The code text.
+				# @parameter index [Index] The index to use.
+				# @parameter relative_to [Definition] The definition this code is relative to.
+				# @parameter language [Language] The language of the code.
 				def initialize(text, index, relative_to: nil, language: relative_to&.language)
 					@text = text
 					@root = ::Prism.parse(text)
@@ -25,6 +30,8 @@ module Decode
 				
 				attr :language
 				
+				# Extract definitions from the code.
+				# @parameter into [Array] The array to extract definitions into.
 				def extract(into = [])
 					if @index
 						traverse(@root.value, into)

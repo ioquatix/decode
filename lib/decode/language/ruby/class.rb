@@ -10,6 +10,10 @@ module Decode
 		module Ruby
 			# A Ruby-specific class.
 			class Class < Definition
+				# Initialize a new class definition.
+				# @parameter arguments [Array] The definition arguments.
+				# @parameter super_class [String] The super class name.
+				# @parameter options [Hash] Additional options.
 				def initialize(*arguments, super_class: nil, **options)
 					super(*arguments, **options)
 					
@@ -48,6 +52,7 @@ module Decode
 			
 			# A Ruby-specific singleton class.
 			class Singleton < Definition
+				# Generate a nested name for the singleton class.
 				def nested_name
 					"::class"
 				end

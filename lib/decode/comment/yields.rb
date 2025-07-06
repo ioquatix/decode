@@ -15,6 +15,9 @@ module Decode
 		class Yields < Tag
 			PATTERN = /\A(?<block>{.*?})(\s+(?<details>.*?))?\Z/
 			
+			# Build a yields tag from a directive and match.
+			# @parameter directive [String] The directive name.
+			# @parameter match [MatchData] The regex match data.
 			def self.build(directive, match)
 				node = self.new(directive, match[:block])
 				
@@ -25,6 +28,9 @@ module Decode
 				return node
 			end
 			
+			# Initialize a new yields tag.
+			# @parameter directive [String] The directive name.
+			# @parameter block [String] The block signature.
 			def initialize(directive, block)
 				super(directive)
 				

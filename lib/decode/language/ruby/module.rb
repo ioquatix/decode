@@ -21,6 +21,7 @@ module Decode
 					"module #{self.name}"
 				end
 				
+				# Generate a long form representation of the module.
 				def long_form
 					qualified_form
 				end

@@ -22,6 +22,7 @@ module Decode
 				"#<#{self.class} #{@children.size} children>"
 			end
 
+			# Generate a string representation of the node.
 			alias to_s inspect
 
 			# A mutable array of all values that terminate at this node.

@@ -5,7 +5,10 @@
 
 module Decode
 	module Syntax
+		# Provides text rewriting functionality with match-based substitutions.
 		class Rewriter
+			# Initialize a new rewriter.
+			# @parameter text [String] The text to rewrite.
 			def initialize(text)
 				@text = text
 				@matches = []
@@ -15,6 +18,8 @@ module Decode
 			
 			attr :matches
 			
+			# Add a match to the rewriter.
+			# @parameter match [Match] The match to add.
 			def << match
 				@matches << match
 			end
@@ -24,6 +29,8 @@ module Decode
 				@text[range]
 			end
 			
+			# Apply all matches to generate the rewritten output.
+			# @parameter output [Array] The output array to append to.
 			def apply(output = [])
 				offset = 0
 				
@@ -47,6 +54,9 @@ module Decode
 				return output
 			end
 			
+			# Generate a link to a definition.
+			# @parameter definition [Definition] The definition to link to.
+			# @parameter text [String] The text to display for the link.
 			def link_to(definition, text)
 				"[#{text}]"
 			end
