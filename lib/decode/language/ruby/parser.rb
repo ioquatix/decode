@@ -49,7 +49,7 @@ module Decode
 				def walk_definitions(node, parent = nil, source = nil, &block)
 					# Check for scope definitions from comments
 					if node.comments.any?
-						parent = scope_for(node.comments.map(&:slice), parent, &block) || parent
+						parent = scope_for(comments_for(node), parent, &block) || parent
 					end
 					
 					case node.type
@@ -72,7 +72,7 @@ module Decode
 						
 						definition = Module.new(path,
 							visibility: :public,
-							comments: node.comments.map(&:slice),
+							comments: comments_for(node),
 							parent: parent,
 							node: node,
 							language: @language,
@@ -94,7 +94,7 @@ module Decode
 						definition = Class.new(path,
 							super_class: super_class,
 							visibility: :public, 
-							comments: node.comments.map(&:slice),
+							comments: comments_for(node),
 							parent: parent,
 							node: node,
 							language: @language,
@@ -112,7 +112,7 @@ module Decode
 					when :singleton_class_node
 						if name = singleton_name_for(node)
 							definition = Singleton.new(name,
-								comments: node.comments.map(&:slice),
+								comments: comments_for(node),
 								parent: parent, language: @language, visibility: :public, source: source
 							)
 							
@@ -127,7 +127,7 @@ module Decode
 						
 						definition = Method.new(node.name,
 							visibility: @visibility,
-							comments: node.comments.map(&:slice),
+							comments: comments_for(node),
 							parent: parent,
 							node: node,
 							language: @language,
@@ -138,7 +138,7 @@ module Decode
 						yield definition
 					when :constant_write_node
 						definition = Constant.new(node.name,
-							comments: node.comments.map(&:slice),
+							comments: comments_for(node),
 							parent: parent,
 							node: node,
 							language: @language,
@@ -162,7 +162,7 @@ module Decode
 										
 										definition = Method.new(arg_node.name,
 											visibility: name,
-											comments: arg_node.comments.map(&:slice),
+											comments: comments_for(arg_node),
 											parent: parent,
 											node: arg_node,
 											language: @language,
@@ -191,7 +191,7 @@ module Decode
 							end
 						when :attr, :attr_reader, :attr_writer, :attr_accessor
 							definition = Attribute.new(attribute_name_for(node),
-								comments: node.comments.map(&:slice),
+								comments: comments_for(node),
 								parent: parent, language: @language, node: node
 							)
 							
@@ -207,7 +207,7 @@ module Decode
 								old_name = symbol_name_for(old_name_arg)
 								
 								definition = Alias.new(new_name.to_sym, old_name.to_sym,
-									comments: node.comments.map(&:slice),
+									comments: comments_for(node),
 									parent: parent,
 									node: node,
 									language: @language,
@@ -220,14 +220,14 @@ module Decode
 						else
 							# Check if this call should be treated as a definition
 							# either because it has a @name comment, @attribute comment, or a block
-							has_name_comment = node.comments.any? { |comment| comment.slice.match(NAME_ATTRIBUTE) }
-							has_attribute_comment = kind_for(node, node.comments.map(&:slice))
+							has_name_comment = comments_for(node).any? { |comment| comment.match(NAME_ATTRIBUTE) }
+							has_attribute_comment = kind_for(node, comments_for(node))
 							has_block = node.block
 							
 							if has_name_comment || has_attribute_comment || has_block
 								definition = Call.new(
 									attribute_name_for(node),
-									comments: node.comments.map(&:slice),
+									comments: comments_for(node),
 									parent: parent, language: @language, node: node
 								)
 								
@@ -245,7 +245,7 @@ module Decode
 						old_name = node.old_name.unescaped
 						
 						definition = Alias.new(new_name.to_sym, old_name.to_sym,
-							comments: node.comments.map(&:slice),
+							comments: comments_for(node),
 							parent: parent,
 							node: node,
 							language: @language,
@@ -279,6 +279,17 @@ module Decode
 				
 				private
 				
+				# Extract clean comment text from a node by removing leading # symbols and whitespace.
+				# @parameter node [Node] The AST node with comments.
+				# @returns [Array] Array of cleaned comment strings.
+				def comments_for(node)
+					node.comments.map do |comment|
+						text = comment.slice
+						# Remove leading # and optional whitespace
+						text.sub(/\A\#\s?/, '')
+					end
+				end
+				
 				def assign_definition(parent, definition)
 					(@definitions[parent] ||= {})[definition.name] = definition
 				end
@@ -301,32 +312,6 @@ module Decode
 					end
 				end
 				
-				def extract_comments_for(node, comments)
-					prefix = []
-					
-					while comment = comments.first
-						break if comment.location.line >= node.location.line
-						
-						if last_comment = prefix.last
-							if last_comment.location.line != (comment.location.line - 1)
-								prefix.clear
-							end
-						end
-						
-						prefix << comments.shift
-					end
-					
-					# The last comment must butt up against the node:
-					if comment = prefix.last
-						if comment.location.line == (node.location.line - 1)
-							return prefix.map do |comment|
-								# Remove # and at most one space/tab to preserve indentation
-								comment.slice.sub(/\A\#[\s\t]?/, "")
-							end
-						end
-					end
-				end
-				
 				def with_visibility(visibility = :public, &block)
 					saved_visibility = @visibility
 					@visibility = visibility
@@ -335,12 +320,11 @@ module Decode
 					@visibility = saved_visibility
 				end
 				
-				NAME_ATTRIBUTE = /\A\#\s*@name\s+(?<value>.*?)\Z/
+				NAME_ATTRIBUTE = /\A@name\s+(?<value>.*?)\Z/
 				
 				def attribute_name_for(node)
-					node.comments.each do |comment|
-						text = comment.slice
-						if match = text.match(NAME_ATTRIBUTE)
+					comments_for(node).each do |comment|
+						if match = comment.match(NAME_ATTRIBUTE)
 							return match[:value].to_sym
 						end
 					end
@@ -410,8 +394,8 @@ module Decode
 				end
 				
 				KIND_ATTRIBUTE = /\A
-					(\#\s*@(?<kind>attribute)\s+(?<value>.*?))|
-					(\#\s*@define\s+(?<kind>)\s+(?<value>.*?))
+					(@(?<kind>attribute)\s+(?<value>.*?))|
+					(@define\s+(?<kind>)\s+(?<value>.*?))
 				\Z/x
 				
 				def kind_for(node, comments = nil)
@@ -425,7 +409,7 @@ module Decode
 				end
 				
 				SCOPE_ATTRIBUTE = /\A
-					\#\s*@scope\s+(?<names>.*?)
+					@scope\s+(?<names>.*?)
 				\Z/x
 				
 				def scope_for(comments, parent = nil, &block)
