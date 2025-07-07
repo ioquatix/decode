@@ -543,4 +543,67 @@ describe Decode::Language::Ruby do
 			expect(definitions.first.name).to be == :block_attr
 		end
 	end
+	
+	with "indented methods" do
+		let(:path) {File.expand_path(".fixtures/indented_methods.rb", __dir__)}
+		
+		it "can extract definitions" do
+			expect(definitions).not.to be(:empty?)
+		end
+		
+		it "has text with normalized indentation" do
+			# Find the simple_method definition
+			simple_method = definitions.find{|definition| definition.name == :simple_method}
+			expect(simple_method).not.to be_nil
+			
+			# The text should have normalized indentation (no leading tabs)
+			expect(simple_method.text).to be == <<~TEXT.chomp
+				def simple_method
+					"Hello World"
+				end
+			TEXT
+		end
+		
+		it "has text with normalized indentation for complex methods" do
+			# Find the complex_method definition
+			complex_method = definitions.find{|definition| definition.name == :complex_method}
+			expect(complex_method).not.to be_nil
+			
+			# The text should have normalized indentation (no leading tabs)
+			expect(complex_method.text).to be == <<~TEXT.chomp
+				def complex_method(name)
+					greeting = "Hello"
+					message = "\#{greeting}, \#{name}!"
+					
+					# Add some extra processing
+					if name.length > 5
+						message += " You have a long name!"
+					end
+					
+					return message
+				end
+			TEXT
+		end
+		
+		it "has text with normalized indentation for methods with blocks" do
+			# Find the method_with_block definition
+			block_method = definitions.find{|definition| definition.name == :method_with_block}
+			expect(block_method).not.to be_nil
+			
+			# The text should have normalized indentation (no leading tabs)
+			expect(block_method.text).to be == <<~TEXT.chomp
+				def method_with_block
+					lines = [
+						"First line",
+						"Second line",
+						"Third line"
+					]
+					
+					lines.each do |line|
+						yield line
+					end
+				end
+			TEXT
+		end
+	end
 end

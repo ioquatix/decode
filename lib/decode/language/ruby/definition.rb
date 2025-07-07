@@ -43,19 +43,22 @@ module Decode
 				end
 				
 				# The source code associated with the definition.
-				# @returns [String] The source code text for this definition.
+				# @returns [String]
 				def text
-					expression = @node.location
-					lines = expression.slice.lines
+					location = @node.location
+					source_text = location.slice_lines
+					lines = source_text.split("\n")
+					
 					if lines.count == 1
 						return lines.first
 					else
-						if indentation = expression.slice.lines.first[/\A\s+/]
-							# Remove all the indentation:
+						# Get the indentation from the first line of the node in the original source
+						if indentation = source_text[/\A\s+/]
+							# Remove the base indentation from all lines
 							lines.each{|line| line.sub!(indentation, "")}
 						end
 						
-						return lines.join
+						return lines.join("\n")
 					end
 				end
 				
