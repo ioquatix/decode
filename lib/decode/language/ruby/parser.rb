@@ -280,13 +280,38 @@ module Decode
 				private
 				
 				# Extract clean comment text from a node by removing leading # symbols and whitespace.
+				# Only returns comments that directly precede the node (i.e., are adjacent to it).
 				# @parameter node [Node] The AST node with comments.
 				# @returns [Array] Array of cleaned comment strings.
 				def comments_for(node)
-					node.comments.map do |comment|
+					# Find the node's starting line
+					node_start_line = node.location.start_line
+					
+					# Filter comments to only include those that directly precede the node
+					# We work backwards from the line before the node to find consecutive comments
+					adjacent_comments = []
+					expected_line = node_start_line - 1
+					
+					# Process comments in reverse order to work backwards from the node
+					node.comments.reverse_each do |comment|
+						comment_line = comment.location.start_line
+						
+						# If this comment is on the expected line, it's adjacent
+						if comment_line == expected_line
+							adjacent_comments.unshift(comment)
+							expected_line = comment_line - 1
+						elsif comment_line < expected_line
+							# If we hit a comment that's too far back, stop
+							break
+						end
+						# If comment_line > expected_line, skip it (it's not adjacent)
+					end
+					
+					# Clean and return the adjacent comments
+					adjacent_comments.map do |comment|
 						text = comment.slice
 						# Remove leading # and optional whitespace
-						text.sub(/\A\#\s?/, '')
+						text.sub(/\A\#\s?/, "")
 					end
 				end
 				
