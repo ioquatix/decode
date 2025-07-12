@@ -65,8 +65,8 @@ module Decode
 				# Get the location of this definition.
 				# @returns [Location | Nil] The location object if source is available.
 				def location
-					if @source
-						Location.new(@source.path, @node.location.start_line)
+					if @source and location = @node&.location
+						Location.new(@source.path, location.start_line)
 					end
 				end
 			end
