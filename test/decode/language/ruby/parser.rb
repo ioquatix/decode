@@ -606,4 +606,33 @@ describe Decode::Language::Ruby do
 			TEXT
 		end
 	end
+	
+	with "singleton class" do
+		let(:path) {File.expand_path(".fixtures/singleton_class.rb", __dir__)}
+
+		it "can extract singleton class definitions" do
+			# Should find both the class and the singleton class
+			class_definition = definitions.find{|definition| definition.name == :Foo}
+			singleton_definition = definitions.find{|definition| definition.short_form == "class << self"}
+			
+			expect(singleton_definition).to have_attributes(
+				qualified_name: be == "Foo::class",
+			)
+			
+			expect(class_definition).not.to be_nil
+			expect(singleton_definition).not.to be_nil
+		end
+
+		it "has correct text for singleton class" do
+			singleton_definition = definitions.find{|definition| definition.short_form == "class << self"}
+			expect(singleton_definition).not.to be_nil
+			expect(singleton_definition.text).to be == <<~RUBY.chomp
+				class << self
+					# Singleton method
+					def bar
+					end
+				end
+			RUBY
+		end
+	end
 end

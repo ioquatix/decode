@@ -113,7 +113,11 @@ module Decode
 						if name = singleton_name_for(node)
 							definition = Singleton.new(name,
 								comments: comments_for(node),
-								parent: parent, language: @language, visibility: :public, source: source
+								parent: parent,
+								node: node,
+								language: @language,
+								visibility: :public,
+								source: source
 							)
 							
 							yield definition

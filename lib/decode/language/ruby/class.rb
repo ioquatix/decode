@@ -54,7 +54,7 @@ module Decode
 			class Singleton < Definition
 				# Generate a nested name for the singleton class.
 				def nested_name
-					"::class"
+					"class"
 				end
 
 				# A singleton class is a container for other definitions.
