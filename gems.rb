@@ -12,6 +12,7 @@ gem "agent-context"
 group :maintenance, optional: true do
 	gem "bake-gem"
 	gem "bake-modernize"
+	gem "bake-releases"
 	
 	gem "bake-github-pages"
 	gem "utopia-project"

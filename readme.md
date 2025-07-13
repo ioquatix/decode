@@ -12,6 +12,10 @@ As part of my effort to build [better project documentation](https://github.com/
 
 Please see the [project documentation](https://ioquatix.github.io/decode/).
 
+## Releases
+
+There are no documented releases.
+
 ## Contributing
 
 We welcome contributions to this project.
