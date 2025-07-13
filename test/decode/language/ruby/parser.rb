@@ -648,4 +648,15 @@ describe Decode::Language::Ruby do
 			expect(method_names).to be(:include?, :method_in_final_else)
 		end
 	end
+	
+	with "unless/else methods" do
+		let(:path) {File.expand_path(".fixtures/unless_else_methods.rb", __dir__)}
+
+		it "extracts methods from all branches of unless/else" do
+			method_names = definitions.map(&:name)
+			expect(method_names).to be(:include?, :foo)
+			expect(method_names).to be(:include?, :bar)
+			expect(method_names).to be(:include?, :baz)
+		end
+	end
 end
