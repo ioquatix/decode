@@ -10,11 +10,21 @@ As part of my effort to build [better project documentation](https://github.com/
 
 ## Usage
 
-Please see the [project documentation](https://ioquatix.github.io/decode/).
+Please see the [project documentation](https://ioquatix.github.io/decode/) for more details.
+
+  - [Getting Started](https://ioquatix.github.io/decode/guides/getting-started/index) - This guide explains how to use `decode` for source code analysis.
+
+  - [Code Coverage](https://ioquatix.github.io/decode/guides/code-coverage/index) - This guide explains how to compute documentation code coverage.
+
+  - [Extract Symbols](https://ioquatix.github.io/decode/guides/extract-symbols/index) - This example demonstrates how to extract symbols using the index. An instance of <code class="language-ruby">Decode::Index</code> is used for loading symbols from source code files. These symbols are available as a flat list and as a trie structure. You can look up specific symbols using a reference using <code class="language-ruby">Decode::Index\#lookup</code>.
 
 ## Releases
 
-There are no documented releases.
+Please see the [project releases](https://ioquatix.github.io/decode/releases/index) for all releases.
+
+### v0.23.4
+
+  - Fix handling of definitions nested within `if`/`unless`/`elsif`/`else` blocks.
 
 ## Contributing
 
