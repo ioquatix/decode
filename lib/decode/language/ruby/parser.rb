@@ -272,9 +272,9 @@ module Decode
 						if node.statements
 							walk_definitions(node.statements, parent, source, &block)
 						end
-						# Walk the 'else' branch (consequent):
-						if node.consequent
-							walk_definitions(node.consequent, parent, source, &block)
+						# Walk the 'else' branch (else_clause):
+						if node.else_clause
+							walk_definitions(node.else_clause, parent, source, &block)
 						end
 					else
 						if node.respond_to?(:statements)
