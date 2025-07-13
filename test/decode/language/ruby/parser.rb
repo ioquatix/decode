@@ -635,4 +635,17 @@ describe Decode::Language::Ruby do
 			RUBY
 		end
 	end
+	
+	with "if/else/elsif methods" do
+		let(:path) {File.expand_path(".fixtures/if_else_methods.rb", __dir__)}
+
+		it "extracts methods from all branches of if/else/elsif" do
+			method_names = definitions.map(&:name)
+			expect(method_names).to be(:include?, :method_in_if)
+			expect(method_names).to be(:include?, :method_in_else)
+			expect(method_names).to be(:include?, :method_in_if_false)
+			expect(method_names).to be(:include?, :method_in_elsif)
+			expect(method_names).to be(:include?, :method_in_final_else)
+		end
+	end
 end

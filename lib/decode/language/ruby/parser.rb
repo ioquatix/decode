@@ -258,6 +258,15 @@ module Decode
 						)
 						
 						yield definition
+					when :if_node
+						# Walk the 'if' branch (statements):
+						if node.statements
+							walk_definitions(node.statements, parent, source, &block)
+						end
+						# Walk the 'else' or 'elsif' branch (subsequent):
+						if node.subsequent
+							walk_definitions(node.subsequent, parent, source, &block)
+						end
 					else
 						if node.respond_to?(:statements)
 							walk_definitions(node.statements, parent, source, &block)

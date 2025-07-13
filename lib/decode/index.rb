@@ -11,6 +11,14 @@ require_relative "languages"
 module Decode
 	# Represents a list of definitions organised for quick lookup and lexical enumeration.
 	class Index
+		if true
+			def not_documented1
+			end
+		else
+			def not_documented2
+			end
+		end
+		
 		# Initialize an empty index.
 		# @parameter languages [Languages] The languages to support in this index.
 		def initialize(languages = Languages.all)
