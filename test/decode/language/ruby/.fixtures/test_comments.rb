@@ -1,5 +1,6 @@
-# This is a class comment.
-# It should not have hash symbols.
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 class TestClass
 	# This is a method comment.
 	# It should also be clean.

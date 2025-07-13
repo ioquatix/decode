@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2024, by Samuel Williams.
+# Copyright, 2020-2025, by Samuel Williams.
 
 require_relative "definition"
 require_relative "../../syntax/link"
@@ -58,8 +58,8 @@ module Decode
 						
 						# Extract constants from arguments:
 						if node.arguments
-							node.arguments.arguments.each do |arg_node|
-								traverse(arg_node, into)
+							node.arguments.arguments.each do |argument_node|
+								traverse(argument_node, into)
 							end
 						end
 					when :constant_read_node

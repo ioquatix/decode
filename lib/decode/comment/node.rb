@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2024, by Samuel Williams.
+# Copyright, 2020-2025, by Samuel Williams.
 
 module Decode
 	module Comment
@@ -63,9 +63,7 @@ module Decode
 			# 	@parameter node [Node] The current node which is being traversed.
 			# 	@parameter descend [Proc | Nil] The recursive method for traversing children.
 			def traverse(&block)
-				descend = ->(node){
-					node.traverse(&block)
-				}
+				descend = ->(node){node.traverse(&block)}
 				
 				yield(self, descend)
 			end

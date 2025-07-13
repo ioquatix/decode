@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# This is a file header comment
-# that should NOT be included in method documentation.
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
 
 # This is a separate comment block
 # that should also NOT be included.

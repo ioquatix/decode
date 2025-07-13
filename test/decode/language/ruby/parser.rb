@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2024, by Samuel Williams.
+# Copyright, 2020-2025, by Samuel Williams.
 
 require "decode/source"
 require "decode/language/ruby"
@@ -406,7 +406,7 @@ describe Decode::Language::Ruby do
 	end
 	
 	with "helper methods" do
-		let(:parser) { language.parser }
+		let(:parser) {language.parser}
 		
 		with "#symbol_name_for" do
 			it "should extract symbol names" do
@@ -508,7 +508,7 @@ describe Decode::Language::Ruby do
 	end
 	
 	with "edge cases" do
-		let(:parser) { language.parser }
+		let(:parser) {language.parser}
 		
 		it "should handle inline visibility with non-method definitions" do
 			code = "private :some_method"

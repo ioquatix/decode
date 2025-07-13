@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2024, by Samuel Williams.
+# Copyright, 2020-2025, by Samuel Williams.
 
 require "prism"
 
@@ -158,17 +158,17 @@ module Decode
 							# Handle cases like "private def foo" where method definitions are arguments
 							if node.arguments
 								has_method_definitions = false
-								node.arguments.arguments.each do |arg_node|
-									if arg_node.type == :def_node
+								node.arguments.arguments.each do |argument_node|
+									if argument_node.type == :def_node
 										has_method_definitions = true
 										# Process the method definition with the specified visibility
-										receiver = receiver_for(arg_node.receiver)
+										receiver = receiver_for(argument_node.receiver)
 										
-										definition = Method.new(arg_node.name,
+										definition = Method.new(argument_node.name,
 											visibility: name,
-											comments: comments_for(arg_node),
+											comments: comments_for(argument_node),
 											parent: parent,
-											node: arg_node,
+											node: argument_node,
 											language: @language,
 											receiver: receiver,
 										)
@@ -224,7 +224,7 @@ module Decode
 						else
 							# Check if this call should be treated as a definition
 							# either because it has a @name comment, @attribute comment, or a block
-							has_name_comment = comments_for(node).any? { |comment| comment.match(NAME_ATTRIBUTE) }
+							has_name_comment = comments_for(node).any? {|comment| comment.match(NAME_ATTRIBUTE)}
 							has_attribute_comment = kind_for(node, comments_for(node))
 							has_block = node.block
 							
@@ -480,15 +480,15 @@ module Decode
 						statements = node.child_nodes
 						current_segment = nil
 						
-						statements.each_with_index do |stmt, stmt_index|
+						statements.each_with_index do |statement, statement_index|
 							# Find comments that precede this statement and are not inside previous statements
 							preceding_comments = []
-							last_stmt_end_line = stmt_index > 0 ? statements[stmt_index - 1].location.end_line : 0
+							last_statement_end_line = statement_index > 0 ? statements[statement_index - 1].location.end_line : 0
 							
 							comments.each do |comment|
 								comment_line = comment.location.start_line
 								# Comment must be after the previous statement and before this statement
-								if comment_line > last_stmt_end_line && comment_line < stmt.location.start_line
+								if comment_line > last_statement_end_line && comment_line < statement.location.start_line
 									preceding_comments << comment
 								end
 							end
@@ -500,19 +500,19 @@ module Decode
 								# Start a new segment with these comments
 								yield current_segment if current_segment
 								current_segment = Segment.new(
-									preceding_comments.map { |c| c.location.slice.sub(/^#[\s\t]?/, "") },
+									preceding_comments.map {|comment| comment.location.slice.sub(/^#[\s\t]?/, "")},
 									@language,
-									stmt
+									statement
 								)
 							elsif current_segment
 								# Extend current segment with this statement
-								current_segment.expand(stmt)
+								current_segment.expand(statement)
 							else
 								# Start a new segment without comments
 								current_segment = Segment.new(
 									[],
 									@language,
-									stmt
+									statement
 								)
 							end
 						end

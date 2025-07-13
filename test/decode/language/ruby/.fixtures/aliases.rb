@@ -1,3 +1,6 @@
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 class Test
 	def original_method
 		puts "original"

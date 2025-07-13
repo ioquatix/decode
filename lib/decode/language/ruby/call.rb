@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2020-2024, by Samuel Williams.
+# Copyright, 2020-2025, by Samuel Williams.
 
 require_relative "definition"
 
@@ -33,8 +33,8 @@ module Decode
 					else
 						# For multiline calls, use the actual call name with arguments
 						if @node.arguments && @node.arguments.arguments.any?
-							arg_text = @node.arguments.arguments.map { |arg| arg.location.slice }.join(", ")
-							"#{@node.name}(#{arg_text})"
+							argument_text = @node.arguments.arguments.map {|argument| argument.location.slice}.join(", ")
+							"#{@node.name}(#{argument_text})"
 						else
 							@node.name.to_s
 						end
