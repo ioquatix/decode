@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v0.23.5
 
   - Fix handling of `&block` arguments in call nodes.
 

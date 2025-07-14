@@ -22,6 +22,10 @@ Please see the [project documentation](https://ioquatix.github.io/decode/) for m
 
 Please see the [project releases](https://ioquatix.github.io/decode/releases/index) for all releases.
 
+### v0.23.5
+
+  - Fix handling of `&block` arguments in call nodes.
+
 ### v0.23.4
 
   - Fix handling of definitions nested within `if`/`unless`/`elsif`/`else` blocks.

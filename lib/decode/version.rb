@@ -4,5 +4,5 @@
 # Copyright, 2020-2025, by Samuel Williams.
 
 module Decode
-	VERSION = "0.23.4"
+	VERSION = "0.23.5"
 end
