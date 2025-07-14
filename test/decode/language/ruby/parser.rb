@@ -659,4 +659,14 @@ describe Decode::Language::Ruby do
 			expect(method_names).to be(:include?, :baz)
 		end
 	end
+	
+	with "call node with block argument" do
+		let(:path) {File.expand_path(".fixtures/block_argument.rb", __dir__)}
+		
+		it "does not raise when block argument is not a block_node" do
+			definitions.each do |definition|
+				expect{definition.container?}.not.to raise_exception
+			end
+		end
+	end
 end

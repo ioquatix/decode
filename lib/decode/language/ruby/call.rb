@@ -12,7 +12,17 @@ module Decode
 			class Call < Definition
 				# A block can sometimes be a container for other definitions.
 				def container?
-					@node&.block && @node.block.opening == "do"
+					case block = @node&.block
+					when nil
+						false
+					when Prism::BlockArgumentNode
+						false
+					when Prism::BlockNode
+						# Technically, all block nodes are containers, but we prefer to be opinionated about when we consider them containers:
+						block.opening == "do"
+					else
+						false
+					end
 				end
 				
 				# The short form of the class.
