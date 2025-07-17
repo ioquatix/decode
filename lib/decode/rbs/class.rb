@@ -8,13 +8,18 @@ require_relative "wrapper"
 require_relative "method"
 module Decode
 	module RBS
+		# Represents a Ruby class definition wrapper for RBS generation.
 		class Class < Wrapper
 			
+			# Initialize a new class wrapper.
+			# @parameter definition [Decode::Definition] The class definition to wrap.
 			def initialize(definition)
 				super
 				@generics = nil
 			end
 			
+			# Extract generic type parameters from the class definition.
+			# @returns [Array] The generic type parameters for this class.
 			def generics
 				@generics ||= extract_generics
 			end

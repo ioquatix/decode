@@ -8,8 +8,11 @@ require_relative "wrapper"
 
 module Decode
 	module RBS
+		# Represents a Ruby module definition wrapper for RBS generation.
 		class Module < Wrapper
 			
+			# Initialize a new module wrapper.
+			# @parameter definition [Decode::Definition] The module definition to wrap.
 			def initialize(definition)
 				super
 			end

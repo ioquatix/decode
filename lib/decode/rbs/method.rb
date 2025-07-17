@@ -10,13 +10,18 @@ require_relative "wrapper"
 
 module Decode
 	module RBS
+		# Represents a Ruby method definition wrapper for RBS generation.
 		class Method < Wrapper
 			
+			# Initialize a new method wrapper.
+			# @parameter definition [Decode::Definition] The method definition to wrap.
 			def initialize(definition)
 				super
 				@signatures = nil
 			end
 			
+			# Extract method signatures from the method definition.
+			# @returns [Array] The extracted signatures for this method.
 			def signatures
 				@signatures ||= extract_signatures
 			end

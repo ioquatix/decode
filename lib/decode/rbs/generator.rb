@@ -10,7 +10,10 @@ require_relative "module"
 
 module Decode
 	module RBS
+		# Represents a generator for RBS type declarations.
 		class Generator
+			# Initialize a new RBS generator.
+			# Sets up the RBS environment for type resolution.
 			def initialize
 				# Set up RBS environment for type resolution
 				@loader = ::RBS::EnvironmentLoader.new()
