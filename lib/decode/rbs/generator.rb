@@ -26,6 +26,7 @@ module Decode
 			def generate(index, output: $stdout)
 				# Build nested RBS AST structure using a hash for proper ||= behavior
 				declarations = {}
+				roots = []
 				
 				# Efficiently traverse the trie to find containers and their methods
 				index.trie.traverse do |lexical_path, node, descend|
@@ -35,7 +36,9 @@ module Decode
 						containers.each do |definition|
 							case definition
 							when Decode::Language::Ruby::Class, Decode::Language::Ruby::Module
-								build_nested_declaration(definition, declarations, index)
+								if declaration = build_nested_declaration(definition, declarations, index)
+									roots << declaration
+								end
 							end
 						end
 					end
@@ -47,18 +50,20 @@ module Decode
 				# Write the RBS output
 				writer = ::RBS::Writer.new(out: output)
 				
-				unless declarations.empty?
-					writer.write(declarations.values)
+				unless roots.empty?
+					writer.write(roots)
 				end
 			end
 			
 			private
 			
-			# Build nested RBS declarations preserving the parent hierarchy
+			# Build nested RBS declarations preserving the parent hierarchy.
+			# @returns [::RBS::AST::Declarations::Class | ::RBS::AST::Declarations::Module] If the definition has no parent, returns the declaration.
+			# @returns [Nil] If the definition has a parent, adds to parent's members.
 			def build_nested_declaration(definition, declarations, index)
 				# Create the declaration for this definition using ||= to avoid duplicates
 				qualified_name = definition.qualified_name
-				declarations[qualified_name] ||= definition_to_rbs(definition, index)
+				declaration = (declarations[qualified_name] ||= definition_to_rbs(definition, index))
 				
 				# Add this declaration to its parent's members if it has a parent
 				if definition.parent
@@ -66,11 +71,13 @@ module Decode
 					parent_container = declarations[parent_qualified_name]
 					
 					# Only add if not already present
-					unless parent_container.members.any? {|member| 
-						member.respond_to?(:name) && member.name.name == definition.name.to_sym 
-					}
+					unless parent_container.members.any?{|member| member.respond_to?(:name) && member.name.name == definition.name.to_sym}
 						parent_container.members << declarations[qualified_name]
 					end
+					
+					return nil
+				else
+					return declaration
 				end
 			end
 			
