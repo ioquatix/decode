@@ -26,10 +26,10 @@ describe "RBS Integration" do
 		path = create_ruby_file("test.rb", content)
 		index = Decode::Index.for(path)
 		generator = Decode::RBS::Generator.new
-
+		
 		buffer = StringIO.new
 		generator.generate(index, output: buffer)
-
+		
 		return buffer.string
 	end
 	
@@ -42,12 +42,12 @@ describe "RBS Integration" do
 					def initialize(name)
 						@name = name
 					end
-					
+				
 					# Get the name
 					def name
 						@name
 					end
-					
+				
 					# Check if empty
 					def empty?
 						@name.nil? || @name.empty?
@@ -75,7 +75,7 @@ describe "RBS Integration" do
 					def self.to_string(value)
 						value.to_s
 					end
-					
+				
 					# Check if nil
 					def self.nil?(value)
 						value.nil?
@@ -132,7 +132,7 @@ describe "RBS Integration" do
 					def add(a, b)
 						a + b
 					end
-					
+				
 					# Divide two numbers
 					# @parameter dividend [Float] The dividend
 					# @parameter divisor [Float] The divisor
@@ -165,7 +165,7 @@ describe "RBS Integration" do
 					def initialize(value)
 						@value = value
 					end
-					
+				
 					# Get the value
 					# @returns [T] The stored value
 					def get
@@ -194,7 +194,7 @@ describe "RBS Integration" do
 						yield "item1"
 						yield "item2"
 					end
-					
+				
 					# Map over collection
 					# @yields [String] Each item
 					# @returns [Array] The transformed items
@@ -245,7 +245,7 @@ describe "RBS Integration" do
 			
 			index = Decode::Index.for(animal_path, dog_path)
 			generator = Decode::RBS::Generator.new
-
+			
 			buffer = StringIO.new
 			result = generator.generate(index, output: buffer)
 			
@@ -266,7 +266,7 @@ describe "RBS Integration" do
 								"inner"
 							end
 						end
-						
+				
 						def outer_method
 							"outer"
 						end

@@ -56,7 +56,7 @@ module Decode
 						else
 							# Ignore unknown directive.
 						end
-					
+						
 					# Or it's just text:
 					else
 						yield Text.new(line)

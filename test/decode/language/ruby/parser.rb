@@ -574,12 +574,12 @@ describe Decode::Language::Ruby do
 				def complex_method(name)
 					greeting = "Hello"
 					message = "\#{greeting}, \#{name}!"
-					
+				
 					# Add some extra processing
 					if name.length > 5
 						message += " You have a long name!"
 					end
-					
+				
 					return message
 				end
 			TEXT
@@ -598,7 +598,7 @@ describe Decode::Language::Ruby do
 						"Second line",
 						"Third line"
 					]
-					
+				
 					lines.each do |line|
 						yield line
 					end
@@ -609,7 +609,7 @@ describe Decode::Language::Ruby do
 	
 	with "singleton class" do
 		let(:path) {File.expand_path(".fixtures/singleton_class.rb", __dir__)}
-
+		
 		it "can extract singleton class definitions" do
 			# Should find both the class and the singleton class
 			class_definition = definitions.find{|definition| definition.name == :Foo}
@@ -622,7 +622,7 @@ describe Decode::Language::Ruby do
 			expect(class_definition).not.to be_nil
 			expect(singleton_definition).not.to be_nil
 		end
-
+		
 		it "has correct text for singleton class" do
 			singleton_definition = definitions.find{|definition| definition.short_form == "class << self"}
 			expect(singleton_definition).not.to be_nil
@@ -638,7 +638,7 @@ describe Decode::Language::Ruby do
 	
 	with "if/else/elsif methods" do
 		let(:path) {File.expand_path(".fixtures/if_else_methods.rb", __dir__)}
-
+		
 		it "extracts methods from all branches of if/else/elsif" do
 			method_names = definitions.map(&:name)
 			expect(method_names).to be(:include?, :method_in_if)
@@ -651,7 +651,7 @@ describe Decode::Language::Ruby do
 	
 	with "unless/else methods" do
 		let(:path) {File.expand_path(".fixtures/unless_else_methods.rb", __dir__)}
-
+		
 		it "extracts methods from all branches of unless/else" do
 			method_names = definitions.map(&:name)
 			expect(method_names).to be(:include?, :foo)

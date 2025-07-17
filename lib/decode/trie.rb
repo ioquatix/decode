@@ -21,10 +21,10 @@ module Decode
 			def inspect
 				"#<#{self.class} #{@children.size} children>"
 			end
-
+			
 			# Generate a string representation of the node.
 			alias to_s inspect
-
+			
 			# A mutable array of all values that terminate at this node.
 			# @attribute [Array | Nil] The values stored at this node, or nil if no values.
 			attr_accessor :values

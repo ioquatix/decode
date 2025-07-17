@@ -57,10 +57,10 @@ module Decode
 		def inspect
 			"#<#{self.class} #{@definitions.size} definition(s)>"
 		end
-
+		
 		# Generate a string representation of the index.
 		alias to_s inspect
-
+		
 		# All supported languages for this index.
 		# @attribute [Languages] The languages this index can parse.
 		attr :languages

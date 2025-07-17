@@ -56,7 +56,7 @@ module Decode
 				def nested_name
 					"class"
 				end
-
+				
 				# A singleton class is a container for other definitions.
 				# @returns [Boolean]
 				def container?
