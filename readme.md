@@ -24,7 +24,7 @@ Please see the [project releases](https://socketry.github.io/decode/releases/ind
 
 ### v0.24.0
 
-  - [Introduce support for RBS signature generation.](https://socketry.github.io/decode/releases/index#introduce-support-for-rbs-signature-generation.)
+  - [Introduce support for RBS signature generation](https://socketry.github.io/decode/releases/index#introduce-support-for-rbs-signature-generation)
 
 ### v0.23.5
 
