@@ -1,10 +1,7 @@
 
 # @rbs generic T
 class GenericClass
-end
-
-class AnotherClass
-	# @rbs [T] () -> T
-	def method_with_rbs
+	# @rbs () -> T
+	def generic_method
 	end
-end 
+end

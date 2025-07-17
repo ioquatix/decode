@@ -51,14 +51,13 @@ module Decode
 			end
 			
 			# Extract the generic type parameter name.
-			# @returns [String | nil] The generic type parameter name, or nil if not a generic.
+			# @returns [String | Nil] The generic type parameter name, or nil if not a generic.
 			def generic_parameter
 				if generic?
 					# Extract the parameter name from "generic T" or "generic T, U"
 					match = @text.match(/^generic\s+([A-Z][A-Za-z0-9_]*(?:\s*,\s*[A-Z][A-Za-z0-9_]*)*)/)
 					return match[1] if match
 				end
-				nil
 			end
 			
 			# Check if this is a method type signature.
@@ -68,10 +67,10 @@ module Decode
 			end
 			
 			# Get the method type signature text.
-			# @returns [String | nil] The method signature text, or nil if not a method signature.
+			# @returns [String | Nil] The method signature text, or nil if not a method signature.
 			def method_signature
 				method_signature? ? @text : nil
 			end
 		end
 	end
-end 
+end

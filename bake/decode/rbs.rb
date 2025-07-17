@@ -7,6 +7,7 @@ def initialize(...)
 	super
 	
 	require "decode/index"
+	require "deocde/rbs"
 	require "rbs"
 	require "types"
 	
@@ -197,49 +198,52 @@ end
 
 # Convert a method definition to RBS.
 def method_to_rbs(definition, index)
+	wrapper = Decode::RBS::Method.new(definition)
 	method_name = definition.name
-	
-	# Extract type information from documentation
-	return_type = extract_return_type(definition, index)
-	parameters = extract_parameters(definition, index)
 	comment = extract_comment(definition)
 	
-	# Extract block information from documentation
-	block_type = extract_block_type(definition, index)
-	
-	# Create a method type with extracted type information
-	method_type = RBS::MethodType.new(
-		type_params: [],
-		type: RBS::Types::Function.new(
-			required_positionals: parameters,
-			optional_positionals: [],
-			rest_positionals: nil,
-			trailing_positionals: [],
-			required_keywords: {},
-			optional_keywords: {},
-			rest_keywords: nil,
-			return_type: return_type
-		),
-		block: block_type,
-		location: nil
-	)
-	
-	# Determine method kind (instance vs singleton)
-	kind = if definition.receiver
-		:singleton
+	overloads = []
+	if wrapper.signatures.any?
+		wrapper.signatures.each do |signature_string|
+			method_type = RBS::Parser.parse_method_type(signature_string).first
+			overloads << RBS::AST::Members::MethodDefinition::Overload.new(
+				method_type: method_type,
+				annotations: []
+			)
+		end
 	else
-		:instance
+		return_type = extract_return_type(definition, index) || RBS::Parser.parse_type("untyped")
+		parameters = extract_parameters(definition, index)
+		block_type = extract_block_type(definition, index)
+		
+		method_type = RBS::MethodType.new(
+			type_params: [],
+			type: RBS::Types::Function.new(
+				required_positionals: parameters,
+				optional_positionals: [],
+				rest_positionals: nil,
+				trailing_positionals: [],
+				required_keywords: {},
+				optional_keywords: {},
+				rest_keywords: nil,
+				return_type: return_type
+			),
+			block: block_type,
+			location: nil
+		)
+		
+		overloads << RBS::AST::Members::MethodDefinition::Overload.new(
+			method_type: method_type,
+			annotations: []
+		)
 	end
+	
+	kind = definition.receiver ? :singleton : :instance
 	
 	RBS::AST::Members::MethodDefinition.new(
 		name: method_name.to_sym,
 		kind: kind,
-		overloads: [
-			RBS::AST::Members::MethodDefinition::Overload.new(
-				method_type: method_type,
-				annotations: []
-			)
-		],
+		overloads: overloads,
 		annotations: [],
 		location: nil,
 		comment: comment,

@@ -6,6 +6,7 @@
 require "decode/language/ruby"
 require "decode/source"
 require "decode/documentation"
+require "decode/rbs"
 
 describe Decode::Language::Ruby do
 	let(:language) {Decode::Language::Ruby.new}
@@ -85,16 +86,19 @@ describe Decode::Language::Ruby do
 		let(:path) {File.expand_path(".fixtures/rbs_comments.rb", __dir__)}
 		
 		it "should correctly parse @rbs generic pragma" do
-			generic_class = definitions.find {|d| d.name == :GenericClass}
-			expect(generic_class).not.to be_nil
-			expect(generic_class.generics).to be == ["T"]
+			definition = definitions.find{|definition| definition.name == :GenericClass}
+			expect(definition).not.to be_nil
+			
+			wrapped = Decode::RBS::Class.new(definition)
+			expect(wrapped.generics).to be == ["T"]
 		end
 		
 		it "should correctly parse @rbs method signature" do
-			method = definitions.find {|d| d.name == :method_with_rbs}
-			expect(method).not.to be_nil
-			expect(method.has_rbs_signature?).to be_truthy
-			expect(method.rbs_signature).to be == "[T] () -> T"
+			definition = definitions.find{|definition| definition.name == :generic_method}
+			expect(definition).not.to be_nil
+			
+			wrapped = Decode::RBS::Method.new(definition)
+			expect(wrapped.signatures).to be == ["() -> T"]
 		end
 	end
 end

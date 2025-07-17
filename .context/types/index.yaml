@@ -1,0 +1,12 @@
+---
+description: A simple human-readable and Ruby-parsable type library.
+version: 0.4.3
+metadata:
+  funding_uri: https://github.com/sponsors/ioquatix/
+  source_code_uri: https://github.com/ioquatix/types.git
+files:
+- path: usage.md
+  title: Usage
+  description: The Types gem provides abstract types for the Ruby programming language
+    that can be used for documentation and evaluation purposes. It offers a simple
+    and Ruby-compatible approach to type signature...

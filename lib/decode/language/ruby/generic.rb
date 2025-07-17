@@ -8,7 +8,7 @@ require_relative "parser"
 require_relative "code"
 
 require_relative "../generic"
-require_relative "rbs"
+require_relative "../../comment/rbs"
 
 module Decode
 	module Language
@@ -34,7 +34,7 @@ module Decode
 					tags["public"] = Comment::Pragma
 					tags["private"] = Comment::Pragma
 					
-					tags["rbs"] = RBS
+					tags["rbs"] = Comment::RBS
 				end
 				
 				# Get the parser for Ruby source code.
