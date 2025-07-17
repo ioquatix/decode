@@ -574,12 +574,12 @@ describe Decode::Language::Ruby do
 				def complex_method(name)
 					greeting = "Hello"
 					message = "\#{greeting}, \#{name}!"
-				
+					
 					# Add some extra processing
 					if name.length > 5
 						message += " You have a long name!"
 					end
-				
+					
 					return message
 				end
 			TEXT
@@ -598,7 +598,7 @@ describe Decode::Language::Ruby do
 						"Second line",
 						"Third line"
 					]
-				
+					
 					lines.each do |line|
 						yield line
 					end
