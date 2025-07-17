@@ -26,18 +26,18 @@ module Decode
 			def generate(index, output: $stdout)
 				# Build nested RBS AST structure using a hash for proper ||= behavior
 				declarations = {}
-				roots = []
+				roots = {}
 				
 				# Efficiently traverse the trie to find containers and their methods
 				index.trie.traverse do |lexical_path, node, descend|
 					# Process container definitions at this node
 					if node.values
-						containers = node.values.select {|definition| definition.container? && definition.public?}
+						containers = node.values.select{|definition| definition.container? && definition.public?}
 						containers.each do |definition|
 							case definition
 							when Decode::Language::Ruby::Class, Decode::Language::Ruby::Module
 								if declaration = build_nested_declaration(definition, declarations, index)
-									roots << declaration
+									roots[definition.qualified_name] ||= declaration
 								end
 							end
 						end
@@ -51,7 +51,7 @@ module Decode
 				writer = ::RBS::Writer.new(out: output)
 				
 				unless roots.empty?
-					writer.write(roots)
+					writer.write(roots.values)
 				end
 			end
 			
