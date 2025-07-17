@@ -22,6 +22,10 @@ Please see the [project documentation](https://ioquatix.github.io/decode/) for m
 
 Please see the [project releases](https://ioquatix.github.io/decode/releases/index) for all releases.
 
+### v0.24.0
+
+  - [Introduce support for RBS signature generation.](https://ioquatix.github.io/decode/releases/index#introduce-support-for-rbs-signature-generation.)
+
 ### v0.23.5
 
   - Fix handling of `&block` arguments in call nodes.
