@@ -61,7 +61,7 @@ module Decode
 			#
 			# @yields {|node, descend| descend.call}
 			# 	@parameter node [Node] The current node which is being traversed.
-			# 	@parameter descend [Proc | Nil] The recursive method for traversing children.
+			# 	@parameter descend [Proc] The recursive method for traversing children.
 			def traverse(&block)
 				descend = ->(node){node.traverse(&block)}
 				

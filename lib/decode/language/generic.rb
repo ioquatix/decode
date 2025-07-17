@@ -17,14 +17,15 @@ module Decode
 				tags["parameter"] = Comment::Parameter
 				tags["option"] = Comment::Option
 				tags["yields"] = Comment::Yields
+				tags["yields?"] = Comment::Yields
 				tags["returns"] = Comment::Returns
 				tags["raises"] = Comment::Raises
 				tags["throws"] = Comment::Throws
-				
+			
 				tags["deprecated"] = Comment::Pragma
-				
+			
 				tags["asynchronous"] = Comment::Pragma
-				
+			
 				tags["public"] = Comment::Pragma
 				tags["private"] = Comment::Pragma
 			end

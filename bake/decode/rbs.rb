@@ -8,6 +8,11 @@ def initialize(...)
 	
 	require "decode/index"
 	require "rbs"
+	require "types"
+	
+	# Set up RBS environment for type resolution
+	@rbs_loader = RBS::EnvironmentLoader.new()
+	@rbs_environment = RBS::Environment.from_loader(@rbs_loader).resolve_type_names
 end
 
 # Generate RBS declarations for the given source root.
@@ -26,66 +31,138 @@ def generate(root)
 	index = Decode::Index.new
 	index.update(paths)
 	
-	# Group definitions by qualified name to avoid duplicates
-	class_defs = {}
-	module_defs = {}
-	methods = {}
+	# Build nested RBS AST structure using a hash for proper ||= behavior
+	declarations = {}
 	
 	# Collect all definitions
-	index.trie.traverse do |path, node, descend|
-		node.values&.each do |definition|
-			if definition.public?
-				case definition
-				when Decode::Language::Ruby::Class
-					class_defs[definition.qualified_name] = definition
-				when Decode::Language::Ruby::Module
-					module_defs[definition.qualified_name] = definition
-				when Decode::Language::Ruby::Method
-					parent_name = definition.parent&.qualified_name
-					if parent_name
-						methods[parent_name] ||= []
-						methods[parent_name] << definition
-					end
-				end
+	index.definitions.each do |qualified_name, definition|
+		if definition.public?
+			case definition
+			when Decode::Language::Ruby::Class, Decode::Language::Ruby::Module
+				build_nested_declaration(definition, declarations, index)
 			end
 		end
-		
-		descend.call
 	end
 	
-	declarations = []
-	
-	# Generate class declarations with methods
-	class_defs.each do |name, definition|
-		declaration = class_to_rbs(definition, methods[name] || [], index)
-		declarations << declaration if declaration
-	end
-	
-	# Generate module declarations with methods
-	module_defs.each do |name, definition|
-		declaration = module_to_rbs(definition, methods[name] || [], index)
-		declarations << declaration if declaration
-	end
+	# Convert the nested structure to declarations array - only root-level declarations
+	# Find the shortest qualified name path (the root namespace)
+	shortest_path_length = declarations.keys.map {|key| key.split("::").length}.min
+	root_declarations = declarations.select {|qualified_name, decl| 
+		qualified_name.split("::").length == shortest_path_length
+	}.values.compact
+	declarations = root_declarations
 	
 	# Write the RBS output
-	io = StringIO.new
-	writer = RBS::Writer.new(out: io)
+	writer = RBS::Writer.new(out: $stdout)
 	
 	unless declarations.empty?
 		writer.write(declarations)
-		puts io.string
 	end
 end
 
 private
 
+def definition_to_rbs(definition, index)
+	case definition
+	when Decode::Language::Ruby::Class
+		class_to_rbs(definition, get_methods_for_definition(definition, index), index)
+	when Decode::Language::Ruby::Module  
+		module_to_rbs(definition, get_methods_for_definition(definition, index), index)
+	end
+end
+
+# Build nested RBS declarations preserving the parent hierarchy
+def build_nested_declaration(definition, declarations, index)
+	# Ensure all parent containers exist using ||= for proper reuse
+	ensure_parent_containers_exist(definition, declarations, index)
+	
+	# Create the declaration for this definition using ||= to avoid duplicates
+	qualified_name = definition.qualified_name
+	declarations[qualified_name] ||= definition_to_rbs(definition, index)
+	
+	# Add this declaration to its parent's members if it has a parent
+	if definition.parent
+		parent_qualified_name = definition.parent.qualified_name
+		parent_container = declarations[parent_qualified_name]
+		
+		# Only add if not already present
+		unless parent_container.members.any? {|member| 
+			member.respond_to?(:name) && member.name.name == definition.name.to_sym 
+		}
+			parent_container.members << declarations[qualified_name]
+		end
+	end
+end
+
+# Ensure all parent containers exist using ||= for proper reuse
+def ensure_parent_containers_exist(definition, declarations, index)
+	current = definition.parent
+	
+	while current
+		qualified_name = current.qualified_name
+		
+		# Use ||= to create parent container only if it doesn't exist
+		declarations[qualified_name] ||= create_parent_container(current)
+		
+		current = current.parent
+	end
+end
+
+# Create a parent container (module) for a definition
+def create_parent_container(definition)
+	name = simple_name_to_rbs(definition.name)
+	comment = extract_comment(definition)
+	
+	case definition
+	when Decode::Language::Ruby::Class
+		RBS::AST::Declarations::Class.new(
+			name: name,
+			type_params: [],
+			super_class: nil,
+			members: [],
+			annotations: [],
+			location: nil,
+			comment: comment
+		)
+	else
+		RBS::AST::Declarations::Module.new(
+			name: name,
+			type_params: [],
+			self_types: [],
+			members: [],
+			annotations: [],
+			location: nil,
+			comment: comment
+		)
+	end
+end
+
+# Get methods for a given definition
+def get_methods_for_definition(definition, index)
+	methods = []
+	
+	# Look for methods that are children of this definition
+	index.definitions.each do |qualified_name, child_def|
+		if child_def.is_a?(Decode::Language::Ruby::Method) && child_def.parent == definition && child_def.public?
+			methods << child_def
+		end
+	end
+	
+	methods
+end
+
+# Convert a simple name to RBS TypeName (not qualified)
+def simple_name_to_rbs(name)
+	RBS::TypeName.new(name: name.to_sym, namespace: RBS::Namespace.empty)
+end
+
 # Convert a class definition to RBS.
 def class_to_rbs(definition, method_definitions = [], index = nil)
-	name = qualified_name_to_rbs(definition.qualified_name)
+	name = simple_name_to_rbs(definition.name)
 	comment = extract_comment(definition)
 	
 	# Build method definitions
-	methods = method_definitions.map { |method_def| method_to_rbs(method_def, index) }.compact
+	methods = method_definitions.map {|method_def| method_to_rbs(method_def, index)}.compact
 	
 	# For now, just create a simple class declaration
 	RBS::AST::Declarations::Class.new(
@@ -101,11 +178,11 @@ end
 
 # Convert a module definition to RBS.
 def module_to_rbs(definition, method_definitions = [], index = nil)
-	name = qualified_name_to_rbs(definition.qualified_name)
+	name = simple_name_to_rbs(definition.name)
 	comment = extract_comment(definition)
 	
 	# Build method definitions
-	methods = method_definitions.map { |method_def| method_to_rbs(method_def, index) }.compact
+	methods = method_definitions.map {|method_def| method_to_rbs(method_def, index)}.compact
 	
 	RBS::AST::Declarations::Module.new(
 		name: name,
@@ -127,6 +204,9 @@ def method_to_rbs(definition, index)
 	parameters = extract_parameters(definition, index)
 	comment = extract_comment(definition)
 	
+	# Extract block information from documentation
+	block_type = extract_block_type(definition, index)
+	
 	# Create a method type with extracted type information
 	method_type = RBS::MethodType.new(
 		type_params: [],
@@ -140,7 +220,7 @@ def method_to_rbs(definition, index)
 			rest_keywords: nil,
 			return_type: return_type
 		),
-		block: nil,
+		block: block_type,
 		location: nil
 	)
 	
@@ -179,7 +259,7 @@ def extract_return_type(definition, index)
 	if returns_tag
 		# Parse the type from the tag
 		type_string = returns_tag.type.strip
-		parse_type_string(type_string, definition, index)
+		parse_type_string(type_string)
 	else
 		# Infer return type based on method name patterns
 		infer_return_type(definition)
@@ -198,7 +278,7 @@ def extract_parameters(definition, index)
 	param_tags.map do |tag|
 		name = tag.name
 		type_string = tag.type.strip
-		type = parse_type_string(type_string, definition, index)
+		type = parse_type_string(type_string)
 		
 		RBS::Types::Function::Param.new(
 			type: type,
@@ -207,30 +287,78 @@ def extract_parameters(definition, index)
 	end
 end
 
+# Extract block type from method documentation.
+def extract_block_type(definition, index)
+	documentation = definition.documentation
+	return nil unless documentation
+	
+	# Find @yields tags
+	yields_tag = documentation.filter(Decode::Comment::Yields).first
+	return nil unless yields_tag
+	
+	# Extract block parameters from nested @parameter tags
+	block_params = yields_tag.filter(Decode::Comment::Parameter).map do |param_tag|
+		name = param_tag.name
+		type_string = param_tag.type.strip
+		type = parse_type_string(type_string)
+		
+		RBS::Types::Function::Param.new(
+			type: type,
+			name: name.to_sym
+		)
+	end
+	
+	# Parse the block signature to determine if it's required
+	# Check both the directive name and the block signature
+	block_signature = yields_tag.block
+	directive_name = yields_tag.directive
+	required = !directive_name.include?("?") && !block_signature.include?("?") && !block_signature.include?("optional")
+	
+	# Determine block return type (default to void if not specified)
+	block_return_type = RBS::Parser.parse_type("void")
+	
+	# Create the block function type
+	block_function = RBS::Types::Function.new(
+		required_positionals: block_params,
+		optional_positionals: [],
+		rest_positionals: nil,
+		trailing_positionals: [],
+		required_keywords: {},
+		optional_keywords: {},
+		rest_keywords: nil,
+		return_type: block_return_type
+	)
+	
+	# Create and return the block type
+	RBS::Types::Block.new(
+		type: block_function,
+		required: required,
+		self_type: nil
+	)
+end
+
 # Infer return type based on method patterns and heuristics.
 def infer_return_type(definition)
 	method_name = definition.name
+	method_name_str = method_name.to_s
 	
 	# Methods ending with ? are typically boolean
-	if method_name.end_with?('?')
-		return RBS::Types::Union.new(types: [
-			RBS::Types::ClassInstance.new(name: RBS::TypeName.new(name: :TrueClass, namespace: RBS::Namespace.root), args: [], location: nil),
-			RBS::Types::ClassInstance.new(name: RBS::TypeName.new(name: :FalseClass, namespace: RBS::Namespace.root), args: [], location: nil)
-		], location: nil)
+	if method_name_str.end_with?("?")
+		return RBS::Parser.parse_type("bool")
 	end
 	
 	# Methods named initialize return void
-	if method_name == 'initialize'
-		return RBS::Types::Bases::Void.new(location: nil)
+	if method_name == :initialize
+		return RBS::Parser.parse_type("void")
 	end
 	
 	# Methods with names that suggest they return self
-	if method_name.match?(/^(add|append|prepend|push|<<|concat|merge!|sort!|reverse!|clear|delete|remove)/)
-		return RBS::Types::Bases::Self.new(location: nil)
+	if method_name_str.match?(/^(add|append|prepend|push|<<|concat|merge!|sort!|reverse!|clear|delete|remove)/)
+		return RBS::Parser.parse_type("self")
 	end
 	
 	# Default to untyped
-	RBS::Types::Bases::Any.new(location: nil)
+	RBS::Parser.parse_type("untyped")
 end
 
 # Extract comment from method documentation.
@@ -259,86 +387,13 @@ def extract_comment(definition)
 	nil
 end
 
-# Parse a type string and convert it to RBS type using RBS's built-in parser.
-def parse_type_string(type_string, definition = nil, index = nil)
-	# Clean up the type string
-	type_string = type_string.strip
-	
-	# Convert () to [] for generic types as suggested
-	normalized_type_string = type_string.gsub('(', '[').gsub(')', ']')
-	
-	# Handle special cases that need inference
-	case normalized_type_string
-	when /^void$/i
-		return RBS::Types::Bases::Void.new(location: nil)
-	when /^nil$/i
-		return RBS::Types::Bases::Nil.new(location: nil)
-	when /^self$/i
-		return RBS::Types::Bases::Self.new(location: nil)
-	when /^untyped$/i
-		return RBS::Types::Bases::Any.new(location: nil)
-	when /^Boolean$/i
-		return RBS::Types::Union.new(types: [
-			RBS::Types::ClassInstance.new(name: RBS::TypeName.new(name: :TrueClass, namespace: RBS::Namespace.root), args: [], location: nil),
-			RBS::Types::ClassInstance.new(name: RBS::TypeName.new(name: :FalseClass, namespace: RBS::Namespace.root), args: [], location: nil)
-		], location: nil)
-	end
-	
-	# Try to parse with RBS's built-in parser
-	begin
-		parsed_type = RBS::Parser.parse_type(normalized_type_string)
-		
-		# If we have an index and definition, try to resolve relative references
-		if index && definition && parsed_type.is_a?(RBS::Types::ClassInstance)
-			resolved_type = resolve_type_with_index(type_string, definition, index)
-			return resolved_type if resolved_type
-		end
-		
-		return parsed_type
-	rescue => e
-		# If parsing fails, try to resolve with index if available
-		if index && definition
-			resolved_type = resolve_type_with_index(type_string, definition, index)
-			return resolved_type if resolved_type
-		end
-		
-		# Fall back to untyped
-		return RBS::Types::Bases::Any.new(location: nil)
-	end
-end
-
-# Resolve a type string using the index and definition context.
-def resolve_type_with_index(type_string, definition, index)
-	# Skip if already fully qualified or a built-in type
-	return nil if type_string.start_with?('::') || type_string.match?(/^[a-z]/)
-	
-	# Try to find the type in the index
-	begin
-		reference = Decode::Language::Ruby::Reference.new(type_string)
-		resolved_definition = index.lookup(reference, relative_to: definition)
-		
-		if resolved_definition
-			qualified_name = resolved_definition.qualified_name
-			parts = qualified_name.split('::')
-			name = parts.pop
-			namespace = if parts.empty?
-				RBS::Namespace.root
-			else
-				RBS::Namespace.new(path: parts.map(&:to_sym), absolute: true)
-			end
-			
-			return RBS::Types::ClassInstance.new(
-				name: RBS::TypeName.new(name: name.to_sym, namespace: namespace),
-				args: [],
-				location: nil
-			)
-		end
-	rescue => e
-		# If resolution fails, return nil to fall back to default parsing
-		return nil
-	end
-	
-	nil
+# Parse a type string and convert it to RBS type using RBS's built-in parser and environment.
+def parse_type_string(type_string)
+	type = Types.parse(type_string)
+	return RBS::Parser.parse_type(type.to_rbs)
+rescue => error
+	Console.warn(self, "Failed to parse type string: #{type_string}", error)
+	return RBS::Parser.parse_type("untyped")
 end
 
 # Convert a qualified name to RBS TypeName.
@@ -348,4 +403,4 @@ def qualified_name_to_rbs(qualified_name)
 	namespace = RBS::Namespace.new(path: parts.map(&:to_sym), absolute: true)
 	
 	RBS::TypeName.new(name: name.to_sym, namespace: namespace)
-end 
+end

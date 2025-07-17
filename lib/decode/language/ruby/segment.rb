@@ -32,7 +32,7 @@ module Decode
 				end
 				
 				# The source code trailing the comments.
-				# @returns [String | nil]
+				# @returns [String | Nil]
 				def code
 					@expression.slice
 				end
