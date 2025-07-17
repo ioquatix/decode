@@ -11,6 +11,33 @@ require_relative "languages"
 module Decode
 	# Represents a list of definitions organised for quick lookup and lexical enumeration.
 	class Index
+		# Create and populate an index from the given paths.
+		# @parameter paths [Array(String)] The paths to index (files, directories, or glob patterns).
+		# @parameter languages [Languages] The languages to support in this index.
+		# @returns [Index] A new index populated with definitions from the given paths.
+		def self.for(*paths, languages: Languages.all)
+			# Resolve all paths to actual files:
+			resolved_paths = paths.flat_map do |path|
+				if File.directory?(path)
+					Dir.glob(File.join(path, "**/*"))
+				elsif File.file?(path)
+					[path]
+				else
+					# Handle glob patterns or non-existent paths:
+					Dir.glob(path)
+				end
+			end
+			
+			resolved_paths.sort!
+			resolved_paths.uniq!
+			
+			# Create and populate the index:
+			index = new(languages)
+			index.update(resolved_paths)
+			
+			return index
+		end
+		
 		# Initialize an empty index.
 		# @parameter languages [Languages] The languages to support in this index.
 		def initialize(languages = Languages.all)

@@ -1,0 +1,11 @@
+# A basic class for testing RBS generation.
+class Animal
+  # Make the animal speak.
+  public def speak: () -> untyped
+
+  # Get the animal's name.
+  public def name: () -> untyped
+
+  # Set the animal's name.
+  public def name=: (String name) -> untyped
+end

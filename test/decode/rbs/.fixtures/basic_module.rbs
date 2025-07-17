@@ -1,0 +1,8 @@
+# A utility module for string operations.
+module StringUtils
+  # Reverse a string.
+  public def reverse_string: (String str) -> String
+
+  # Check if a string is empty.
+  public def empty?: (String str) -> bool
+end

@@ -1,0 +1,14 @@
+# Base animal class.
+class Animal
+  # Make the animal speak.
+  public def speak: () -> untyped
+end
+
+# A dog is a type of animal.
+class Dog < ::Animal
+  # Dogs bark.
+  public def speak: () -> untyped
+
+  # Dogs can fetch.
+  public def fetch: () -> untyped
+end

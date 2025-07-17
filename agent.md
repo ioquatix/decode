@@ -29,3 +29,11 @@ There are two types of mocking in sus: `receive` and `mock`. The `receive` match
 #### [Shared Test Behaviors and Fixtures](.context/sus/shared.md)
 
 Sus provides shared test contexts which can be used to define common behaviours or tests that can be reused across one or more test files.
+
+### types
+
+A simple human-readable and Ruby-parsable type library.
+
+#### [Usage](.context/types/usage.md)
+
+The Types gem provides abstract types for the Ruby programming language that can be used for documentation and evaluation purposes. It offers a simple and Ruby-compatible approach to type signature...

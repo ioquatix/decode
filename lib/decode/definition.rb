@@ -119,14 +119,14 @@ module Decode
 		# A short form of the definition.
 		# e.g. `def short_form`.
 		#
-		# @returns [String | nil]
+		# @returns [String | Nil]
 		def short_form
 		end
 		
 		# A long form of the definition.
 		# e.g. `def initialize(kind, name, comments, **options)`.
 		#
-		# @returns [String | nil]
+		# @returns [String | Nil]
 		def long_form
 			self.short_form
 		end
@@ -134,7 +134,7 @@ module Decode
 		# A long form which uses the qualified name if possible.
 		# Defaults to {long_form}.
 		#
-		# @returns [String | nil]
+		# @returns [String | Nil]
 		def qualified_form
 			self.long_form
 		end
@@ -148,7 +148,7 @@ module Decode
 		
 		# The full text of the definition.
 		#
-		# @returns [String | nil]
+		# @returns [String | Nil]
 		def text
 		end
 		

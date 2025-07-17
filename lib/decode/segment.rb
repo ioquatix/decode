@@ -29,7 +29,7 @@ module Decode
 		attr :language
 		
 		# An interface for accsssing the documentation of the definition.
-		# @returns [Documentation | nil] A {Documentation} instance if this definition has comments.
+		# @returns [Documentation | Nil] A {Documentation} instance if this definition has comments.
 		def documentation
 			if @comments&.any?
 				@documentation ||= Documentation.new(@comments, @language)
@@ -37,7 +37,7 @@ module Decode
 		end
 		
 		# The source code trailing the comments.
-		# @returns [String | nil]
+		# @returns [String | Nil]
 		def code
 		end
 	end

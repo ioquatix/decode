@@ -1,0 +1,14 @@
+# A generic container class.
+class Container[T]
+  # Create a new container.
+  public def initialize: () -> void
+
+  # Add an item to the container.
+  public def add: (T item) -> self
+
+  # Get the first item.
+  public def first: () -> (T | nil)
+
+  # Check if the container is empty.
+  public def empty?: () -> bool
+end

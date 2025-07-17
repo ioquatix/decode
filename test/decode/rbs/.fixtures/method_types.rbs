@@ -1,0 +1,17 @@
+# A class demonstrating different method signatures.
+class Calculator
+  # Add two numbers.
+  public def add: (Integer a, Integer b) -> Integer
+
+  # Check if a number is positive.
+  public def positive?: (Integer num) -> bool
+
+  # Initialize the calculator.
+  public def initialize: () -> void
+
+  # Clear the history.
+  public def clear: () -> self
+
+  # Process numbers with a block.
+  public def process_numbers: (Array[Integer] numbers) -> Array[Integer]
+end

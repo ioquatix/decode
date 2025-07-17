@@ -13,10 +13,7 @@ end
 # Process the given source root and report on comment coverage.
 # @parameter root [String] The root path to index.
 def coverage(root)
-	paths = Dir.glob(File.join(root, "**/*"))
-	
-	index = Decode::Index.new
-	index.update(paths)
+	index = Decode::Index.for(root)
 	
 	documented = Set.new
 	missing = {}
@@ -71,10 +68,7 @@ end
 # Process the given source root and report on symbols.
 # @parameter root [String] The root path to index.
 def symbols(root)
-	paths = Dir.glob(File.join(root, "**/*"))
-	
-	index = Decode::Index.new
-	index.update(paths)
+	index = Decode::Index.for(root)
 	
 	index.trie.traverse do |path, node, descend|
 		level = path.size
@@ -91,10 +85,7 @@ end
 # Print documentation for all definitions.
 # @parameter root [String] The root path to index.
 def documentation(root)
-	paths = Dir.glob(File.join(root, "**/*"))
-	
-	index = Decode::Index.new
-	index.update(paths)
+	index = Decode::Index.for(root)
 	
 	index.definitions.each do |name, definition|
 		comments = definition.comments
