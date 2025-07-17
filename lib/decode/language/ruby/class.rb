@@ -18,9 +18,11 @@ module Decode
 					super(*arguments, **options)
 					
 					@super_class = super_class
+					@generics = extract_generics_from_comments
 				end
 				
 				attr :super_class
+				attr :generics
 				
 				# A class is a container for other definitions.
 				def container?
@@ -47,6 +49,27 @@ module Decode
 				# e.g. `class ::Barnyard::Dog`.
 				def qualified_form
 					"class #{self.qualified_name}"
+				end
+				
+				private
+				
+				# Extract generic type parameters from RBS pragmas in comments.
+				# @returns [Array(String)] Array of generic type parameter names.
+				def extract_generics_from_comments
+					return [] unless @documentation
+					
+					generics = []
+					
+					@documentation.tags.each do |tag|
+						if tag.is_a?(Comment::RBS) && tag.generic?
+							# Extract generic parameters from "generic T" or "generic T, U"
+							if parameter = tag.generic_parameter
+								generics.concat(parameter.split(/\s*,\s*/))
+							end
+						end
+					end
+					
+					generics
 				end
 			end
 			

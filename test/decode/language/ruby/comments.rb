@@ -80,4 +80,21 @@ describe Decode::Language::Ruby do
 			expect(another_method.comments[0]).to be == "This is another method comment"
 		end
 	end
+	
+	with "rbs comment extraction" do
+		let(:path) {File.expand_path(".fixtures/rbs_comments.rb", __dir__)}
+		
+		it "should correctly parse @rbs generic pragma" do
+			generic_class = definitions.find {|d| d.name == :GenericClass}
+			expect(generic_class).not.to be_nil
+			expect(generic_class.generics).to be == ["T"]
+		end
+		
+		it "should correctly parse @rbs method signature" do
+			method = definitions.find {|d| d.name == :method_with_rbs}
+			expect(method).not.to be_nil
+			expect(method.has_rbs_signature?).to be_truthy
+			expect(method.rbs_signature).to be == "[T] () -> T"
+		end
+	end
 end

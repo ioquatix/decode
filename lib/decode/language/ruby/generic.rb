@@ -8,6 +8,7 @@ require_relative "parser"
 require_relative "code"
 
 require_relative "../generic"
+require_relative "rbs"
 
 module Decode
 	module Language
@@ -15,6 +16,26 @@ module Decode
 			# Represents the Ruby language implementation for parsing and analysis.
 			class Generic < Language::Generic
 				EXTENSIONS = [".rb", ".ru"]
+				
+				TAGS = Comment::Tags.build do |tags|
+					tags["attribute"] = Comment::Attribute
+					tags["parameter"] = Comment::Parameter
+					tags["option"] = Comment::Option
+					tags["yields"] = Comment::Yields
+					tags["yields?"] = Comment::Yields
+					tags["returns"] = Comment::Returns
+					tags["raises"] = Comment::Raises
+					tags["throws"] = Comment::Throws
+				
+					tags["deprecated"] = Comment::Pragma
+				
+					tags["asynchronous"] = Comment::Pragma
+				
+					tags["public"] = Comment::Pragma
+					tags["private"] = Comment::Pragma
+					
+					tags["rbs"] = RBS
+				end
 				
 				# Get the parser for Ruby source code.
 				# @returns [Parser] The Ruby parser instance.

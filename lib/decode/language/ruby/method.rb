@@ -17,9 +17,17 @@ module Decode
 				def initialize(*arguments, receiver: nil, **options)
 					super(*arguments, **options)
 					@receiver = receiver
+					@rbs_signature = extract_rbs_signature_from_comments
 				end
 				
 				attr :receiver
+				attr :rbs_signature
+				
+				# Check if this method has an RBS signature.
+				# @returns [Boolean] True if the method has an RBS signature.
+				def has_rbs_signature?
+					!@rbs_signature.nil?
+				end
 				
 				# Generate a nested name for the method.
 				def nested_name
@@ -87,6 +95,22 @@ module Decode
 					else
 						super
 					end
+				end
+				
+				private
+				
+				# Extract RBS signature from RBS pragmas in comments.
+				# @returns [String | nil] The RBS signature text, or nil if not found.
+				def extract_rbs_signature_from_comments
+					return nil unless @documentation
+					
+					@documentation.tags.each do |tag|
+						if tag.is_a?(Comment::RBS) && tag.method_signature?
+							return tag.method_signature
+						end
+					end
+					
+					nil
 				end
 			end
 		end
