@@ -44,20 +44,12 @@ def generate(root)
 			end
 		end
 	end
-	
-	# Convert the nested structure to declarations array - only root-level declarations
-	# Find the shortest qualified name path (the root namespace)
-	shortest_path_length = declarations.keys.map {|key| key.split("::").length}.min
-	root_declarations = declarations.select {|qualified_name, decl| 
-		qualified_name.split("::").length == shortest_path_length
-	}.values.compact
-	declarations = root_declarations
-	
+		
 	# Write the RBS output
 	writer = RBS::Writer.new(out: $stdout)
 	
 	unless declarations.empty?
-		writer.write(declarations)
+		writer.write(declarations.values)
 	end
 end
 
@@ -74,7 +66,6 @@ end
 
 # Build nested RBS declarations preserving the parent hierarchy
 def build_nested_declaration(definition, declarations, index)
-	# Ensure all parent containers exist using ||= for proper reuse
 	ensure_parent_containers_exist(definition, declarations, index)
 	
 	# Create the declaration for this definition using ||= to avoid duplicates
@@ -102,7 +93,7 @@ def ensure_parent_containers_exist(definition, declarations, index)
 	while current
 		qualified_name = current.qualified_name
 		
-		# Use ||= to create parent container only if it doesn't exist
+		$stderr.puts "Ensuring parent container for: #{qualified_name}"
 		declarations[qualified_name] ||= create_parent_container(current)
 		
 		current = current.parent
