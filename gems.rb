@@ -21,7 +21,9 @@ end
 group :test do
 	gem "sus"
 	gem "covered"
+	
 	gem "rubocop"
+	gem "rubocop-socketry"
 	
 	gem "bake-test"
 	gem "bake-test-external"

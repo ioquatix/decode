@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 # A basic class for testing RBS generation.
 class Animal
 	# Make the animal speak.
@@ -17,4 +20,4 @@ class Animal
 	def name=(name)
 		@name = name
 	end
-end 
+end

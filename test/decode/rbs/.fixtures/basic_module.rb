@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 # A utility module for string operations.
 module StringUtils
 	# Reverse a string.
@@ -15,4 +18,4 @@ module StringUtils
 	def empty?(str)
 		str.empty?
 	end
-end 
+end

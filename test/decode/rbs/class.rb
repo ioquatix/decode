@@ -154,4 +154,4 @@ describe Decode::RBS::Class do
 			end
 		end
 	end
-end 
+end

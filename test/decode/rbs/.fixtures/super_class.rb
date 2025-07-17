@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 # Base animal class.
 class Animal
 	# Make the animal speak.
@@ -19,4 +22,4 @@ class Dog < Animal
 	def fetch
 		puts "Fetching!"
 	end
-end 
+end

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
+
 # A class demonstrating different method signatures.
 class Calculator
 	# Add two numbers.
@@ -34,4 +37,4 @@ class Calculator
 	def process_numbers(numbers, &block)
 		numbers.map(&block)
 	end
-end 
+end

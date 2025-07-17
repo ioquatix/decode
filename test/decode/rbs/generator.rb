@@ -100,4 +100,4 @@ describe Decode::RBS::Generator do
 			expect(generator).to be_a(Decode::RBS::Generator)
 		end
 	end
-end 
+end

@@ -324,4 +324,4 @@ describe "RBS Integration" do
 			expect(result).to be(:empty?)
 		end
 	end
-end 
+end
