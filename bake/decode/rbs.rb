@@ -7,7 +7,7 @@ def initialize(...)
 	super
 	
 	require "decode/index"
-	require "deocde/rbs"
+	require "decode/rbs"
 	require "rbs"
 	require "types"
 	
@@ -161,14 +161,24 @@ end
 def class_to_rbs(definition, method_definitions = [], index = nil)
 	name = simple_name_to_rbs(definition.name)
 	comment = extract_comment(definition)
+	# Use Decode::RBS::Class wrapper to extract generics
+	class_wrapper = Decode::RBS::Class.new(definition)
+	type_params = class_wrapper.generics.map do |generic|
+		RBS::AST::TypeParam.new(
+			name: generic.to_sym,
+			variance: nil,
+			upper_bound: nil,
+			location: nil
+		)
+	end
 	
 	# Build method definitions
 	methods = method_definitions.map {|method_def| method_to_rbs(method_def, index)}.compact
 	
-	# For now, just create a simple class declaration
+	# Create the class declaration with generics
 	RBS::AST::Declarations::Class.new(
 		name: name,
-		type_params: [],
+		type_params: type_params,
 		super_class: nil,
 		members: methods,
 		annotations: [],
@@ -205,7 +215,7 @@ def method_to_rbs(definition, index)
 	overloads = []
 	if wrapper.signatures.any?
 		wrapper.signatures.each do |signature_string|
-			method_type = RBS::Parser.parse_method_type(signature_string).first
+			method_type = RBS::Parser.parse_method_type(signature_string)
 			overloads << RBS::AST::Members::MethodDefinition::Overload.new(
 				method_type: method_type,
 				annotations: []

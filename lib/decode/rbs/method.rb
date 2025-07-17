@@ -15,9 +15,9 @@ module Decode
 			private
 			
 			def extract_tags
-				@definition.documentation.children.select do |child|
+				@definition.documentation&.children&.select do |child|
 					child.is_a?(Comment::RBS)
-				end
+				end || []
 			end
 			
 			def extract_signatures
