@@ -43,7 +43,7 @@ module Decode
 					else
 						# For multiline calls, use the actual call name with arguments
 						if @node.arguments && @node.arguments.arguments.any?
-							argument_text = @node.arguments.arguments.map {|argument| argument.location.slice}.join(", ")
+							argument_text = @node.arguments.arguments.map{|argument| argument.location.slice}.join(", ")
 							"#{@node.name}(#{argument_text})"
 						else
 							@node.name.to_s

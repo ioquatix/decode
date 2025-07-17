@@ -86,13 +86,12 @@ module Decode
 				# Use the trie to efficiently find methods for this definition
 				if node = index.trie.lookup(definition.full_path)
 					node.children.flat_map do |name, child|
-						child.values.select {|symbol| symbol.is_a?(Decode::Language::Ruby::Method) && symbol.public?}
+						child.values.select{|symbol| symbol.is_a?(Decode::Language::Ruby::Method) && symbol.public?}
 					end
 				else
 					[]
 				end
 			end
-			
 		end
 	end
 end 

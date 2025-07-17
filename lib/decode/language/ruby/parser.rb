@@ -509,7 +509,7 @@ module Decode
 								# Start a new segment with these comments
 								yield current_segment if current_segment
 								current_segment = Segment.new(
-									preceding_comments.map {|comment| comment.location.slice.sub(/^#[\s\t]?/, "")},
+									preceding_comments.map{|comment| comment.location.slice.sub(/^#[\s\t]?/, "")},
 									@language,
 									statement
 								)

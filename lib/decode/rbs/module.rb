@@ -20,7 +20,7 @@ module Decode
 				comment = extract_comment(@definition)
 				
 				# Build method definitions
-				methods = method_definitions.map {|method_def| Method.new(method_def).to_rbs_ast(index)}.compact
+				methods = method_definitions.map{|method_def| Method.new(method_def).to_rbs_ast(index)}.compact
 				
 				::RBS::AST::Declarations::Module.new(
 					name: name,
