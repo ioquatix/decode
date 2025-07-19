@@ -21,11 +21,10 @@ Gem::Specification.new do |spec|
 		"source_code_uri" => "https://github.com/socketry/decode.git",
 	}
 	
-	spec.files = Dir.glob(["{bake,context,lib}/**/*", "*.md"], File::FNM_DOTMATCH, base: __dir__)
+	spec.files = Dir.glob(["{bake,context,lib,sig}/**/*", "*.md"], File::FNM_DOTMATCH, base: __dir__)
 	
 	spec.required_ruby_version = ">= 3.2"
 	
 	spec.add_dependency "prism"
 	spec.add_dependency "rbs"
-	spec.add_dependency "types"
 end

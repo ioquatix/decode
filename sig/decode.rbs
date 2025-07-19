@@ -1,0 +1,801 @@
+module Decode
+  # Represents comment parsing and processing functionality.
+  module Comment
+    # Describes an attribute type.
+    #
+    # - `@attribute [Integer] The person's age.`
+    class Attribute < ::Tag
+      # Build an attribute from a directive and match.
+      public def self.build: (String directive, MatchData match) -> untyped
+
+      # Initialize a new attribute.
+      public def initialize: (String directive, String type) -> void
+    end
+
+    # Represents a node in a comment tree structure.
+    class Node
+      # Initialize the node.
+      public def initialize: (Array[Node] | nil children) -> void
+
+      # Whether this node has any children nodes.
+      # Ignores {Text} instances.
+      public def children?: () -> bool
+
+      # Add a child node to this node.
+      public def add: (Node child) -> self
+
+      # Enumerate all non-text children nodes.
+      public def each: () -> untyped
+
+      # Filter children nodes by class type.
+      public def filter: (Class klass) -> untyped
+
+      # Any lines of text associated with this node.
+      public def text: () -> (Array[String] | nil)
+
+      # Traverse the tags from this node using {each}. Invoke `descend.call(child)` to recursively traverse the specified child.
+      public def traverse: () { (Node node, Proc descend) -> void } -> untyped
+    end
+
+    # Describes a method option (keyword argument).
+    #
+    # - `@option :cached [Boolean] Whether to cache the value.`
+    class Option < ::Parameter
+    end
+
+    # Represents a named method parameter.
+    #
+    # - `@parameter age [Float] The users age.`
+    class Parameter < ::Tag
+      # Build a parameter from a directive and regex match.
+      public def self.build: (String directive, MatchData match) -> Parameter
+
+      # Initialize a new parameter.
+      public def initialize: (String directive, String name, String type) -> void
+    end
+
+    # Asserts a specific property about the method signature.
+    #
+    # - `@reentrant This method is thread-safe.`
+    # - `@deprecated Please use {other_method} instead.`
+    # - `@blocking This method may block.`
+    # - `@asynchronous This method may yield.`
+    class Pragma < ::Tag
+      # Parse a pragma directive from text.
+      public def self.parse: (String directive, String text, Array[String] lines, Array[Tag] tags, Integer level) -> untyped
+
+      # Build a pragma from a directive and text.
+      public def self.build: (String directive, String text) -> untyped
+
+      # Initialize a new pragma.
+      public def initialize: (String directive) -> void
+    end
+
+    # Identifies that a method might raise an exception.
+    #
+    # - `@raises [ArgumentError] If the argument cannot be coerced.`
+    class Raises < ::Attribute
+    end
+
+    # Represents an RBS type annotation following rbs-inline syntax.
+    #
+    # Examples:
+    # - `@rbs generic T` - Declares a generic type parameter for a class
+    # - `@rbs [T] () { () -> T } -> Task[T]` - Complete method type signature
+    class RBS < ::Tag
+      # Parse an RBS pragma from text.
+      public def self.parse: (String directive, String text, Array[String] lines, Array[Tag] tags, Integer level) -> untyped
+
+      # Build an RBS pragma from a directive and text.
+      public def self.build: (String directive, String text) -> untyped
+
+      # Initialize a new RBS pragma.
+      public def initialize: (String directive, String text) -> void
+
+      # Check if this is a generic type declaration.
+      public def generic?: () -> bool
+
+      # Extract the generic type parameter name.
+      public def generic_parameter: () -> (String | nil)
+
+      # Check if this is a method type signature.
+      public def method_signature?: () -> bool
+
+      # Get the method type signature text.
+      public def method_signature: () -> (String | nil)
+    end
+
+    # Represents a return value.
+    #
+    # Example: `@returns [Integer] The person's age.`
+    class Returns < ::Attribute
+    end
+
+    # Represents a documentation tag parsed from a comment directive.
+    class Tag < ::Node
+      # Build a pattern for bracketed content, supporting nested brackets.
+      public def self.bracketed_content: (String name) -> String
+
+      # Match text against the tag pattern.
+      public def self.match: (String text) -> untyped
+
+      # Parse a tag from a directive and text.
+      public def self.parse: (String directive, String text, Array[String] lines, Tags tags, Integer level) -> untyped
+
+      # Initialize a new tag.
+      public def initialize: (String directive) -> void
+    end
+
+    # Represents a collection of documentation tags and their parsing logic.
+    class Tags
+      # Build a tags parser with directive mappings.
+      public def self.build: (Proc block) -> untyped
+
+      # Initialize a new tags parser.
+      public def initialize: (Hash[String, Class] directives) -> void
+
+      # Check if a line has valid indentation for the given level.
+      public def valid_indentation?: (String line, Integer level) -> bool
+
+      # Parse documentation tags from lines.
+      public def parse: (Array[String] lines, Integer level, Proc block) -> untyped
+
+      # Ignore lines at the specified indentation level.
+      public def ignore: (Array[String] lines, Integer level) -> untyped
+    end
+
+    # A structured comment.
+    class Text
+      # Initialize a new text node.
+      public def initialize: (String line) -> void
+
+      # Traverse the text node.
+      public def traverse: () -> untyped
+    end
+
+    # Identifies that a method might throw a specific symbol.
+    #
+    # - `@throws [:skip] To skip recursion.`
+    class Throws < ::Attribute
+    end
+
+    # Describes a block parameter.
+    #
+    # - `@yields {|person| ... } If a block is given.`
+    #
+    # Should contain nested parameters.
+    class Yields < ::Tag
+      # Build a yields tag from a directive and match.
+      public def self.build: (String directive, MatchData match) -> untyped
+
+      # Initialize a new yields tag.
+      public def initialize: (String directive, String block) -> void
+    end
+  end
+
+  # A symbol with attached documentation.
+  class Definition
+    # Initialize the symbol.
+    public def initialize: (Symbol | Array[Symbol] path, Symbol parent, Language language, Array[String] comments, Source source) -> void
+
+    # Generate a debug representation of the definition.
+    public def inspect: () -> untyped
+
+    # The symbol name.
+    # e.g. `:Decode`.
+    public def name: () -> untyped
+
+    # The full path to the definition.
+    public def full_path: () -> untyped
+
+    # Whether the definition is considered part of the public interface.
+    # This is used to determine whether the definition should be documented for coverage purposes.
+    public def public?: () -> bool
+
+    # Whether the definition has documentation.
+    public def documented?: () -> bool
+
+    # The qualified name is an absolute name which includes any and all namespacing.
+    public def qualified_name: () -> String
+
+    # The name relative to the parent.
+    public def nested_name: () -> String
+
+    # Does the definition name match the specified prefix?
+    public def start_with?: () -> bool
+
+    # Convert this definition into another kind of definition.
+    public def convert: () -> untyped
+
+    # A short form of the definition.
+    # e.g. `def short_form`.
+    public def short_form: () -> (String | nil)
+
+    # A long form of the definition.
+    # e.g. `def initialize(kind, name, comments, **options)`.
+    public def long_form: () -> (String | nil)
+
+    # A long form which uses the qualified name if possible.
+    # Defaults to {long_form}.
+    public def qualified_form: () -> (String | nil)
+
+    # Whether the definition spans multiple lines.
+    public def multiline?: () -> bool
+
+    # The full text of the definition.
+    public def text: () -> (String | nil)
+
+    # Whether this definition can contain nested definitions.
+    public def container?: () -> bool
+
+    # Whether this represents a single entity to be documented (along with it's contents).
+    public def nested?: () -> bool
+
+    # Structured access to the definitions comments.
+    public def documentation: () -> (Documentation | nil)
+
+    # The location of the definition.
+    public def location: () -> (Location | nil)
+  end
+
+  # Structured access to a set of comment lines.
+  class Documentation < ::Comment::Node
+    # Initialize the documentation with an array of comments, within a specific language.
+    public def initialize: (Array[String] comments, Language language) -> void
+  end
+
+  # Represents a list of definitions organised for quick lookup and lexical enumeration.
+  class Index
+    # Create and populate an index from the given paths.
+    public def self.for: (Array[String] paths, Languages languages) -> Index
+
+    # Initialize an empty index.
+    public def initialize: (Languages languages) -> void
+
+    # Generate a string representation of this index.
+    public def inspect: () -> String
+
+    # Updates the index by parsing the specified files.
+    # All extracted definitions are merged into the existing index.
+    public def update: (Array[String] paths) -> untyped
+
+    # Lookup the specified reference and return matching definitions.
+    public def lookup: (Language::Reference reference, Definition relative_to) -> (Definition | nil)
+  end
+
+  # Language specific parsers and definitions.
+  module Language
+    # Represents a generic language implementation that can be extended for specific languages.
+    class Generic
+      # Initialize a new generic language.
+      public def initialize: (String name, Array[String] extensions, Comment::Tags tags) -> void
+
+      # Get all names for this language.
+      public def names: () -> Array[String]
+
+      # Generate a language-specific reference.
+      public def reference_for: (String identifier) -> Reference
+
+      # Get the parser for this language.
+      public def parser: () -> (Parser | nil)
+
+      # Parse the input yielding definitions.
+      public def definitions_for: (Source source) { (Definition definition) -> void } -> Enumerator[Segment]
+
+      # Parse the input yielding segments.
+      # Segments are constructed from a block of top level comments followed by a block of code.
+      public def segments_for: (Source source) { (Segment segment) -> void } -> Enumerator[Segment]
+    end
+
+    # An reference which can be resolved to zero or more definitions.
+    class Reference
+      # Initialize the reference.
+      public def initialize: (String identifier) -> void
+
+      # Generate a string representation of the reference.
+      public def to_s: () -> untyped
+
+      # Generate a debug representation of the reference.
+      public def inspect: () -> untyped
+
+      # Whether the reference starts at the base of the lexical tree.
+      public def absolute?: () -> bool
+
+      # Check if this is a relative reference.
+      public def relative?: () -> bool
+
+      # Split an identifier into prefix and name components.
+      public def split: (String identifier) -> untyped
+
+      # Get the lexical path of this reference.
+      public def lexical_path: () -> untyped
+
+      # Calculate the priority of a definition for matching.
+      public def priority: (String definition, String prefix) -> untyped
+
+      # Find the best matching definition from a list.
+      public def best: (Array[String] definitions) -> untyped
+
+      # The lexical path of the reference.
+      public def path: () -> Array[String]
+    end
+
+    # Represents an interface for extracting information from Ruby source code.
+    module Ruby
+      # Create a new Ruby language instance.
+      public def self.new: () -> Ruby::Generic
+
+      # Represents an alias statement, e.g., `alias new_name old_name` or `alias_method :new_name, :old_name`
+      class Alias < ::Definition
+        # Initialize a new alias definition.
+        public def initialize: (String new_name, String old_name, Hash options) -> void
+
+        # Generate a short form representation of the alias.
+        public def short_form: () -> untyped
+
+        # Generate a long form representation of the alias.
+        public def long_form: () -> untyped
+
+        # Generate a string representation of the alias.
+        public def to_s: () -> untyped
+      end
+
+      # A Ruby-specific attribute.
+      class Attribute < ::Definition
+        # The short form of the attribute.
+        # e.g. `attr :value`.
+        public def short_form: () -> untyped
+
+        # Generate a long form representation of the attribute.
+        public def long_form: () -> untyped
+      end
+
+      # A Ruby-specific block which might carry other definitions.
+      class Block < ::Definition
+        # A block can sometimes be a container for other definitions.
+        public def container?: () -> bool
+
+        # Generate a nested name for the block.
+        public def nested_name: () -> untyped
+
+        # The short form of the block.
+        # e.g. `foo`.
+        public def short_form: () -> untyped
+
+        # The long form of the block.
+        # e.g. `foo(:bar)`.
+        public def long_form: () -> untyped
+
+        # The fully qualified name of the block.
+        # e.g. `::Barnyard::foo`.
+        public def qualified_form: () -> untyped
+
+        # Convert the block to a different kind of definition.
+        public def convert: (Symbol kind) -> untyped
+      end
+
+      # A Ruby-specific block which might carry other definitions.
+      class Call < ::Definition
+        # A block can sometimes be a container for other definitions.
+        public def container?: () -> bool
+
+        # The short form of the class.
+        # e.g. `foo`.
+        public def short_form: () -> untyped
+
+        # The long form of the class.
+        # e.g. `foo(:bar)`.
+        public def long_form: () -> untyped
+
+        # The fully qualified name of the block.
+        # e.g. `class ::Barnyard::Dog`.
+        public def qualified_form: () -> untyped
+      end
+
+      # A Ruby-specific class.
+      class Class < ::Definition
+        # Initialize a new class definition.
+        public def initialize: (Array arguments, String super_class, Hash options) -> void
+
+        # A class is a container for other definitions.
+        public def container?: () -> bool
+
+        # The short form of the class.
+        # e.g. `class Animal`.
+        public def short_form: () -> untyped
+
+        # The long form of the class.
+        # e.g. `class Dog < Animal`.
+        public def long_form: () -> untyped
+
+        # The fully qualified name of the class.
+        # e.g. `class ::Barnyard::Dog`.
+        public def qualified_form: () -> untyped
+      end
+
+      # A Ruby-specific singleton class.
+      class Singleton < ::Definition
+        # Generate a nested name for the singleton class.
+        public def nested_name: () -> untyped
+
+        # A singleton class is a container for other definitions.
+        public def container?: () -> bool
+
+        # Typically, a singleton class does not contain other definitions.
+        public def nested?: () -> bool
+
+        # The short form of the class.
+        # e.g. `class << self`.
+        public def short_form: () -> untyped
+      end
+
+      # A Ruby-specific block of code.
+      class Code
+        # Initialize a new code block.
+        public def initialize: (String text, Index index, Definition relative_to, Language language) -> void
+
+        # Extract definitions from the code.
+        public def extract: (Array into) -> untyped
+      end
+
+      # A Ruby-specific constant.
+      class Constant < ::Definition
+        # The short form of the constant.
+        # e.g. `NAME`.
+        public def short_form: () -> untyped
+
+        # Generate a nested name for the constant.
+        public def nested_name: () -> untyped
+
+        # The long form of the constant.
+        # e.g. `NAME = "Alice"`.
+        public def long_form: () -> untyped
+      end
+
+      # Represents a Ruby-specific definition extracted from source code.
+      class Definition < ::Decode::Definition
+        # Initialize the definition from the syntax tree node.
+        public def initialize: (Array arguments, Symbol visibility, Parser::AST::Node node, Hash options) -> void
+
+        # Check if this definition is public.
+        public def public?: () -> bool
+
+        # Check if this definition spans multiple lines.
+        public def multiline?: () -> bool
+
+        # The source code associated with the definition.
+        public def text: () -> String
+
+        # Get the location of this definition.
+        public def location: () -> (Location | nil)
+      end
+
+      # A Ruby-specific function.
+      class Function < ::Method
+        # Generate a nested name for the function.
+        public def nested_name: () -> untyped
+
+        # The node which contains the function arguments.
+        public def arguments_node: () -> untyped
+      end
+
+      # Represents the Ruby language implementation for parsing and analysis.
+      class Generic < ::Language::Generic
+        # Get the parser for Ruby source code.
+        public def parser: () -> Parser
+
+        # Generate a language-specific reference for Ruby.
+        public def reference_for: (String identifier) -> Reference
+
+        # Generate a code representation with syntax highlighting and link resolution.
+        public def code_for: (String text, Index index, Definition relative_to) -> Code
+      end
+
+      # A Ruby-specific method.
+      class Method < ::Definition
+        # Initialize a new method definition.
+        public def initialize: (Array arguments, String receiver, Hash options) -> void
+
+        # Generate a nested name for the method.
+        public def nested_name: () -> untyped
+
+        # The short form of the method.
+        # e.g. `def puts` or `def self.puts`.
+        public def short_form: () -> untyped
+
+        # The node which contains the function arguments.
+        public def arguments_node: () -> untyped
+
+        # The long form of the method.
+        # e.g. `def puts(*lines, separator: "\n")` or `def self.puts(*lines, separator: "\n")`.
+        public def long_form: () -> untyped
+
+        # The fully qualified name of the block.
+        # e.g. `::Barnyard#foo`.
+        public def qualified_form: () -> untyped
+
+        # Override the qualified_name method to handle method name joining correctly
+        public def qualified_name: () -> untyped
+
+        # Convert the method to a different kind of definition.
+        public def convert: (Symbol kind) -> untyped
+      end
+
+      # A Ruby-specific module.
+      class Module < ::Definition
+        # A module is a container for other definitions.
+        public def container?: () -> bool
+
+        # The short form of the module.
+        # e.g. `module Barnyard`.
+        public def short_form: () -> untyped
+
+        # Generate a long form representation of the module.
+        public def long_form: () -> untyped
+
+        # The fully qualified name of the module.
+        # e.g. `module ::Barnyard::Dog`.
+        public def qualified_form: () -> untyped
+      end
+
+      # The Ruby source code parser.
+      class Parser
+        # Initialize a new Ruby parser.
+        public def initialize: (Language language) -> void
+
+        # Extract definitions from the given input file.
+        public def definitions_for: () -> untyped
+
+        # Walk over the syntax tree and extract relevant definitions with their associated comments.
+        public def walk_definitions: () -> untyped
+
+        # Extract segments from the given input file.
+        public def segments_for: () -> untyped
+      end
+
+      # An Ruby-specific reference which can be resolved to zero or more definitions.
+      class Reference < ::Language::Reference
+        # Create a reference from a constant node.
+        public def self.from_const: (Prism::Node node, Language language) -> untyped
+
+        # Append a constant node to the path.
+        public def self.append_const: (Prism::Node node, Array path) -> self
+
+        # Split a Ruby identifier into prefix and name components.
+        public def split: (String text) -> untyped
+      end
+
+      # A Ruby specific code segment.
+      class Segment < ::Decode::Segment
+        # Initialize a new Ruby segment.
+        public def initialize: (Array[String] comments, Language language, Prism::Node node, Hash options) -> void
+
+        # Expand the segment to include another node.
+        public def expand: (Prism::Node node) -> untyped
+
+        # The source code trailing the comments.
+        public def code: () -> (String | nil)
+      end
+    end
+  end
+
+  # Represents a context for looking up languages based on file extension or name.
+  class Languages
+    # Create a new languages context with all supported languages.
+    public def self.all: () -> Languages
+
+    # Initialize a new languages context.
+    public def initialize: () -> void
+
+    # Freeze the languages context to prevent further modifications.
+    public def freeze: () -> untyped
+
+    # Add a language to this context.
+    public def add: (Language::Generic language) -> self
+
+    # Fetch a language by name, creating a generic language if needed.
+    public def fetch: (String name) -> Language::Generic
+
+    # Create a source object for the given file path.
+    public def source_for: (String path) -> (Source | nil)
+
+    # Parse a language agnostic reference.
+    public def parse_reference: (String text, Language::Generic default_language) -> (Language::Reference | nil)
+
+    # Create a reference for the given language and identifier.
+    public def reference_for: (String name, String identifier) -> Language::Reference
+  end
+
+  # Represents a location in a source file.
+  class Location
+    # Generate a string representation of the location.
+    public def to_s: () -> untyped
+  end
+
+  # RBS generation functionality for Ruby type signatures.
+  module RBS
+    # Represents a Ruby class definition wrapper for RBS generation.
+    class Class < ::Wrapper
+      # Initialize a new class wrapper.
+      public def initialize: (Decode::Definition definition) -> void
+
+      # Extract generic type parameters from the class definition.
+      public def generics: () -> Array
+
+      # Convert the class definition to RBS AST
+      public def to_rbs_ast: () -> untyped
+    end
+
+    # Represents a generator for RBS type declarations.
+    class Generator
+      # Initialize a new RBS generator.
+      # Sets up the RBS environment for type resolution.
+      public def initialize: () -> void
+
+      # Generate RBS declarations for the given index.
+      public def generate: (Decode::Index index, IO output) -> untyped
+    end
+
+    # Represents a Ruby method definition wrapper for RBS generation.
+    class Method < ::Wrapper
+      # Initialize a new method wrapper.
+      public def initialize: (Decode::Definition definition) -> void
+
+      # Extract method signatures from the method definition.
+      public def signatures: () -> Array
+
+      # Convert the method definition to RBS AST
+      public def to_rbs_ast: () -> untyped
+    end
+
+    # Represents a Ruby module definition wrapper for RBS generation.
+    class Module < ::Wrapper
+      # Initialize a new module wrapper.
+      public def initialize: (Decode::Definition definition) -> void
+
+      # Convert the module definition to RBS AST
+      public def to_rbs_ast: () -> untyped
+    end
+
+    # Base wrapper class for RBS generation from definitions.
+    class Wrapper
+      # Initialize the wrapper instance variables.
+      public def initialize: (Definition definition) -> void
+
+      # Extract RBS tags from the definition's documentation.
+      public def tags: () -> Array
+    end
+  end
+
+  # An abstract namespace for nesting definitions.
+  class Scope < ::Definition
+    public def short_form: () -> String
+
+    # Scopes are always containers.
+    public def container?: () -> bool
+  end
+
+  # A chunk of code with an optional preceeding comment block.
+  #
+  # ~~~ ruby
+  # # Get the first segment from a source file:
+  # segment = source.segments.first
+  # ~~~
+  class Segment
+    # Initialize a new segment.
+    public def initialize: (Array[String] comments, Language::Generic language) -> void
+
+    # An interface for accsssing the documentation of the definition.
+    public def documentation: () -> (Documentation | nil)
+
+    # The source code trailing the comments.
+    public def code: () -> (String | nil)
+  end
+
+  # Represents a source file in a specific language.
+  class Source
+    # Initialize a new source file.
+    public def initialize: (String path, Language::Generic language) -> void
+
+    # The relative path of the source, if it is known.
+    public def relative_path: () -> String
+
+    # Read the source file into an internal buffer/cache.
+    public def read: () -> String
+
+    # Open the source file and read all definitions.
+    public def definitions: () { (Definition definition) -> void } -> Enumerator[Definition]
+
+    # Open the source file and read all segments.
+    public def segments: () { (Segment segment) -> void } -> Enumerator[Segment]
+
+    # Generate code representation with optional index for link resolution.
+    public def code: (Index index, Definition relative_to) -> String
+  end
+
+  # Provides syntax rewriting and linking functionality.
+  module Syntax
+    # Represents a link to a definition in the documentation.
+    class Link < ::Match
+      # Initialize a new link.
+      public def initialize: (Range range, Definition definition) -> void
+
+      # Apply the link to the output.
+      public def apply: (String output, Rewriter rewriter) -> untyped
+    end
+
+    # Represents a match in the source text for syntax rewriting.
+    class Match
+      # Initialize a new match.
+      public def initialize: (Range range) -> void
+
+      # Apply the match to extract text from source.
+      public def apply: (String source) -> untyped
+
+      # Apply the match to the output.
+      public def apply: (String output, Rewriter rewriter) -> untyped
+
+      # Compare matches by their starting position.
+      public def <=>: (Match other) -> untyped
+
+      # Get the starting offset of this match.
+      public def offset: () -> untyped
+
+      # Get the size of this match.
+      public def size: () -> untyped
+    end
+
+    # Provides text rewriting functionality with match-based substitutions.
+    class Rewriter
+      # Initialize a new rewriter.
+      public def initialize: (String text) -> void
+
+      # Add a match to the rewriter.
+      public def <<: (Match match) -> self
+
+      # Returns a chunk of raw text with no formatting.
+      public def text_for: () -> untyped
+
+      # Apply all matches to generate the rewritten output.
+      public def apply: (Array output) -> untyped
+
+      # Generate a link to a definition.
+      public def link_to: (Definition definition, String text) -> untyped
+    end
+  end
+
+  # Represents a prefix-trie data structure for fast lexical lookups.
+  class Trie
+    # Initialize an empty trie.
+    public def initialize: () -> void
+
+    # Insert the specified value at the given path into the trie.
+    public def insert: (Array[String] path, Object value) -> untyped
+
+    # Lookup the values at the specified path.
+    public def lookup: (Array[String] path) -> (Node | nil)
+
+    # Enumerate all lexical scopes under the specified path.
+    public def each: (Array[String] path) { (Array[String] path, Array[Object] | nil values) -> void } -> untyped
+
+    # Traverse the trie starting from the specified path.
+    # See {Node#traverse} for details.
+    public def traverse: (Array[String] path) { () -> void } -> untyped
+
+    # Represents a single node in the trie.
+    class Node
+      # Initialize a new trie node.
+      public def initialize: () -> void
+
+      # Generate a string representation of this node.
+      public def inspect: () -> String
+
+      # Look up a lexical path starting at this node.
+      public def lookup: (Array[String] path, Integer index) -> (Node | nil)
+
+      # Traverse the trie from this node.
+      # Invoke `descend.call` to traverse the children of the current node.
+      public def traverse: (Array[String] path) { (Array[String] path, Node node, Proc descend) -> void } -> untyped
+    end
+  end
+end

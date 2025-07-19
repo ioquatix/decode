@@ -136,7 +136,7 @@ describe Decode::RBS::Method do
 				it "extracts return type from @returns tag" do
 					return_type = rbs_method.send(:extract_return_type, definition, nil)
 					expect(return_type).not.to be_nil
-					# The exact type depends on the Types.parse implementation
+					# The exact type depends on the RBS::Parser.parse_type implementation
 				end
 			end
 			

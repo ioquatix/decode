@@ -13,7 +13,7 @@ module Decode
 		# - `@attribute [Integer] The person's age.`
 		#
 		class Attribute < Tag
-			PATTERN = /\A\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+			PATTERN = /\A\[#{Tag.bracketed_content(:type)}\](\s+(?<details>.*?))?\Z/
 			
 			# Build an attribute from a directive and match.
 			# @parameter directive [String] The original directive text.

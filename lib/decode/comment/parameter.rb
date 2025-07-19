@@ -12,7 +12,7 @@ module Decode
 		# - `@parameter age [Float] The users age.`
 		#
 		class Parameter < Tag
-			PATTERN = /\A(?<name>.*?)\s+\[(?<type>.*?)\](\s+(?<details>.*?))?\Z/
+			PATTERN = /\A(?<name>.*?)\s+\[#{Tag.bracketed_content(:type)}\](\s+(?<details>.*?))?\Z/
 			
 			# Build a parameter from a directive and regex match.
 			# @parameter directive [String] The original directive text.

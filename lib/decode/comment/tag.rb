@@ -9,6 +9,13 @@ module Decode
 	module Comment
 		# Represents a documentation tag parsed from a comment directive.
 		class Tag < Node
+			# Build a pattern for bracketed content, supporting nested brackets.
+			# @parameter name [String] The name of the group.
+			# @returns [String] The pattern.
+			def self.bracketed_content(name)
+				"(?<#{name}>(?:[^\\[\\]]+|\\[\\g<#{name}>\\])*)"
+			end
+			
 			# Match text against the tag pattern.
 			# @parameter text [String] The text to match.
 			def self.match(text)

@@ -5,7 +5,6 @@
 
 require "rbs"
 require "console"
-require "types"
 require_relative "wrapper"
 
 module Decode
@@ -202,8 +201,12 @@ module Decode
 			
 			# Parse a type string and convert it to RBS type
 			def parse_type_string(type_string)
-				type = Types.parse(type_string)
-				return ::RBS::Parser.parse_type(type.to_rbs)
+				# This is for backwards compatibility with the old syntax, eventually we will emit warnings for these:
+				type_string = type_string.tr("()", "[]")
+				type_string.gsub!("| Nil", "| nil")
+				type_string.gsub!("Boolean", "bool")
+				
+				return ::RBS::Parser.parse_type(type_string)
 			rescue => error
 				Console.warn(self, "Failed to parse type string: #{type_string}", error)
 				return ::RBS::Parser.parse_type("untyped")
